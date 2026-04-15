@@ -27,13 +27,6 @@ class AuthController {
   StateController<AsyncValue<void>> get _actionStateController =>
       _ref.read(authActionStateProvider.notifier);
 
-  Future<void> signInAnonymously() async {
-    _actionStateController.state = const AsyncLoading();
-    _actionStateController.state = await AsyncValue.guard(
-      _authService.signInAnonymously,
-    );
-  }
-
   Future<void> signInWithGoogle() async {
     _actionStateController.state = const AsyncLoading();
     _actionStateController.state = await AsyncValue.guard(

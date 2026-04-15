@@ -16,10 +16,6 @@ class AuthService {
     return _firebaseAuth.authStateChanges().map((user) => user != null);
   }
 
-  Future<UserCredential> signInAnonymously() {
-    return _firebaseAuth.signInAnonymously();
-  }
-
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,

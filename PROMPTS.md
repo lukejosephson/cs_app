@@ -43,7 +43,9 @@ Create a sign in screen that the user is brought to before the home screen.
 [x] 12. Implement the option to log in with email and password. There should also be functionality for creating
 an account.
 
-[ ] 13. I do not need functionality for anonymous sign in. Remove that functionality and maintain clean code.
+[x] 13. I do not need functionality for anonymous sign in. Remove that functionality and maintain clean code.
+
+[ ] 14. The create account button should take the user to a screen where they can create an account using email and password.
 
 
 

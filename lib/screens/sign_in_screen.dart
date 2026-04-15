@@ -70,7 +70,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Use email/password, Google, or continue anonymously to start practicing.',
+                      'Use email/password or Google to start practicing.',
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
@@ -128,13 +128,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       icon: Icons.login_rounded,
                       isLoading: isLoading,
                       onPressed: () => authController.signInWithGoogle(),
-                    ),
-                    const SizedBox(height: 12),
-                    SignInActionButton(
-                      label: 'Continue Anonymously',
-                      icon: Icons.person_outline_rounded,
-                      isLoading: isLoading,
-                      onPressed: () => authController.signInAnonymously(),
                     ),
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),

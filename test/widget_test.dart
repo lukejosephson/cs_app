@@ -115,7 +115,7 @@ void main() {
     expect(find.text('Sign in with Email'), findsOneWidget);
     expect(find.text('Create Account'), findsOneWidget);
     expect(find.text('Continue with Google'), findsOneWidget);
-    expect(find.text('Continue Anonymously'), findsOneWidget);
+    expect(find.text('Continue Anonymously'), findsNothing);
   });
 }
 

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/binary_practice_config.dart';
 import '../providers/binary_practice_provider.dart';
+import '../widgets/binary/binary_visibility_settings_card.dart';
+import '../widgets/binary/bit_toggle_tile.dart';
 
 class BinaryPracticeScreen extends ConsumerWidget {
   const BinaryPracticeScreen({super.key});
@@ -12,7 +15,6 @@ class BinaryPracticeScreen extends ConsumerWidget {
     final controller = ref.read(binaryPracticeProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    const weights = [64, 32, 16, 8, 4, 2, 1];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Binary Practice')),
@@ -31,7 +33,7 @@ class BinaryPracticeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Flip the seven bits to match the target number.',
+                    'Flip the ${BinaryPracticeConfig.bitCount} bits to match the target number.',
                     style: textTheme.bodyMedium,
                   ),
                 ],
@@ -42,49 +44,13 @@ class BinaryPracticeScreen extends ConsumerWidget {
           Wrap(
             spacing: 6,
             runSpacing: 8,
-            children: List.generate(weights.length, (index) {
-              final isOn = state.bits[index];
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (state.showBitPlaceValues)
-                    Text(
-                      '${weights[index]}',
-                      style: textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.75),
-                      ),
-                    ),
-                  SizedBox(height: state.showBitPlaceValues ? 6 : 22),
-                  InkWell(
-                    key: ValueKey('bit-toggle-$index'),
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () => controller.toggleBit(index),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 120),
-                      width: 46,
-                      height: 46,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: isOn
-                            ? Colors.green.shade600
-                            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.85),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isOn
-                              ? Colors.green.shade300
-                              : colorScheme.outline.withValues(alpha: 0.4),
-                        ),
-                      ),
-                      child: Text(
-                        isOn ? '1' : '0',
-                        style: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            children: List.generate(BinaryPracticeConfig.placeValues.length, (index) {
+              return BitToggleTile(
+                index: index,
+                bitValue: BinaryPracticeConfig.placeValues[index],
+                isOn: state.bits[index],
+                showBitPlaceValues: state.showBitPlaceValues,
+                onTap: () => controller.toggleBit(index),
               );
             }),
           ),
@@ -125,21 +91,11 @@ class BinaryPracticeScreen extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: 8),
-          Card(
-            child: Column(
-              children: [
-                SwitchListTile(
-                  title: const Text('Show current value'),
-                  value: state.showCurrentValue,
-                  onChanged: controller.toggleShowCurrentValue,
-                ),
-                SwitchListTile(
-                  title: const Text('Show bit place values'),
-                  value: state.showBitPlaceValues,
-                  onChanged: controller.toggleShowBitPlaceValues,
-                ),
-              ],
-            ),
+          BinaryVisibilitySettingsCard(
+            showCurrentValue: state.showCurrentValue,
+            showBitPlaceValues: state.showBitPlaceValues,
+            onShowCurrentValueChanged: controller.toggleShowCurrentValue,
+            onShowBitPlaceValuesChanged: controller.toggleShowBitPlaceValues,
           ),
         ],
       ),

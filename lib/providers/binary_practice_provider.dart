@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/binary_practice_config.dart';
 import '../models/binary_practice_state.dart';
 
 final randomProvider = Provider<Random>((ref) => Random());
@@ -12,7 +13,8 @@ final binaryPracticeProvider =
     });
 
 class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
-  BinaryPracticeController(this._random) : super(BinaryPracticeState.initial(_random.nextInt(128)));
+  BinaryPracticeController(this._random)
+      : super(BinaryPracticeState.initial(_random.nextInt(1 << BinaryPracticeConfig.bitCount)));
 
   final Random _random;
 
@@ -24,12 +26,12 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
 
   void checkAnswer() {
     final answeredNumber = state.targetNumber;
-    final answeredBinary = answeredNumber.toRadixString(2).padLeft(7, '0');
+    final answeredBinary = answeredNumber.toRadixString(2).padLeft(BinaryPracticeConfig.bitCount, '0');
 
     if (state.currentValue == state.targetNumber) {
       state = BinaryPracticeState(
-        targetNumber: _random.nextInt(128),
-        bits: List<bool>.filled(7, false),
+        targetNumber: _random.nextInt(1 << BinaryPracticeConfig.bitCount),
+        bits: List<bool>.filled(BinaryPracticeConfig.bitCount, false),
         feedback:
             'Correct! The binary equivalent of $answeredNumber is $answeredBinary',
         isCorrect: true,
@@ -41,7 +43,7 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
 
     state = state.copyWith(
       feedback:
-          'Not quite. Correct answer: ${state.targetNumber.toRadixString(2).padLeft(7, '0')}',
+          'Not quite. Correct answer: ${state.targetNumber.toRadixString(2).padLeft(BinaryPracticeConfig.bitCount, '0')}',
       isCorrect: false,
     );
   }

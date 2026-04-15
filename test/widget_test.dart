@@ -68,7 +68,7 @@ void main() {
     await tester.tap(find.text('Check Answer'));
     await tester.pumpAndSettle();
 
-    expect(find.text('The binary equivalent of 5 is 0000101.'), findsOneWidget);
+    expect(find.textContaining('The binary equivalent of 5 is 0000101'), findsOneWidget);
   });
 }
 

@@ -23,13 +23,17 @@ and square, and should change color to green when flipped.
 [x] 6. Display the current value of the flipped bits right below the tiles. Additionally,
 the message after a correct answer should say: The binary equivalent of (number) is (answer).
 
-[ ] 7. Improve the organization of the code. The code should adhere to the standards set in the requirements.
+[x] 7. Improve the organization of the code. The code should adhere to the standards set in the requirements.
 
-[ ] 8. 
+[x] 8. I am now beginning to implement user authentication. I am getting firebase auth set up. I just used
+flutterfire configure, and now I want firebase to be initialized in my code.
 
-[ ] 9. 
+[x] 9. Firebase should be ready to be initialized now. I have a project called cs-practice-app in my firebase
+console, and the recent changes to this project. Ensure firebase is set up and initialized, and do not commit
+anything yet.
 
-[ ] 10. 
+[x] 10. Ensure that the .gitignore file prevents any keys or private information from being committed. Check
+for other possible safety issues as well.
 
 [ ] 11. 
 

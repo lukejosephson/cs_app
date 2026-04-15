@@ -45,4 +45,4 @@ and includes achievements for specific milestones / puzzles solved
 that widgets don't get too large. If the do, put them in seperate files. Make sure
 data models are clearly seperated from the UI.
 
-Agent skills go in the skills.md file.
+Agent skills go in the skills.md file.2

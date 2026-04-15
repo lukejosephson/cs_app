@@ -1,3 +1,5 @@
+import 'binary_practice_config.dart';
+
 class BinaryPracticeState {
   const BinaryPracticeState({
     required this.targetNumber,
@@ -11,7 +13,7 @@ class BinaryPracticeState {
   factory BinaryPracticeState.initial(int targetNumber) {
     return BinaryPracticeState(
       targetNumber: targetNumber,
-      bits: List<bool>.filled(7, false),
+      bits: List<bool>.filled(BinaryPracticeConfig.bitCount, false),
       feedback: null,
       isCorrect: null,
       showCurrentValue: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/practice_options_provider.dart';
+import 'binary_practice_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -88,6 +89,13 @@ class HomeScreen extends ConsumerWidget {
                     Icons.chevron_right_rounded,
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const BinaryPracticeScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

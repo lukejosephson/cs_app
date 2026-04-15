@@ -8,7 +8,7 @@ Start with just a binary practice.
 
 [x] 2. Make the theme dark and make the UI more professional while keeping a simple color scheme.
 
-[ ] 3. Implement the new screen for the binary practice. Binary practice should consist of 
+[x] 3. Implement the new screen for the binary practice. Binary practice should consist of 
 6 flippable bits. A number should be given, and the user should get to flip the bits to
 make the number, and then be able to check for correctness. If correct, the user should get a
 message that they got it correct, and be given another number. If wrong, the correct answer 
@@ -49,5 +49,5 @@ status).
 5. Database: Use [Firebase Firestore OR PostgreSQL] for persistent cloud data.
 6. Stepwise Execution: Only implement the specific step requested in the prompt. Do not jump ahead.
 7. Explain-First Policy: Before providing code, Gemini must briefly explain the architectural pattern chosen and why it is the standard approach for Flutter/Riverpod.
-8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description (Ref: Prompt #[X]).
+8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description
 9. Refactor Alert: If Gemini identifies a widget or logic block that could be made reusable, it must stop and suggest a refactor into the /widgets or /services folder before continuing with the UI.

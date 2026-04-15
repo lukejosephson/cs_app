@@ -38,5 +38,5 @@ status).
 5. Database: Use [Firebase Firestore OR PostgreSQL] for persistent cloud data.
 6. Stepwise Execution: Only implement the specific step requested in the prompt. Do not jump ahead.
 7. Explain-First Policy: Before providing code, Gemini must briefly explain the architectural pattern chosen and why it is the standard approach for Flutter/Riverpod.
-8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description (Ref: Prompt #[X]).
+8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description
 9. Refactor Alert: If Gemini identifies a widget or logic block that could be made reusable, it must stop and suggest a refactor into the /widgets or /services folder before continuing with the UI.

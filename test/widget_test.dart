@@ -129,10 +129,79 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Create Account'));
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Create your account'), findsOneWidget);
+  });
+
+  testWidgets('create account shows message for invalid email', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ],
+        child: const CsPracticeApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-email-field')),
+      'bad-email',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-password-field')),
+      'Password1',
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('create-account-submit-button')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Please enter a valid email address.'), findsOneWidget);
+  });
+
+  testWidgets('create account shows message for invalid password', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ],
+        child: const CsPracticeApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-email-field')),
+      'user@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-password-field')),
+      '',
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('create-account-submit-button')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Please enter a password.'),
+      findsOneWidget,
+    );
   });
 }
 

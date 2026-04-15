@@ -47,9 +47,13 @@ an account.
 
 [x] 14. The create account button should take the user to a screen where they can create an account using email and password.
 
-[ ] 15. There should be checks in the create account ensuring that a user has entered a 
+[x] 15. There should be checks in the create account ensuring that a user has entered a 
 valid email address and a valid password. If a user does not, they should recieve a message 
 explaining why what they entered was invalid.
+
+[ ] 16. Upon attempted to create an account with an email and password, it took around 15 seconds
+to buffer and then gave a message that authentication failed. Troubleshoot, explain what the problem could be, 
+and verify changes with me before making them.
 
 
 

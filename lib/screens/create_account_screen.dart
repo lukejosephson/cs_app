@@ -12,8 +12,13 @@ class CreateAccountScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
+  static final RegExp _emailPattern = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+  static final RegExp _passwordLetterPattern = RegExp(r'[A-Za-z]');
+  static final RegExp _passwordDigitPattern = RegExp(r'\d');
+
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  String? _inputValidationError;
 
   @override
   void initState() {
@@ -38,7 +43,6 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final authController = ref.read(authControllerProvider);
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    final canSubmit = email.isNotEmpty && password.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
@@ -77,6 +81,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     ),
                     const SizedBox(height: 20),
                     TextField(
+                      key: const ValueKey('create-account-email-field'),
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autofillHints: const [AutofillHints.email],
@@ -89,6 +94,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextField(
+                      key: const ValueKey('create-account-password-field'),
                       controller: _passwordController,
                       obscureText: true,
                       autofillHints: const [AutofillHints.newPassword],
@@ -98,16 +104,25 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     ),
                     const SizedBox(height: 12),
                     SignInActionButton(
+                      key: const ValueKey('create-account-submit-button'),
                       label: 'Create Account',
                       icon: Icons.person_add_alt_1_rounded,
                       isLoading: isLoading,
-                      onPressed: canSubmit
-                          ? () => authController.createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )
-                          : null,
+                      onPressed: () => _submitCreateAccount(
+                        authController: authController,
+                        email: email,
+                        password: password,
+                      ),
                     ),
+                    if (_inputValidationError != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        _inputValidationError!,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.error,
+                        ),
+                      ),
+                    ],
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),
                       Text(
@@ -125,5 +140,54 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _submitCreateAccount({
+    required AuthController authController,
+    required String email,
+    required String password,
+  }) async {
+    final validationError = _validateCredentials(
+      email: email,
+      password: password,
+    );
+    if (validationError != null) {
+      setState(() {
+        _inputValidationError = validationError;
+      });
+      return;
+    }
+
+    setState(() {
+      _inputValidationError = null;
+    });
+
+    await authController.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  String? _validateCredentials({
+    required String email,
+    required String password,
+  }) {
+    if (email.isEmpty) {
+      return 'Please enter an email address.';
+    }
+    if (!_emailPattern.hasMatch(email)) {
+      return 'Please enter a valid email address.';
+    }
+    if (password.isEmpty) {
+      return 'Please enter a password.';
+    }
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+    if (!_passwordLetterPattern.hasMatch(password) ||
+        !_passwordDigitPattern.hasMatch(password)) {
+      return 'Password must include at least one letter and one number.';
+    }
+    return null;
   }
 }

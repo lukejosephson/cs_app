@@ -20,10 +20,10 @@ their flipped bits and the option to show or not show the value of a bit at a gi
 [x] 5. Change the number of bits to 7 and improve the UI. The tiles should be closer together
 and square, and should change color to green when flipped.
 
-[ ] 6. Display the current value of the flipped bits right below the tiles. Additionally,
+[x] 6. Display the current value of the flipped bits right below the tiles. Additionally,
 the message after a correct answer should say: The binary equivalent of (number) is (answer).
 
-[ ] 7. 
+[ ] 7. Improve the organization of the code. The code should adhere to the standards set in the requirements.
 
 [ ] 8. 
 

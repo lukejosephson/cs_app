@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:cs_app/main.dart';
+import 'package:cs_app/providers/binary_practice_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,4 +49,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('64'), findsNothing);
   });
+
+  testWidgets('correct answer feedback includes number and binary equivalent', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [randomProvider.overrideWithValue(_FakeRandom([5, 9]))],
+        child: const CsPracticeApp(),
+      ),
+    );
+
+    await tester.tap(find.text('Binary Practice'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('bit-toggle-4'))); // 4
+    await tester.tap(find.byKey(const ValueKey('bit-toggle-6'))); // 1
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Check Answer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('The binary equivalent of 5 is 0000101.'), findsOneWidget);
+  });
+}
+
+class _FakeRandom implements Random {
+  _FakeRandom(this._values);
+
+  final List<int> _values;
+  var _index = 0;
+
+  @override
+  int nextInt(int max) {
+    final value = _values[_index % _values.length];
+    _index++;
+    return value % max;
+  }
+
+  @override
+  bool nextBool() => nextInt(2) == 1;
+
+  @override
+  double nextDouble() => nextInt(1000000) / 1000000;
 }

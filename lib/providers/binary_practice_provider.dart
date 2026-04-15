@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/binary_practice_state.dart';
 
-final _randomProvider = Provider<Random>((ref) => Random());
+final randomProvider = Provider<Random>((ref) => Random());
 
 final binaryPracticeProvider =
     StateNotifierProvider<BinaryPracticeController, BinaryPracticeState>((ref) {
-      return BinaryPracticeController(ref.watch(_randomProvider));
+      return BinaryPracticeController(ref.watch(randomProvider));
     });
 
 class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
@@ -23,11 +23,15 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
   }
 
   void checkAnswer() {
+    final answeredNumber = state.targetNumber;
+    final answeredBinary = answeredNumber.toRadixString(2).padLeft(7, '0');
+
     if (state.currentValue == state.targetNumber) {
       state = BinaryPracticeState(
         targetNumber: _random.nextInt(128),
         bits: List<bool>.filled(7, false),
-        feedback: 'Correct! Great work. Here is a new number.',
+        feedback:
+            'Correct! The binary equivalent of $answeredNumber is $answeredBinary',
         isCorrect: true,
         showCurrentValue: state.showCurrentValue,
         showBitPlaceValues: state.showBitPlaceValues,

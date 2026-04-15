@@ -34,35 +34,8 @@ class BinaryPracticeScreen extends ConsumerWidget {
                     'Flip the seven bits to match the target number.',
                     style: textTheme.bodyMedium,
                   ),
-                  if (state.showCurrentValue) ...[
-                    const SizedBox(height: 10),
-                    Text(
-                      'Your Value: ${state.currentValue}',
-                      style: textTheme.titleMedium?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
                 ],
               ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: Column(
-              children: [
-                SwitchListTile(
-                  title: const Text('Show current value'),
-                  value: state.showCurrentValue,
-                  onChanged: controller.toggleShowCurrentValue,
-                ),
-                SwitchListTile(
-                  title: const Text('Show bit place values'),
-                  value: state.showBitPlaceValues,
-                  onChanged: controller.toggleShowBitPlaceValues,
-                ),
-              ],
             ),
           ),
           const SizedBox(height: 16),
@@ -115,6 +88,16 @@ class BinaryPracticeScreen extends ConsumerWidget {
               );
             }),
           ),
+          if (state.showCurrentValue) ...[
+            const SizedBox(height: 14),
+            Text(
+              'Your Value: ${state.currentValue}',
+              style: textTheme.titleMedium?.copyWith(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: controller.checkAnswer,
@@ -141,6 +124,23 @@ class BinaryPracticeScreen extends ConsumerWidget {
               ),
             ),
           ],
+          const SizedBox(height: 8),
+          Card(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: const Text('Show current value'),
+                  value: state.showCurrentValue,
+                  onChanged: controller.toggleShowCurrentValue,
+                ),
+                SwitchListTile(
+                  title: const Text('Show bit place values'),
+                  value: state.showBitPlaceValues,
+                  onChanged: controller.toggleShowBitPlaceValues,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -55,6 +55,28 @@ explaining why what they entered was invalid.
 to buffer and then gave a message that authentication failed. Troubleshoot, explain what the problem could be, 
 and verify changes with me before making them.
 
+[ ] 17. The user should be askedd to verify their password when creating an account. 
+Upon successful account creation, the user should be sent back to the sign in screen with a message that the
+creation of their account was successful. Upon successful sign in, they should be brought to the home screen. 
+
+[ ] 18.
+
+[ ] 19.
+
+[ ] 20.
+
+[ ] 21.
+
+[ ] 22.
+
+[ ] 23.
+
+[ ] 24.
+
+[ ] 25.
+
+[ ] 26.
+
 
 
 ** Development Rules **

@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
-import 'create_account_screen.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
-class SignInScreen extends ConsumerStatefulWidget {
-  const SignInScreen({super.key});
+class CreateAccountScreen extends ConsumerStatefulWidget {
+  const CreateAccountScreen({super.key});
 
   @override
-  ConsumerState<SignInScreen> createState() => _SignInScreenState();
+  ConsumerState<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
 
-class _SignInScreenState extends ConsumerState<SignInScreen> {
+class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
@@ -39,10 +38,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final authController = ref.read(authControllerProvider);
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    final canSubmitEmailForm = email.isNotEmpty && password.isNotEmpty;
+    final canSubmit = email.isNotEmpty && password.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
+      appBar: AppBar(title: const Text('Create Account')),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 520),
@@ -64,14 +63,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sign in to CS Practice',
+                      'Create your account',
                       style: textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Use email/password or Google to sign in.',
+                      'Set up an email and password to save your progress.',
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
@@ -92,45 +91,22 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     TextField(
                       controller: _passwordController,
                       obscureText: true,
-                      autofillHints: const [AutofillHints.password],
+                      autofillHints: const [AutofillHints.newPassword],
                       enabled: !isLoading,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                      ),
+                      decoration: const InputDecoration(labelText: 'Password'),
                       onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
                     SignInActionButton(
-                      label: 'Sign in with Email',
-                      icon: Icons.email_outlined,
+                      label: 'Create Account',
+                      icon: Icons.person_add_alt_1_rounded,
                       isLoading: isLoading,
-                      onPressed: canSubmitEmailForm
-                          ? () => authController.signInWithEmailAndPassword(
+                      onPressed: canSubmit
+                          ? () => authController.createUserWithEmailAndPassword(
                                 email: email,
                                 password: password,
                               )
                           : null,
-                    ),
-                    const SizedBox(height: 12),
-                    OutlinedButton.icon(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const CreateAccountScreen(),
-                                ),
-                              );
-                            },
-                      icon: const Icon(Icons.person_add_alt_1_rounded),
-                      label: const Text('Create Account'),
-                    ),
-                    const SizedBox(height: 12),
-                    SignInActionButton(
-                      label: 'Continue with Google',
-                      icon: Icons.login_rounded,
-                      isLoading: isLoading,
-                      onPressed: () => authController.signInWithGoogle(),
                     ),
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),

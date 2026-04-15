@@ -45,8 +45,11 @@ an account.
 
 [x] 13. I do not need functionality for anonymous sign in. Remove that functionality and maintain clean code.
 
-[ ] 14. The create account button should take the user to a screen where they can create an account using email and password.
+[x] 14. The create account button should take the user to a screen where they can create an account using email and password.
 
+[ ] 15. There should be checks in the create account ensuring that a user has entered a 
+valid email address and a valid password. If a user does not, they should recieve a message 
+explaining why what they entered was invalid.
 
 
 

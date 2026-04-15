@@ -117,6 +117,23 @@ void main() {
     expect(find.text('Continue with Google'), findsOneWidget);
     expect(find.text('Continue Anonymously'), findsNothing);
   });
+
+  testWidgets('create account button opens create account screen', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ],
+        child: const CsPracticeApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Create Account'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Create your account'), findsOneWidget);
+  });
 }
 
 class _FakeRandom implements Random {

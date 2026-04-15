@@ -12,7 +12,7 @@ class BinaryPracticeScreen extends ConsumerWidget {
     final controller = ref.read(binaryPracticeProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    const weights = [32, 16, 8, 4, 2, 1];
+    const weights = [64, 32, 16, 8, 4, 2, 1];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Binary Practice')),
@@ -31,7 +31,7 @@ class BinaryPracticeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Flip the six bits to match the target number.',
+                    'Flip the seven bits to match the target number.',
                     style: textTheme.bodyMedium,
                   ),
                   if (state.showCurrentValue) ...[
@@ -67,8 +67,8 @@ class BinaryPracticeScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Wrap(
-            spacing: 8,
-            runSpacing: 10,
+            spacing: 6,
+            runSpacing: 8,
             children: List.generate(weights.length, (index) {
               final isOn = state.bits[index];
               return Column(
@@ -81,11 +81,35 @@ class BinaryPracticeScreen extends ConsumerWidget {
                         color: colorScheme.onSurface.withValues(alpha: 0.75),
                       ),
                     ),
-                  SizedBox(height: state.showBitPlaceValues ? 6 : 24),
-                  FilledButton.tonal(
+                  SizedBox(height: state.showBitPlaceValues ? 6 : 22),
+                  InkWell(
                     key: ValueKey('bit-toggle-$index'),
-                    onPressed: () => controller.toggleBit(index),
-                    child: Text(isOn ? '1' : '0'),
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => controller.toggleBit(index),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 120),
+                      width: 46,
+                      height: 46,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isOn
+                            ? Colors.green.shade600
+                            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.85),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: isOn
+                              ? Colors.green.shade300
+                              : colorScheme.outline.withValues(alpha: 0.4),
+                        ),
+                      ),
+                      child: Text(
+                        isOn ? '1' : '0',
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               );

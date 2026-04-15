@@ -12,7 +12,7 @@ final binaryPracticeProvider =
     });
 
 class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
-  BinaryPracticeController(this._random) : super(BinaryPracticeState.initial(_random.nextInt(64)));
+  BinaryPracticeController(this._random) : super(BinaryPracticeState.initial(_random.nextInt(128)));
 
   final Random _random;
 
@@ -25,8 +25,8 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
   void checkAnswer() {
     if (state.currentValue == state.targetNumber) {
       state = BinaryPracticeState(
-        targetNumber: _random.nextInt(64),
-        bits: List<bool>.filled(6, false),
+        targetNumber: _random.nextInt(128),
+        bits: List<bool>.filled(7, false),
         feedback: 'Correct! Great work. Here is a new number.',
         isCorrect: true,
         showCurrentValue: state.showCurrentValue,
@@ -37,7 +37,7 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
 
     state = state.copyWith(
       feedback:
-          'Not quite. Correct answer: ${state.targetNumber.toRadixString(2).padLeft(6, '0')}',
+          'Not quite. Correct answer: ${state.targetNumber.toRadixString(2).padLeft(7, '0')}',
       isCorrect: false,
     );
   }

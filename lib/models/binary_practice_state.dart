@@ -11,7 +11,7 @@ class BinaryPracticeState {
   factory BinaryPracticeState.initial(int targetNumber) {
     return BinaryPracticeState(
       targetNumber: targetNumber,
-      bits: List<bool>.filled(6, false),
+      bits: List<bool>.filled(7, false),
       feedback: null,
       isCorrect: null,
       showCurrentValue: true,

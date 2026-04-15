@@ -12,7 +12,7 @@ void main() {
     expect(find.text('Binary Practice'), findsOneWidget);
   });
 
-  testWidgets('opens binary practice screen with six flippable bits', (tester) async {
+  testWidgets('opens binary practice screen with seven flippable bits', (tester) async {
     await tester.pumpWidget(const ProviderScope(child: CsPracticeApp()));
 
     await tester.tap(find.text('Binary Practice'));
@@ -25,6 +25,7 @@ void main() {
     expect(find.byKey(const ValueKey('bit-toggle-3')), findsOneWidget);
     expect(find.byKey(const ValueKey('bit-toggle-4')), findsOneWidget);
     expect(find.byKey(const ValueKey('bit-toggle-5')), findsOneWidget);
+    expect(find.byKey(const ValueKey('bit-toggle-6')), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);
   });
 
@@ -35,7 +36,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Your Value:'), findsOneWidget);
-    expect(find.text('32'), findsOneWidget);
+    expect(find.text('64'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(SwitchListTile, 'Show current value'));
     await tester.pumpAndSettle();
@@ -43,6 +44,6 @@ void main() {
 
     await tester.tap(find.widgetWithText(SwitchListTile, 'Show bit place values'));
     await tester.pumpAndSettle();
-    expect(find.text('32'), findsNothing);
+    expect(find.text('64'), findsNothing);
   });
 }

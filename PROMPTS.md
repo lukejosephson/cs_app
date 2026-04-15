@@ -6,9 +6,13 @@ to begin the development process. There should be a quick welcome to the app
 with a short explanation of the purpose, and a list of types of practice to do.
 Start with just a binary practice. 
 
-[ ] 2. Make the theme dark and make the UI more professional while keeping a simple color scheme.
+[x] 2. Make the theme dark and make the UI more professional while keeping a simple color scheme.
 
-[ ] 3. 
+[ ] 3. Implement the new screen for the binary practice. Binary practice should consist of 
+6 flippable bits. A number should be given, and the user should get to flip the bits to
+make the number, and then be able to check for correctness. If correct, the user should get a
+message that they got it correct, and be given another number. If wrong, the correct answer 
+should be shown.
 
 [ ] 4. 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/auth_provider.dart';
 import '../providers/practice_options_provider.dart';
 import '../widgets/home/practice_option_tile.dart';
 import '../widgets/home/welcome_card.dart';
@@ -11,12 +12,22 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.read(authControllerProvider);
     final practiceOptions = ref.watch(practiceOptionsProvider);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('CS Practice')),
+      appBar: AppBar(
+        title: const Text('CS Practice'),
+        actions: [
+          IconButton(
+            tooltip: 'Sign out',
+            onPressed: authController.signOut,
+            icon: const Icon(Icons.logout_rounded),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

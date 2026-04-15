@@ -35,7 +35,10 @@ anything yet.
 [x] 10. Ensure that the .gitignore file prevents any keys or private information from being committed. Check
 for other possible safety issues as well.
 
-[ ] 11. 
+[ ] 11. I have successfully configured Firebase. We are now implementing user authentication. 
+Create lib/services/auth_service.dart. Implement a class AuthService that handles Anonymous login 
+and Google Sign-In using firebase_auth and google_sign_in. Do any other work needed to set up user authentication.
+Create a sign in screen that the user is brought to before the home screen.
 
 [ ] 12. 
 

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -126,7 +129,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),
                       Text(
-                        'Authentication failed: ${authActionState.error}',
+                        _buildAuthErrorMessage(authActionState.error!),
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.error,
                         ),
@@ -189,5 +192,29 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       return 'Password must include at least one letter and one number.';
     }
     return null;
+  }
+
+  String _buildAuthErrorMessage(Object error) {
+    if (error is TimeoutException) {
+      return 'Authentication timed out. Check your internet connection and try again.';
+    }
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'operation-not-allowed':
+          return 'Email/password sign-in is not enabled in Firebase Console.';
+        case 'email-already-in-use':
+          return 'That email is already in use. Try signing in instead.';
+        case 'invalid-email':
+          return 'Firebase rejected this email address as invalid.';
+        case 'weak-password':
+          return 'Firebase rejected this password as too weak.';
+        case 'network-request-failed':
+          return 'Network request failed while contacting Firebase.';
+        default:
+          return 'Authentication failed (${error.code}): ${error.message ?? 'Unknown error'}';
+      }
+    }
+
+    return 'Authentication failed: $error';
   }
 }

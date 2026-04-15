@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -33,7 +35,7 @@ class AuthService {
     return _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
-    );
+    ).timeout(const Duration(seconds: 12));
   }
 
   Future<UserCredential> signInWithGoogle() async {

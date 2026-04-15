@@ -59,9 +59,12 @@ and verify changes with me before making them.
 Upon successful account creation, the user should be sent back to the sign in screen with a message that the
 creation of their account was successful. Upon successful sign in, they should be brought to the home screen. 
 
-[ ] 18.
+[x] 18. While the app runs on the android simulator, it is not running on the ios 
+simulator. Troubleshoot the problem.
 
-[ ] 19.
+[ ] 19. The menu for stopping the program and rot restarting the program is not 
+appearing when running in either ios or android. Explain the possible reasons
+for this and fix the issue.
 
 [ ] 20.
 

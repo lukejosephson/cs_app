@@ -62,11 +62,11 @@ creation of their account was successful. Upon successful sign in, they should b
 [x] 18. While the app runs on the android simulator, it is not running on the ios 
 simulator. Troubleshoot the problem.
 
-[ ] 19. The menu for stopping the program and rot restarting the program is not 
+[x] 19. The menu for stopping the program and rot restarting the program is not 
 appearing when running in either ios or android. Explain the possible reasons
 for this.
 
-[ ] 20. Improve testing code by seperating the tests into their own files, following
+[x] 20. Improve testing code by seperating the tests into their own files, following
 best practice outlined by the instructions.
 
 [ ] 21.

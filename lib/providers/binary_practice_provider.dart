@@ -29,6 +29,8 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
         bits: List<bool>.filled(6, false),
         feedback: 'Correct! Great work. Here is a new number.',
         isCorrect: true,
+        showCurrentValue: state.showCurrentValue,
+        showBitPlaceValues: state.showBitPlaceValues,
       );
       return;
     }
@@ -38,5 +40,13 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
           'Not quite. Correct answer: ${state.targetNumber.toRadixString(2).padLeft(6, '0')}',
       isCorrect: false,
     );
+  }
+
+  void toggleShowCurrentValue(bool value) {
+    state = state.copyWith(showCurrentValue: value);
+  }
+
+  void toggleShowBitPlaceValues(bool value) {
+    state = state.copyWith(showBitPlaceValues: value);
   }
 }

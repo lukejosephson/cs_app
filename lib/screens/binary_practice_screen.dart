@@ -34,16 +34,35 @@ class BinaryPracticeScreen extends ConsumerWidget {
                     'Flip the six bits to match the target number.',
                     style: textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Your Value: ${state.currentValue}',
-                    style: textTheme.titleMedium?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+                  if (state.showCurrentValue) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      'Your Value: ${state.currentValue}',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: const Text('Show current value'),
+                  value: state.showCurrentValue,
+                  onChanged: controller.toggleShowCurrentValue,
+                ),
+                SwitchListTile(
+                  title: const Text('Show bit place values'),
+                  value: state.showBitPlaceValues,
+                  onChanged: controller.toggleShowBitPlaceValues,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 16),
@@ -55,13 +74,14 @@ class BinaryPracticeScreen extends ConsumerWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '${weights[index]}',
-                    style: textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.75),
+                  if (state.showBitPlaceValues)
+                    Text(
+                      '${weights[index]}',
+                      style: textTheme.labelLarge?.copyWith(
+                        color: colorScheme.onSurface.withValues(alpha: 0.75),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: state.showBitPlaceValues ? 6 : 24),
                   FilledButton.tonal(
                     key: ValueKey('bit-toggle-$index'),
                     onPressed: () => controller.toggleBit(index),

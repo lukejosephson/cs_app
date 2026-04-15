@@ -14,9 +14,11 @@ make the number, and then be able to check for correctness. If correct, the user
 message that they got it correct, and be given another number. If wrong, the correct answer 
 should be shown.
 
-[ ] 4. 
+[x] 4. For binary practice, give users the option to show or not show the current value of 
+their flipped bits and the option to show or not show the value of a bit at a given place.
 
-[ ] 5. 
+[ ] 5. Change the number of bits to 7 and improve the UI. The tiles should be closer together
+and square, and should change color to green when flipped.
 
 [ ] 6. 
 

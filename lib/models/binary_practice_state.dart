@@ -4,6 +4,8 @@ class BinaryPracticeState {
     required this.bits,
     required this.feedback,
     required this.isCorrect,
+    required this.showCurrentValue,
+    required this.showBitPlaceValues,
   });
 
   factory BinaryPracticeState.initial(int targetNumber) {
@@ -12,6 +14,8 @@ class BinaryPracticeState {
       bits: List<bool>.filled(6, false),
       feedback: null,
       isCorrect: null,
+      showCurrentValue: true,
+      showBitPlaceValues: true,
     );
   }
 
@@ -19,12 +23,16 @@ class BinaryPracticeState {
   final List<bool> bits;
   final String? feedback;
   final bool? isCorrect;
+  final bool showCurrentValue;
+  final bool showBitPlaceValues;
 
   BinaryPracticeState copyWith({
     int? targetNumber,
     List<bool>? bits,
     String? feedback,
     bool? isCorrect,
+    bool? showCurrentValue,
+    bool? showBitPlaceValues,
     bool clearFeedback = false,
   }) {
     return BinaryPracticeState(
@@ -32,6 +40,8 @@ class BinaryPracticeState {
       bits: bits ?? this.bits,
       feedback: clearFeedback ? null : feedback ?? this.feedback,
       isCorrect: clearFeedback ? null : isCorrect ?? this.isCorrect,
+      showCurrentValue: showCurrentValue ?? this.showCurrentValue,
+      showBitPlaceValues: showBitPlaceValues ?? this.showBitPlaceValues,
     );
   }
 

@@ -27,4 +27,22 @@ void main() {
     expect(find.byKey(const ValueKey('bit-toggle-5')), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);
   });
+
+  testWidgets('binary practice visibility toggles work', (tester) async {
+    await tester.pumpWidget(const ProviderScope(child: CsPracticeApp()));
+
+    await tester.tap(find.text('Binary Practice'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Your Value:'), findsOneWidget);
+    expect(find.text('32'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(SwitchListTile, 'Show current value'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Your Value:'), findsNothing);
+
+    await tester.tap(find.widgetWithText(SwitchListTile, 'Show bit place values'));
+    await tester.pumpAndSettle();
+    expect(find.text('32'), findsNothing);
+  });
 }

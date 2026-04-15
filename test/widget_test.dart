@@ -135,6 +135,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Create your account'), findsOneWidget);
+    expect(find.text('Verify Password'), findsOneWidget);
   });
 
   testWidgets('create account shows message for invalid email', (tester) async {
@@ -159,6 +160,10 @@ void main() {
     );
     await tester.enterText(
       find.byKey(const ValueKey('create-account-password-field')),
+      'Password1',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-confirm-password-field')),
       'Password1',
     );
     await tester.tap(
@@ -193,6 +198,10 @@ void main() {
       find.byKey(const ValueKey('create-account-password-field')),
       '',
     );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-confirm-password-field')),
+      '',
+    );
     await tester.tap(
       find.byKey(const ValueKey('create-account-submit-button')),
     );
@@ -200,6 +209,72 @@ void main() {
 
     expect(
       find.text('Please enter a password.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('create account shows message when verification is missing', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ],
+        child: const CsPracticeApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-email-field')),
+      'user@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-password-field')),
+      'Password1',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-confirm-password-field')),
+      '',
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('create-account-submit-button')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Please verify your password.'), findsOneWidget);
+  });
+
+  testWidgets('sign in screen shows success message after create account returns', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ],
+        child: const CsPracticeApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+    navigator.pop('Account created successfully. Please sign in.');
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Account created successfully. Please sign in.'),
       findsOneWidget,
     );
   });

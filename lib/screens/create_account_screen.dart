@@ -21,6 +21,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
   String? _inputValidationError;
 
   @override
@@ -28,12 +29,14 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -46,6 +49,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final authController = ref.read(authControllerProvider);
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final confirmedPassword = _confirmPasswordController.text;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
@@ -106,6 +110,18 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                       onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
+                    TextField(
+                      key: const ValueKey('create-account-confirm-password-field'),
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      autofillHints: const [AutofillHints.newPassword],
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Verify Password',
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 12),
                     SignInActionButton(
                       key: const ValueKey('create-account-submit-button'),
                       label: 'Create Account',
@@ -115,6 +131,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                         authController: authController,
                         email: email,
                         password: password,
+                        confirmedPassword: confirmedPassword,
                       ),
                     ),
                     if (_inputValidationError != null) ...[
@@ -149,10 +166,12 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     required AuthController authController,
     required String email,
     required String password,
+    required String confirmedPassword,
   }) async {
     final validationError = _validateCredentials(
       email: email,
       password: password,
+      confirmedPassword: confirmedPassword,
     );
     if (validationError != null) {
       setState(() {
@@ -169,11 +188,16 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       email: email,
       password: password,
     );
+    await authController.signOut();
+
+    if (!mounted) return;
+    Navigator.of(context).pop('Account created successfully. Please sign in.');
   }
 
   String? _validateCredentials({
     required String email,
     required String password,
+    required String confirmedPassword,
   }) {
     if (email.isEmpty) {
       return 'Please enter an email address.';
@@ -190,6 +214,12 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     if (!_passwordLetterPattern.hasMatch(password) ||
         !_passwordDigitPattern.hasMatch(password)) {
       return 'Password must include at least one letter and one number.';
+    }
+    if (confirmedPassword.isEmpty) {
+      return 'Please verify your password.';
+    }
+    if (password != confirmedPassword) {
+      return 'Password verification does not match.';
     }
     return null;
   }

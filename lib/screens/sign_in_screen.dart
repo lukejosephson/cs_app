@@ -15,6 +15,7 @@ class SignInScreen extends ConsumerStatefulWidget {
 class _SignInScreenState extends ConsumerState<SignInScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  String? _accountCreatedMessage;
 
   @override
   void initState() {
@@ -76,6 +77,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
+                    if (_accountCreatedMessage != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        _accountCreatedMessage!,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.greenAccent.shade200,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 20),
                     TextField(
                       controller: _emailController,
@@ -115,13 +125,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     OutlinedButton.icon(
                       onPressed: isLoading
                           ? null
-                          : () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const CreateAccountScreen(),
-                                ),
-                              );
-                            },
+                          : () => _openCreateAccount(context),
                       icon: const Icon(Icons.person_add_alt_1_rounded),
                       label: const Text('Create Account'),
                     ),
@@ -149,5 +153,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _openCreateAccount(BuildContext context) async {
+    final message = await Navigator.of(context).push<String>(
+      MaterialPageRoute<String>(
+        builder: (_) => const CreateAccountScreen(),
+      ),
+    );
+
+    if (message != null && mounted) {
+      setState(() {
+        _accountCreatedMessage = message;
+      });
+    }
   }
 }

@@ -64,9 +64,10 @@ simulator. Troubleshoot the problem.
 
 [ ] 19. The menu for stopping the program and rot restarting the program is not 
 appearing when running in either ios or android. Explain the possible reasons
-for this and fix the issue.
+for this.
 
-[ ] 20.
+[ ] 20. Improve testing code by seperating the tests into their own files, following
+best practice outlined by the instructions.
 
 [ ] 21.
 

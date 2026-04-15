@@ -41,6 +41,32 @@ class AuthController {
     );
   }
 
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    _actionStateController.state = const AsyncLoading();
+    _actionStateController.state = await AsyncValue.guard(
+      () => _authService.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
+    );
+  }
+
+  Future<void> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    _actionStateController.state = const AsyncLoading();
+    _actionStateController.state = await AsyncValue.guard(
+      () => _authService.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
+    );
+  }
+
   Future<void> signOut() {
     return _authService.signOut();
   }

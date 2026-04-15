@@ -40,8 +40,10 @@ Create lib/services/auth_service.dart. Implement a class AuthService that handle
 and Google Sign-In using firebase_auth and google_sign_in. Do any other work needed to set up user authentication.
 Create a sign in screen that the user is brought to before the home screen.
 
-[ ] 12. Implement the option to log in with email and password. There should also be functionality for creating
+[x] 12. Implement the option to log in with email and password. There should also be functionality for creating
 an account.
+
+[ ] 13. I do not need functionality for anonymous sign in. Remove that functionality and maintain clean code.
 
 
 

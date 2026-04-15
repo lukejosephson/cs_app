@@ -4,16 +4,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
-class SignInScreen extends ConsumerWidget {
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends ConsumerState<SignInScreen> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final authActionState = ref.watch(authActionStateProvider);
     final isLoading = authActionState.isLoading;
     final authController = ref.read(authControllerProvider);
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final canSubmitEmailForm = email.isNotEmpty && password.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
@@ -45,12 +70,59 @@ class SignInScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Use Google or continue anonymously to start practicing.',
+                      'Use email/password, Google, or continue anonymously to start practicing.',
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 20),
+                    TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'name@example.com',
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      autofillHints: const [AutofillHints.password],
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 12),
+                    SignInActionButton(
+                      label: 'Sign in with Email',
+                      icon: Icons.email_outlined,
+                      isLoading: isLoading,
+                      onPressed: canSubmitEmailForm
+                          ? () => authController.signInWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )
+                          : null,
+                    ),
+                    const SizedBox(height: 12),
+                    SignInActionButton(
+                      label: 'Create Account',
+                      icon: Icons.person_add_alt_1_rounded,
+                      isLoading: isLoading,
+                      onPressed: canSubmitEmailForm
+                          ? () => authController.createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )
+                          : null,
+                    ),
+                    const SizedBox(height: 12),
                     SignInActionButton(
                       label: 'Continue with Google',
                       icon: Icons.login_rounded,
@@ -67,7 +139,7 @@ class SignInScreen extends ConsumerWidget {
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),
                       Text(
-                        'Sign-in failed: ${authActionState.error}',
+                        'Authentication failed: ${authActionState.error}',
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.error,
                         ),

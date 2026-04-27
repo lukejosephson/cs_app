@@ -5,11 +5,11 @@
 Necessary for functionality: 
 
 
-1. [ ] Authentication: User opens the app to a sign in / create account screen
+1. [x] Authentication: User opens the app to a sign in / create account screen
 
-2. [ ] UI: User is shown a home screen that gives the option of puzzles / types of problems to solve 
+2. [x] UI: User is shown a home screen that gives the option of puzzles / types of problems to solve 
 
-3. [ ] Binary Practice: User should be given a number and asked to flip tiles from 0 to 1 
+3. [x] Binary Practice: User should be given a number and asked to flip tiles from 0 to 1 
 to make the number, which should then be verified
 
 4. [ ] Error Detection: User should be given a code snippet with a syntax or logic error.

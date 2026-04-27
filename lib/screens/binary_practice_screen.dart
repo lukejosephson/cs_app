@@ -6,11 +6,25 @@ import '../providers/binary_practice_provider.dart';
 import '../widgets/binary/binary_visibility_settings_card.dart';
 import '../widgets/binary/bit_toggle_tile.dart';
 
-class BinaryPracticeScreen extends ConsumerWidget {
+class BinaryPracticeScreen extends ConsumerStatefulWidget {
   const BinaryPracticeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BinaryPracticeScreen> createState() =>
+      _BinaryPracticeScreenState();
+}
+
+class _BinaryPracticeScreenState extends ConsumerState<BinaryPracticeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(binaryPracticeProvider.notifier).restoreDisplayPreferences();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(binaryPracticeProvider);
     final controller = ref.read(binaryPracticeProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
@@ -29,7 +43,9 @@ class BinaryPracticeScreen extends ConsumerWidget {
                 children: [
                   Text(
                     'Target Number: ${state.targetNumber}',
-                    style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    style: textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -44,7 +60,9 @@ class BinaryPracticeScreen extends ConsumerWidget {
           Wrap(
             spacing: 6,
             runSpacing: 8,
-            children: List.generate(BinaryPracticeConfig.placeValues.length, (index) {
+            children: List.generate(BinaryPracticeConfig.placeValues.length, (
+              index,
+            ) {
               return BitToggleTile(
                 index: index,
                 bitValue: BinaryPracticeConfig.placeValues[index],

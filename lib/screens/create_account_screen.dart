@@ -11,7 +11,8 @@ class CreateAccountScreen extends ConsumerStatefulWidget {
   const CreateAccountScreen({super.key});
 
   @override
-  ConsumerState<CreateAccountScreen> createState() => _CreateAccountScreenState();
+  ConsumerState<CreateAccountScreen> createState() =>
+      _CreateAccountScreenState();
 }
 
 class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
@@ -111,7 +112,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextField(
-                      key: const ValueKey('create-account-confirm-password-field'),
+                      key: const ValueKey(
+                        'create-account-confirm-password-field',
+                      ),
                       controller: _confirmPasswordController,
                       obscureText: true,
                       autofillHints: const [AutofillHints.newPassword],
@@ -184,10 +187,14 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       _inputValidationError = null;
     });
 
-    await authController.createUserWithEmailAndPassword(
+    final isCreated = await authController.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
+    if (!isCreated) {
+      return;
+    }
+
     await authController.signOut();
 
     if (!mounted) return;

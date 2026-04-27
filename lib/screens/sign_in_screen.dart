@@ -104,9 +104,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       obscureText: true,
                       autofillHints: const [AutofillHints.password],
                       enabled: !isLoading,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                      ),
+                      decoration: const InputDecoration(labelText: 'Password'),
                       onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
@@ -116,9 +114,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       isLoading: isLoading,
                       onPressed: canSubmitEmailForm
                           ? () => authController.signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )
+                              email: email,
+                              password: password,
+                            )
                           : null,
                     ),
                     const SizedBox(height: 12),
@@ -157,9 +155,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _openCreateAccount(BuildContext context) async {
     final message = await Navigator.of(context).push<String>(
-      MaterialPageRoute<String>(
-        builder: (_) => const CreateAccountScreen(),
-      ),
+      MaterialPageRoute<String>(builder: (_) => const CreateAccountScreen()),
     );
 
     if (message != null && mounted) {

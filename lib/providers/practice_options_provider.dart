@@ -6,7 +6,8 @@ final practiceOptionsProvider = Provider<List<PracticeType>>((ref) {
   return const [
     PracticeType(
       title: 'Binary Practice',
-      description: 'Convert values between decimal and binary using tile-based drills.',
+      description:
+          'Convert values between decimal and binary using tile-based drills.',
     ),
   ];
 });

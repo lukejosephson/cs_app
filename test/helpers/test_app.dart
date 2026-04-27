@@ -15,11 +15,15 @@ Future<void> pumpSignedInApp(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> pumpSignedOutApp(WidgetTester tester) async {
+Future<void> pumpSignedOutApp(
+  WidgetTester tester, {
+  List<Override> overrides = const [],
+}) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         authStateProvider.overrideWith((ref) => Stream<bool>.value(false)),
+        ...overrides,
       ],
       child: const CsPracticeApp(),
     ),

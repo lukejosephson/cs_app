@@ -1,22 +1,48 @@
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/binary_practice_config.dart';
 import '../models/binary_practice_state.dart';
 
 final randomProvider = Provider<Random>((ref) => Random());
+final sharedPreferencesProvider = Provider<SharedPreferences?>((ref) => null);
 
 final binaryPracticeProvider =
     StateNotifierProvider<BinaryPracticeController, BinaryPracticeState>((ref) {
-      return BinaryPracticeController(ref.watch(randomProvider));
+      return BinaryPracticeController(
+        ref.watch(randomProvider),
+        ref.watch(sharedPreferencesProvider),
+      );
     });
 
 class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
-  BinaryPracticeController(this._random)
-      : super(BinaryPracticeState.initial(_random.nextInt(1 << BinaryPracticeConfig.bitCount)));
+  BinaryPracticeController(this._random, this._prefs)
+    : super(
+        BinaryPracticeState.initial(
+          _random.nextInt(1 << BinaryPracticeConfig.bitCount),
+        ),
+      );
 
   final Random _random;
+  final SharedPreferences? _prefs;
+
+  static const _showCurrentValueKey = 'binary.showCurrentValue';
+  static const _showBitPlaceValuesKey = 'binary.showBitPlaceValues';
+
+  void restoreDisplayPreferences() {
+    final prefs = _prefs;
+    if (prefs == null) {
+      return;
+    }
+    state = state.copyWith(
+      showCurrentValue:
+          prefs.getBool(_showCurrentValueKey) ?? state.showCurrentValue,
+      showBitPlaceValues:
+          prefs.getBool(_showBitPlaceValuesKey) ?? state.showBitPlaceValues,
+    );
+  }
 
   void toggleBit(int index) {
     final updatedBits = List<bool>.from(state.bits);
@@ -26,7 +52,9 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
 
   void checkAnswer() {
     final answeredNumber = state.targetNumber;
-    final answeredBinary = answeredNumber.toRadixString(2).padLeft(BinaryPracticeConfig.bitCount, '0');
+    final answeredBinary = answeredNumber
+        .toRadixString(2)
+        .padLeft(BinaryPracticeConfig.bitCount, '0');
 
     if (state.currentValue == state.targetNumber) {
       state = BinaryPracticeState(
@@ -50,9 +78,11 @@ class BinaryPracticeController extends StateNotifier<BinaryPracticeState> {
 
   void toggleShowCurrentValue(bool value) {
     state = state.copyWith(showCurrentValue: value);
+    _prefs?.setBool(_showCurrentValueKey, value);
   }
 
   void toggleShowBitPlaceValues(bool value) {
     state = state.copyWith(showBitPlaceValues: value);
+    _prefs?.setBool(_showBitPlaceValuesKey, value);
   }
 }

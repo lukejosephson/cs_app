@@ -19,9 +19,8 @@ class AuthGateScreen extends ConsumerWidget {
         }
         return const SignInScreen();
       },
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stackTrace) => Scaffold(
         body: Center(
           child: Padding(

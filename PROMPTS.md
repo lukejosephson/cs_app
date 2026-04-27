@@ -69,7 +69,8 @@ for this.
 [x] 20. Improve testing code by seperating the tests into their own files, following
 best practice outlined by the instructions.
 
-[ ] 21.
+[ ] 21. According to the guidelines laid out, give constructive criticism for
+the current code. Do not make any changes. Give feedback on what could be improved and why.
 
 [ ] 22.
 

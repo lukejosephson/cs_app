@@ -4,6 +4,7 @@ import '../models/loop_challenge.dart';
 
 abstract class DatabaseService {
   Future<List<LoopChallenge>> fetchPuzzlesByType(String type);
+  Stream<List<LoopChallenge>> getLoopPuzzles();
 }
 
 class FirestoreDatabaseService implements DatabaseService {
@@ -20,5 +21,19 @@ class FirestoreDatabaseService implements DatabaseService {
         .get();
 
     return snapshot.docs.map(LoopChallenge.fromFirestore).toList(growable: false);
+  }
+
+  @override
+  Stream<List<LoopChallenge>> getLoopPuzzles() {
+    return _firestore
+        .collection('puzzles')
+        .where(LoopChallenge.fieldType, isEqualTo: 'loop_scout')
+        .where(LoopChallenge.fieldIsArchived, isEqualTo: false)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(LoopChallenge.fromFirestore)
+              .toList(growable: false),
+        );
   }
 }

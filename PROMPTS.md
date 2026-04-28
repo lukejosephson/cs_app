@@ -140,7 +140,7 @@ Should there be any areas of improvement for the code and current basic function
 
 [x] 27. Check if lib/models/loop_challenge.dart exists. If not, create it. It must be a pure Dart class with these fields: id (int), type (String), snippet (String), target (String), answer (String), difficulty (int), error_line (int), is_archived (bool), and tags (List). Include a fromFirestore factory constructor.
 
-[ ] 28. Check if lib/services/database_service.dart exists. If not, create it. Implement a method getLoopPuzzles() that fetches documents from the 'puzzles' collection where type == 'loop_scout' and is_archived == false. It should return a Stream<List<LoopChallenge>>
+[x] 28. Check if lib/services/database_service.dart exists. If not, create it. Implement a method getLoopPuzzles() that fetches documents from the 'puzzles' collection where type == 'loop_scout' and is_archived == false. It should return a Stream<List<LoopChallenge>>
 
 [ ] 29. Create lib/providers/loop_provider.dart. Use a Riverpod StreamProvider that wraps the DatabaseService call. We will use this to handle the loading/error states in the UI later using AsyncValue.
 

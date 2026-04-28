@@ -1,4 +1,5 @@
 import 'package:cs_app/models/loop_challenge.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -50,5 +51,27 @@ void main() {
       'is_archived': true,
       'tags': ['syntax', 'dart'],
     });
+  });
+
+  test('fromFirestore builds model from document snapshot', () async {
+    final firestore = FakeFirebaseFirestore();
+    await firestore.collection('loop_challenges').doc('31').set({
+      LoopChallenge.fieldType: 'loop_tracing',
+      LoopChallenge.fieldSnippet: 'for (var i = 0; i < 4; i++) { count += 2; }',
+      LoopChallenge.fieldTarget: 'count',
+      LoopChallenge.fieldAnswer: '8',
+      LoopChallenge.fieldErrorLine: 0,
+      LoopChallenge.fieldDifficulty: 2,
+      LoopChallenge.fieldIsArchived: false,
+      LoopChallenge.fieldTags: ['loops', 'arithmetic'],
+    });
+
+    final snapshot = await firestore.collection('loop_challenges').doc('31').get();
+    final challenge = LoopChallenge.fromFirestore(snapshot);
+
+    expect(challenge.id, 31);
+    expect(challenge.type, 'loop_tracing');
+    expect(challenge.answer, '8');
+    expect(challenge.tags, ['loops', 'arithmetic']);
   });
 }

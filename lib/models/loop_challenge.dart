@@ -1,4 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class LoopChallenge {
+  static const fieldAnswer = 'answer';
+  static const fieldDifficulty = 'difficulty';
+  static const fieldErrorLine = 'error_line';
+  static const fieldId = 'id';
+  static const fieldIsArchived = 'is_archived';
+  static const fieldSnippet = 'snippet';
+  static const fieldTags = 'tags';
+  static const fieldTarget = 'target';
+  static const fieldType = 'type';
+
   const LoopChallenge({
     required this.id,
     required this.type,
@@ -11,17 +23,29 @@ class LoopChallenge {
     required this.tags,
   });
 
+  factory LoopChallenge.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
+    final data = snapshot.data() ?? <String, dynamic>{};
+    final docIdAsInt = int.tryParse(snapshot.id);
+
+    return LoopChallenge.fromMap({
+      ...data,
+      fieldId: (data[fieldId] as num?)?.toInt() ?? docIdAsInt ?? 0,
+    });
+  }
+
   factory LoopChallenge.fromMap(Map<String, dynamic> map) {
     return LoopChallenge(
-      id: (map['id'] as num?)?.toInt() ?? 0,
-      type: map['type'] as String? ?? '',
-      snippet: map['snippet'] as String? ?? '',
-      target: map['target'] as String? ?? '',
-      answer: map['answer'] as String? ?? '',
-      errorLine: (map['error_line'] as num?)?.toInt() ?? 0,
-      difficulty: (map['difficulty'] as num?)?.toInt() ?? 0,
-      isArchived: map['is_archived'] as bool? ?? false,
-      tags: (map['tags'] as List<dynamic>? ?? <dynamic>[])
+      id: (map[fieldId] as num?)?.toInt() ?? 0,
+      type: map[fieldType] as String? ?? '',
+      snippet: map[fieldSnippet] as String? ?? '',
+      target: map[fieldTarget] as String? ?? '',
+      answer: map[fieldAnswer] as String? ?? '',
+      errorLine: (map[fieldErrorLine] as num?)?.toInt() ?? 0,
+      difficulty: (map[fieldDifficulty] as num?)?.toInt() ?? 0,
+      isArchived: map[fieldIsArchived] as bool? ?? false,
+      tags: (map[fieldTags] as List<dynamic>? ?? <dynamic>[])
           .whereType<String>()
           .toList(growable: false),
     );
@@ -39,15 +63,15 @@ class LoopChallenge {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'type': type,
-      'snippet': snippet,
-      'target': target,
-      'answer': answer,
-      'error_line': errorLine,
-      'difficulty': difficulty,
-      'is_archived': isArchived,
-      'tags': tags,
+      fieldId: id,
+      fieldType: type,
+      fieldSnippet: snippet,
+      fieldTarget: target,
+      fieldAnswer: answer,
+      fieldErrorLine: errorLine,
+      fieldDifficulty: difficulty,
+      fieldIsArchived: isArchived,
+      fieldTags: tags,
     };
   }
 

@@ -125,7 +125,7 @@ type
 ""
 (string)
 
-[ ] 23. Implement a fromFirestore factory constructor if it does not already exist. The plan is to
+[x] 23. Implement a fromFirestore factory constructor if it does not already exist. The plan is to
 store puzzles in firestore that will then be used for a loop tracing game. This schema also plans 
 ahead for further games like error identification, which we will not implement yet. Ensure that
 the models directory is thorough and ready. do not move on to the services yet.

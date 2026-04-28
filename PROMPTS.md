@@ -130,7 +130,7 @@ store puzzles in firestore that will then be used for a loop tracing game. This 
 ahead for further games like error identification, which we will not implement yet. Ensure that
 the models directory is thorough and ready. do not move on to the services yet.
 
-[ ] 24. Now create lib/services/database_service.dart. Implement a fetchPuzzlesByType(String type) method. 
+[x] 24. Now create lib/services/database_service.dart. Implement a fetchPuzzlesByType(String type) method. 
 It should query the 'puzzles' collection where 'type' matches the argument.
 Map the Firestore documents into our LoopChallenge model. Ensure no UI code or Riverpod code is in this file
 

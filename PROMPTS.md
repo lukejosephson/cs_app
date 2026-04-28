@@ -142,7 +142,7 @@ Should there be any areas of improvement for the code and current basic function
 
 [x] 28. Check if lib/services/database_service.dart exists. If not, create it. Implement a method getLoopPuzzles() that fetches documents from the 'puzzles' collection where type == 'loop_scout' and is_archived == false. It should return a Stream<List<LoopChallenge>>
 
-[ ] 29. Create lib/providers/loop_provider.dart. Use a Riverpod StreamProvider that wraps the DatabaseService call. We will use this to handle the loading/error states in the UI later using AsyncValue.
+[x] 29. Create lib/providers/loop_provider.dart. Use a Riverpod StreamProvider that wraps the DatabaseService call. We will use this to handle the loading/error states in the UI later using AsyncValue.
 
 [ ] 30.
 

@@ -72,7 +72,7 @@ best practice outlined by the instructions.
 [x] 21. According to the guidelines laid out, give constructive criticism for
 the current code. Do not make any changes. Give feedback on what could be improved and why.
 
-[ ] 22.We are starting the Model Layer for the Loop Scout module. Create 
+[x] 22.We are starting the Model Layer for the Loop Scout module. Create 
 lib/models/loop_challenge.dart. Define a class LoopChallenge with fields 
 matching our Firestore schema, which is as follows below:
 

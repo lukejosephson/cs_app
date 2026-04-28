@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,6 +170,87 @@ void main() {
 
     expect(find.text('Create your account'), findsOneWidget);
     expect(fakeAuthService.createAccountCallCount, 1);
+    expect(fakeAuthService.signOutCalled, isFalse);
+  });
+
+  testWidgets('create account success signs out and returns to sign in', (
+    tester,
+  ) async {
+    final fakeAuthService = FakeAuthService(createAccountSucceeds: true);
+
+    await pumpSignedOutApp(
+      tester,
+      overrides: [authServiceProvider.overrideWithValue(fakeAuthService)],
+    );
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-email-field')),
+      'user@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-password-field')),
+      'Password1',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-confirm-password-field')),
+      'Password1',
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('create-account-submit-button')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Account created successfully. Please sign in.'),
+      findsOneWidget,
+    );
+    expect(fakeAuthService.createAccountCallCount, 1);
+    expect(fakeAuthService.signOutCalled, isTrue);
+  });
+
+  testWidgets('create account shows timeout-specific failure message', (
+    tester,
+  ) async {
+    final fakeAuthService = FakeAuthService(
+      createAccountError: TimeoutException('timed out'),
+    );
+
+    await pumpSignedOutApp(
+      tester,
+      overrides: [authServiceProvider.overrideWithValue(fakeAuthService)],
+    );
+
+    await tester.tap(
+      find.widgetWithIcon(OutlinedButton, Icons.person_add_alt_1_rounded),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-email-field')),
+      'user@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-password-field')),
+      'Password1',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('create-account-confirm-password-field')),
+      'Password1',
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('create-account-submit-button')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(
+        'Authentication timed out. Check your internet connection and try again.',
+      ),
+      findsOneWidget,
+    );
     expect(fakeAuthService.signOutCalled, isFalse);
   });
 }

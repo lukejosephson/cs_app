@@ -2,9 +2,10 @@ import 'package:cs_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FakeAuthService implements AuthService {
-  FakeAuthService({this.createAccountError});
+  FakeAuthService({this.createAccountError, this.createAccountSucceeds = false});
 
   final Object? createAccountError;
+  final bool createAccountSucceeds;
   bool signOutCalled = false;
   var createAccountCallCount = 0;
 
@@ -17,6 +18,9 @@ class FakeAuthService implements AuthService {
     required String password,
   }) async {
     createAccountCallCount++;
+    if (createAccountSucceeds) {
+      return const _FakeUserCredential();
+    }
     if (createAccountError != null) {
       throw createAccountError!;
     }
@@ -40,4 +44,11 @@ class FakeAuthService implements AuthService {
   Future<void> signOut() async {
     signOutCalled = true;
   }
+}
+
+class _FakeUserCredential implements UserCredential {
+  const _FakeUserCredential();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

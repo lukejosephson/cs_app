@@ -144,7 +144,9 @@ Should there be any areas of improvement for the code and current basic function
 
 [x] 29. Create lib/providers/loop_provider.dart. Use a Riverpod StreamProvider that wraps the DatabaseService call. We will use this to handle the loading/error states in the UI later using AsyncValue.
 
-[ ] 30.
+[x] 30. I have added a new markdown file CHANGES.md to contain summaries of the changes made by CLI code assist. I have also added a development 
+rule to add to this file after every prompt. Follow this rule moving forward. If past prompts have summaries available or you
+are able to generate them, add them retroactively to the CHANGES.md file
 
 [ ] 31.
 
@@ -181,3 +183,4 @@ status).
 7. Explain-First Policy: Before providing code, Gemini must briefly explain the architectural pattern chosen and why it is the standard approach for Flutter/Riverpod.
 8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description
 9. Refactor Alert: If Gemini identifies a widget or logic block that could be made reusable, it must stop and suggest a refactor into the /widgets or /services folder before continuing with the UI.
+10. After completing a prompt, summarize what has been done and why. Add this information into the changes.md file with the prompt number.

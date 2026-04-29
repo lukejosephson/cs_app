@@ -163,7 +163,22 @@ Constraint: Use .when() to handle data, loading, and error states.
 For loading, show a CircularProgressIndicator. For error, show a professional error message using ThemeData.
 For data, display a placeholder Column that will eventually hold our widgets.
 
+[ ] 35. The Code Display Widget (Aesthetic)Goal: Create a reusable widget for the code snippet that uses your monospace developer theme.
+"Create lib/widgets/code_display_box.dart.This widget should take a String snippet as a parameter.Wrap the snippet in a Container with a dark background, subtle borders, and padding.Requirement: Use a monospace font (like Fira Code via GoogleFonts) as specified in the 'developer aesthetic' guidelines.Ensure it handles multi-line snippets properly.
 
+[ ] 36.
+
+[ ] 37.
+
+[ ] 38.
+
+[ ] 39.
+
+[ ] 40.
+
+[ ] 41.
+
+[ ] 42.
 
 
 

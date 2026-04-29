@@ -10,3 +10,7 @@ final databaseServiceProvider = Provider<DatabaseService>((ref) {
 final loopPuzzlesProvider = StreamProvider<List<LoopChallenge>>((ref) {
   return ref.watch(databaseServiceProvider).getLoopPuzzles();
 });
+
+final loopPuzzlesOnceProvider = FutureProvider<List<LoopChallenge>>((ref) {
+  return ref.watch(databaseServiceProvider).fetchLoopPuzzles();
+});

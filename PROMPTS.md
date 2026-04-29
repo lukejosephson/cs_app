@@ -181,7 +181,7 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
 
-[ ] 42.Add retry/wrong-answer tracking hooks to align with requirements.
+[x] 42.Add retry/wrong-answer tracking hooks to align with requirements.
 
 [ ] 43. These are possible sources of error. Address these as necessary.
  1. puzzleProvider is a stream alias; if provider types/names change later, screen wiring can silently drift.

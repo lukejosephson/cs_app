@@ -11,6 +11,8 @@ class LoopTracingState {
     this.hasSubmitted = false,
     this.currentPuzzleIndex = 0,
     this.inputErrorMessage,
+    this.wrongAttemptsByPuzzle = const {},
+    this.retryPuzzleIds = const [],
   });
 
   final String currentInput;
@@ -18,6 +20,8 @@ class LoopTracingState {
   final bool hasSubmitted;
   final int currentPuzzleIndex;
   final String? inputErrorMessage;
+  final Map<int, int> wrongAttemptsByPuzzle;
+  final List<int> retryPuzzleIds;
 
   LoopTracingState copyWith({
     String? currentInput,
@@ -25,6 +29,8 @@ class LoopTracingState {
     bool? hasSubmitted,
     int? currentPuzzleIndex,
     String? inputErrorMessage,
+    Map<int, int>? wrongAttemptsByPuzzle,
+    List<int>? retryPuzzleIds,
     bool clearInputError = false,
   }) {
     return LoopTracingState(
@@ -35,6 +41,8 @@ class LoopTracingState {
       inputErrorMessage: clearInputError
           ? null
           : inputErrorMessage ?? this.inputErrorMessage,
+      wrongAttemptsByPuzzle: wrongAttemptsByPuzzle ?? this.wrongAttemptsByPuzzle,
+      retryPuzzleIds: retryPuzzleIds ?? this.retryPuzzleIds,
     );
   }
 }
@@ -59,7 +67,7 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     );
   }
 
-  void submitAnswer(String expectedAnswer) {
+  void submitAnswer({required int puzzleId, required String expectedAnswer}) {
     final userInput = state.currentInput.trim();
     if (userInput.isEmpty) {
       state = state.copyWith(
@@ -72,10 +80,23 @@ class LoopTracingController extends Notifier<LoopTracingState> {
 
     final normalizedInput = _normalizeAnswer(userInput);
     final normalizedExpected = _normalizeAnswer(expectedAnswer);
+    final isCorrect = normalizedInput == normalizedExpected;
+
+    final wrongAttempts = Map<int, int>.from(state.wrongAttemptsByPuzzle);
+    final retryIds = List<int>.from(state.retryPuzzleIds);
+    if (!isCorrect) {
+      wrongAttempts[puzzleId] = (wrongAttempts[puzzleId] ?? 0) + 1;
+      if (!retryIds.contains(puzzleId)) {
+        retryIds.add(puzzleId);
+      }
+    }
+
     state = state.copyWith(
-      isCorrect: normalizedInput == normalizedExpected,
+      isCorrect: isCorrect,
       hasSubmitted: true,
       clearInputError: true,
+      wrongAttemptsByPuzzle: wrongAttempts,
+      retryPuzzleIds: retryIds,
     );
   }
 

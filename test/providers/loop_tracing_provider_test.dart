@@ -15,6 +15,8 @@ void main() {
     expect(state.hasSubmitted, isFalse);
     expect(state.currentPuzzleIndex, 0);
     expect(state.inputErrorMessage, isNull);
+    expect(state.wrongAttemptsByPuzzle, isEmpty);
+    expect(state.retryPuzzleIds, isEmpty);
   });
 
   test('updateInput updates input and clears correctness', () {
@@ -38,7 +40,7 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('  6 ');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 1, expectedAnswer: '6');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isTrue);
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
@@ -46,6 +48,8 @@ void main() {
       container.read(loopTracingControllerProvider).inputErrorMessage,
       isNull,
     );
+    expect(container.read(loopTracingControllerProvider).wrongAttemptsByPuzzle, isEmpty);
+    expect(container.read(loopTracingControllerProvider).retryPuzzleIds, isEmpty);
   });
 
   test('submitAnswer ignores case and repeated whitespace', () {
@@ -54,7 +58,7 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('  Hello   World  ');
-    controller.submitAnswer('hello world');
+    controller.submitAnswer(puzzleId: 2, expectedAnswer: 'hello world');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isTrue);
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
@@ -66,10 +70,15 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('5');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 3, expectedAnswer: '6');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isFalse);
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
+    expect(
+      container.read(loopTracingControllerProvider).wrongAttemptsByPuzzle[3],
+      1,
+    );
+    expect(container.read(loopTracingControllerProvider).retryPuzzleIds, [3]);
   });
 
   test('submitAnswer with empty input sets validation message', () {
@@ -78,12 +87,14 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('   ');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 4, expectedAnswer: '6');
 
     final state = container.read(loopTracingControllerProvider);
     expect(state.hasSubmitted, isFalse);
     expect(state.isCorrect, isFalse);
     expect(state.inputErrorMessage, 'Please enter an answer before checking.');
+    expect(state.wrongAttemptsByPuzzle, isEmpty);
+    expect(state.retryPuzzleIds, isEmpty);
   });
 
   test('reset returns state to default values', () {
@@ -92,7 +103,7 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('6');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 1, expectedAnswer: '6');
     controller.reset();
 
     final state = container.read(loopTracingControllerProvider);
@@ -110,7 +121,7 @@ void main() {
 
     controller.moveToNextPuzzle(3);
     controller.updateInput('6');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 1, expectedAnswer: '6');
     controller.clearResponse();
 
     final state = container.read(loopTracingControllerProvider);
@@ -127,7 +138,7 @@ void main() {
     final controller = container.read(loopTracingControllerProvider.notifier);
 
     controller.updateInput('6');
-    controller.submitAnswer('6');
+    controller.submitAnswer(puzzleId: 1, expectedAnswer: '6');
     controller.moveToNextPuzzle(3);
 
     final state = container.read(loopTracingControllerProvider);
@@ -150,7 +161,7 @@ void main() {
       final controller = container.read(loopTracingControllerProvider.notifier);
 
       controller.updateInput('6');
-      controller.submitAnswer('6');
+      controller.submitAnswer(puzzleId: 1, expectedAnswer: '6');
       controller.moveToRandomPuzzle(3);
 
       final state = container.read(loopTracingControllerProvider);
@@ -161,4 +172,22 @@ void main() {
       expect(state.inputErrorMessage, isNull);
     },
   );
+
+  test('wrong attempts accumulate and keep unique retry puzzle ids', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.updateInput('bad');
+    controller.submitAnswer(puzzleId: 7, expectedAnswer: 'good');
+    controller.updateInput('still bad');
+    controller.submitAnswer(puzzleId: 7, expectedAnswer: 'good');
+    controller.updateInput('bad');
+    controller.submitAnswer(puzzleId: 8, expectedAnswer: 'good');
+
+    final state = container.read(loopTracingControllerProvider);
+    expect(state.wrongAttemptsByPuzzle[7], 2);
+    expect(state.wrongAttemptsByPuzzle[8], 1);
+    expect(state.retryPuzzleIds, [7, 8]);
+  });
 }

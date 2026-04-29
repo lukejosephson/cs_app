@@ -82,7 +82,10 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
             const SizedBox(height: 12),
             FilledButton(
               key: const ValueKey('loop-check-answer-button'),
-              onPressed: () => controller.submitAnswer(widget.correctAnswer),
+              onPressed: () => controller.submitAnswer(
+                puzzleId: widget.puzzleId,
+                expectedAnswer: widget.correctAnswer,
+              ),
               child: const Text('Check Answer'),
             ),
             if (state.inputErrorMessage != null) ...[

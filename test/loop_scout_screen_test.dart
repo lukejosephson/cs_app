@@ -86,6 +86,7 @@ void main() {
 
     expect(find.text('Loop tracing'), findsOneWidget);
     expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
+    expect(find.text('Retry pool: 0'), findsOneWidget);
     expect(find.byKey(const ValueKey('loop-answer-input')), findsOneWidget);
     expect(find.text('Target variable: total'), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);
@@ -99,6 +100,11 @@ void main() {
     await tester.tap(find.text('Random'));
     await tester.pump();
     expect(find.text('Target variable: total'), findsOneWidget);
+
+    await tester.enterText(find.byKey(const ValueKey('loop-answer-input')), 'nope');
+    await tester.tap(find.text('Check Answer'));
+    await tester.pump();
+    expect(find.text('Retry pool: 1'), findsOneWidget);
   });
 
   testWidgets('resets input intentionally when moving to next challenge', (

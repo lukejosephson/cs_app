@@ -89,6 +89,13 @@ class LoopScoutScreen extends ConsumerWidget {
                   color: colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
               ),
+              const SizedBox(height: 4),
+              Text(
+                'Retry pool: ${loopState.retryPuzzleIds.length}',
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.75),
+                ),
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [

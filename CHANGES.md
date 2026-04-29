@@ -81,3 +81,8 @@
 - Added richer answer-validation UX in loop tracing: empty submissions now surface an explicit validation message instead of evaluating as wrong answers.
 - Implemented a comparison policy that normalizes answers by trimming, collapsing repeated whitespace, and ignoring letter case before correctness checks.
 - Updated loop input and controller tests to cover empty-input feedback and case/whitespace-insensitive answer matching behavior.
+
+## Prompt 42
+- Added retry/wrong-answer tracking hooks in loop controller state via `wrongAttemptsByPuzzle` and `retryPuzzleIds`, with incorrect submissions incrementing per-puzzle counters and adding retry candidates.
+- Updated answer submission flow to carry puzzle identity (`puzzleId`) so tracking is tied to specific challenges.
+- Surfaced hook state in the loop UI with a retry pool indicator and expanded tests to verify wrong-attempt accumulation and retry list behavior.

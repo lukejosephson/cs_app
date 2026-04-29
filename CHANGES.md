@@ -43,3 +43,8 @@
 - Added `lib/providers/loop_tracing_provider.dart` with a UI-focused Riverpod `Notifier` (`LoopTracingController`) and `LoopTracingState` containing `currentInput` and `isCorrect`.
 - Implemented controller actions for input updates, answer submission, and reset so loop-tracing UI state is managed separately from Firestore data-fetch providers.
 - Added provider tests in `test/providers/loop_tracing_provider_test.dart` to validate initial state, correctness checks, and reset behavior.
+
+## Prompt 34
+- Added `lib/screens/loop_scout_screen.dart` as the loop tracing main screen skeleton using `AsyncValue.when()` against `puzzleProvider` for loading, error, and data UI states.
+- Implemented a loading state with `CircularProgressIndicator`, a themed/professional error card, and a placeholder `Column` data layout for upcoming loop-tracing widgets.
+- Added `test/loop_scout_screen_test.dart` to cover loading, error, and data rendering behavior for the new async screen flow.

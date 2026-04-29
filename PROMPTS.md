@@ -154,7 +154,14 @@ rule to add to this file after every prompt. Follow this rule moving forward. If
 [x] 33. We are starting the front end / UI for the loop tracing. If not already done, In the providers folder, create a controller for the loop tracing. Implement a Notifier that manages a simple state class (e.g., LoopTracingState) containing the user's currentInput and a bool for isCorrect. Rule 7 (Explain-First): Briefly explain why we use a UI-specific Notifier separate from the Database Provider. Ensure it uses correct Riverpod syntax.
 
 
-[ ] 34. 
+[x] 34. The Main Screen Skeleton (Async Handling)
+Goal: Build the LoopScoutScreen using AsyncValue.when() to handle data from Firestore . 
+If any of this has been done or is in another name, adapt as necessary.
+"Create lib/screens/loop_scout_screen.dart.
+This screen should watch the puzzleProvider (which fetches data from Firestore).
+Constraint: Use .when() to handle data, loading, and error states.
+For loading, show a CircularProgressIndicator. For error, show a professional error message using ThemeData.
+For data, display a placeholder Column that will eventually hold our widgets.
 
 
 

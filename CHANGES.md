@@ -66,3 +66,8 @@
 - Added puzzle progression support in the loop UI state/controller with `moveToNextPuzzle` and `moveToRandomPuzzle`, including `currentPuzzleIndex` tracking and state reset behavior between challenge changes.
 - Updated `LoopScoutScreen` to render puzzles by controller index instead of always using the first record, and added explicit `Next Challenge` and `Random` actions for navigation.
 - Expanded frontend tests to verify progression behavior and controller index/state updates.
+
+## Prompt 39
+- Added intentional puzzle lifecycle input behavior by upgrading `LoopInputPanel` to a stateful, controller-backed widget that syncs its `TextField` with loop controller state.
+- Implemented explicit response reset support (`clearResponse`) in the loop controller and triggered it when the active puzzle changes so answer text/feedback reset cleanly between challenges while preserving same-puzzle edits.
+- Expanded loop UI tests to verify input/feedback are reset after moving to a new challenge and that response clearing keeps puzzle index progression intact.

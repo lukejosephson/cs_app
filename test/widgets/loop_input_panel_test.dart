@@ -9,7 +9,11 @@ void main() {
     return const ProviderScope(
       child: MaterialApp(
         home: Scaffold(
-          body: LoopInputPanel(targetVariable: 'total', correctAnswer: '6'),
+          body: LoopInputPanel(
+            puzzleId: 1,
+            targetVariable: 'total',
+            correctAnswer: '6',
+          ),
         ),
       ),
     );

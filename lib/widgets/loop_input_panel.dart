@@ -3,21 +3,58 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/loop_tracing_provider.dart';
 
-class LoopInputPanel extends ConsumerWidget {
+class LoopInputPanel extends ConsumerStatefulWidget {
   const LoopInputPanel({
+    required this.puzzleId,
     required this.targetVariable,
     required this.correctAnswer,
     super.key,
   });
 
+  final int puzzleId;
   final String targetVariable;
   final String correctAnswer;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoopInputPanel> createState() => _LoopInputPanelState();
+}
+
+class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController();
+  }
+
+  @override
+  void didUpdateWidget(covariant LoopInputPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.puzzleId != oldWidget.puzzleId) {
+      ref.read(loopScoutControllerProvider.notifier).clearResponse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final controller = ref.read(loopScoutControllerProvider.notifier);
     final state = ref.watch(loopScoutControllerProvider);
     final textTheme = Theme.of(context).textTheme;
+
+    if (_textController.text != state.currentInput) {
+      _textController.value = _textController.value.copyWith(
+        text: state.currentInput,
+        selection: TextSelection.collapsed(offset: state.currentInput.length),
+        composing: TextRange.empty,
+      );
+    }
 
     return Card(
       child: Padding(
@@ -26,7 +63,7 @@ class LoopInputPanel extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Target variable: $targetVariable',
+              'Target variable: ${widget.targetVariable}',
               style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -34,6 +71,7 @@ class LoopInputPanel extends ConsumerWidget {
             const SizedBox(height: 12),
             TextField(
               key: const ValueKey('loop-answer-input'),
+              controller: _textController,
               onChanged: controller.updateInput,
               decoration: const InputDecoration(
                 labelText: 'Your answer',
@@ -43,7 +81,7 @@ class LoopInputPanel extends ConsumerWidget {
             const SizedBox(height: 12),
             FilledButton(
               key: const ValueKey('loop-check-answer-button'),
-              onPressed: () => controller.submitAnswer(correctAnswer),
+              onPressed: () => controller.submitAnswer(widget.correctAnswer),
               child: const Text('Check Answer'),
             ),
             if (state.hasSubmitted) ...[
@@ -51,7 +89,7 @@ class LoopInputPanel extends ConsumerWidget {
               Text(
                 state.isCorrect
                     ? 'Success! Correct answer.'
-                    : 'Not quite. Correct answer: $correctAnswer',
+                    : 'Not quite. Correct answer: ${widget.correctAnswer}',
                 style: textTheme.bodyMedium?.copyWith(
                   color: state.isCorrect
                       ? Colors.green.shade300

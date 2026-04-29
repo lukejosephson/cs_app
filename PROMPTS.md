@@ -175,7 +175,7 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 38. Add puzzle progression (next/random challenge) instead of always using puzzles.first.
 
-[ ] 39. Preserve/reset answer input intentionally between puzzles (currently no puzzle lifecycle flow yet).
+[x] 39. Preserve/reset answer input intentionally between puzzles (currently no puzzle lifecycle flow yet).
 
 [ ] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
 

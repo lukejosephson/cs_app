@@ -112,6 +112,7 @@ class LoopScoutScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               LoopInputPanel(
                 key: ValueKey('loop-input-panel-${currentPuzzle.id}'),
+                puzzleId: currentPuzzle.id,
                 targetVariable: currentPuzzle.target,
                 correctAnswer: currentPuzzle.answer,
               ),

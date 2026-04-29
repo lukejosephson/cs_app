@@ -64,6 +64,14 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     state = const LoopTracingState();
   }
 
+  void clearResponse() {
+    state = state.copyWith(
+      currentInput: '',
+      isCorrect: false,
+      hasSubmitted: false,
+    );
+  }
+
   void moveToNextPuzzle(int puzzleCount) {
     if (puzzleCount <= 0) {
       return;

@@ -67,6 +67,23 @@ void main() {
     expect(state.currentPuzzleIndex, 0);
   });
 
+  test('clearResponse clears answer state without changing puzzle index', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.moveToNextPuzzle(3);
+    controller.updateInput('6');
+    controller.submitAnswer('6');
+    controller.clearResponse();
+
+    final state = container.read(loopTracingControllerProvider);
+    expect(state.currentPuzzleIndex, 1);
+    expect(state.currentInput, isEmpty);
+    expect(state.isCorrect, isFalse);
+    expect(state.hasSubmitted, isFalse);
+  });
+
   test('moveToNextPuzzle advances index and clears input state', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);

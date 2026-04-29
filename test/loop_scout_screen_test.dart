@@ -47,6 +47,25 @@ void main() {
     expect(find.text('Please try again in a moment.'), findsOneWidget);
   });
 
+  testWidgets('shows empty-data state when no puzzles are returned', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _buildTestApp([
+        loopPuzzlesProvider.overrideWith(
+          (ref) => Stream<List<LoopChallenge>>.value(const []),
+        ),
+      ]),
+    );
+    await tester.pump();
+
+    expect(
+      find.text('No loop challenges available right now.'),
+      findsOneWidget,
+    );
+    expect(find.text('Check Answer'), findsNothing);
+  });
+
   testWidgets('shows interaction widgets when puzzle data is available', (
     tester,
   ) async {
@@ -87,6 +106,8 @@ void main() {
     expect(find.text('Loop tracing'), findsOneWidget);
     expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
     expect(find.text('Retry pool: 0'), findsOneWidget);
+    expect(find.text('Difficulty: 1'), findsOneWidget);
+    expect(find.text('Tags: loop'), findsOneWidget);
     expect(find.byKey(const ValueKey('loop-answer-input')), findsOneWidget);
     expect(find.text('Target variable: total'), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);

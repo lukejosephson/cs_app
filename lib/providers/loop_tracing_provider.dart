@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants/loop_strings.dart';
+import '../utils/answer_normalizer.dart';
+
 final loopRandomProvider = Provider<Random>((ref) => Random());
 
 class LoopTracingState {
@@ -41,7 +44,8 @@ class LoopTracingState {
       inputErrorMessage: clearInputError
           ? null
           : inputErrorMessage ?? this.inputErrorMessage,
-      wrongAttemptsByPuzzle: wrongAttemptsByPuzzle ?? this.wrongAttemptsByPuzzle,
+      wrongAttemptsByPuzzle:
+          wrongAttemptsByPuzzle ?? this.wrongAttemptsByPuzzle,
       retryPuzzleIds: retryPuzzleIds ?? this.retryPuzzleIds,
     );
   }
@@ -73,13 +77,13 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       state = state.copyWith(
         isCorrect: false,
         hasSubmitted: false,
-        inputErrorMessage: 'Please enter an answer before checking.',
+        inputErrorMessage: LoopStrings.emptyAnswerValidation,
       );
       return;
     }
 
-    final normalizedInput = _normalizeAnswer(userInput);
-    final normalizedExpected = _normalizeAnswer(expectedAnswer);
+    final normalizedInput = AnswerNormalizer.normalize(userInput);
+    final normalizedExpected = AnswerNormalizer.normalize(expectedAnswer);
     final isCorrect = normalizedInput == normalizedExpected;
 
     final wrongAttempts = Map<int, int>.from(state.wrongAttemptsByPuzzle);
@@ -148,10 +152,6 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       hasSubmitted: false,
       clearInputError: true,
     );
-  }
-
-  String _normalizeAnswer(String value) {
-    return value.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase();
   }
 }
 

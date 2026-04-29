@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants/loop_strings.dart';
 import '../providers/loop_tracing_provider.dart';
 
 class LoopInputPanel extends ConsumerStatefulWidget {
@@ -32,7 +33,12 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
   void didUpdateWidget(covariant LoopInputPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.puzzleId != oldWidget.puzzleId) {
-      ref.read(loopScoutControllerProvider.notifier).clearResponse();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) {
+          return;
+        }
+        ref.read(loopScoutControllerProvider.notifier).clearResponse();
+      });
     }
   }
 
@@ -63,7 +69,7 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Target variable: ${widget.targetVariable}',
+              LoopStrings.targetVariable(widget.targetVariable),
               style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -74,9 +80,9 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
               controller: _textController,
               onChanged: controller.updateInput,
               decoration: const InputDecoration(
-                labelText: 'Your answer',
-                hintText: 'Enter final value',
-                helperText: 'Case and extra spaces are ignored.',
+                labelText: LoopStrings.answerLabel,
+                hintText: LoopStrings.answerHint,
+                helperText: LoopStrings.answerHelper,
               ),
             ),
             const SizedBox(height: 12),
@@ -86,7 +92,7 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
                 puzzleId: widget.puzzleId,
                 expectedAnswer: widget.correctAnswer,
               ),
-              child: const Text('Check Answer'),
+              child: const Text(LoopStrings.checkAnswerButton),
             ),
             if (state.inputErrorMessage != null) ...[
               const SizedBox(height: 12),
@@ -102,8 +108,8 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
               const SizedBox(height: 12),
               Text(
                 state.isCorrect
-                    ? 'Success! Correct answer.'
-                    : 'Not quite. Correct answer: ${widget.correctAnswer}',
+                    ? LoopStrings.successAnswer
+                    : LoopStrings.incorrectAnswer(widget.correctAnswer),
                 style: textTheme.bodyMedium?.copyWith(
                   color: state.isCorrect
                       ? Colors.green.shade300

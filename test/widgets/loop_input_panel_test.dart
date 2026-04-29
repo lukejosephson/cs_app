@@ -116,4 +116,56 @@ void main() {
       expect(answerField.controller?.text, '12');
     },
   );
+
+  testWidgets('clears input and feedback when puzzle id changes', (
+    tester,
+  ) async {
+    var puzzleId = 1;
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              return Scaffold(
+                body: ListView(
+                  children: [
+                    LoopInputPanel(
+                      puzzleId: puzzleId,
+                      targetVariable: puzzleId == 1 ? 'total' : 'count',
+                      correctAnswer: puzzleId == 1 ? '6' : '2',
+                    ),
+                    TextButton(
+                      onPressed: () => setState(() => puzzleId = 2),
+                      child: const Text('Switch Puzzle'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(
+      find.byKey(const ValueKey('loop-answer-input')),
+      '6',
+    );
+    await tester.tap(find.byKey(const ValueKey('loop-check-answer-button')));
+    await tester.pump();
+    expect(find.text('Success! Correct answer.'), findsOneWidget);
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Switch Puzzle'));
+    await tester.pumpAndSettle();
+
+    final answerField = tester.widget<TextField>(
+      find.byKey(const ValueKey('loop-answer-input')),
+    );
+    expect(answerField.controller?.text ?? '', isEmpty);
+    expect(find.text('Success! Correct answer.'), findsNothing);
+  });
 }

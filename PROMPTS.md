@@ -189,7 +189,7 @@ If the answer is correct, display a 'Success' message using the green color from
  3. Correctness is strict string match; formatting differences can appear “wrong” even when semantically correct.
  4. UI currently assumes first puzzle is valid; malformed backend records could degrade UX without defensive display handling.
 
-[ ] 44. These are sources of improvement. Address these as necessary.
+[x] 44. These are sources of improvement. Address these as necessary.
  1. Move answer normalization logic into controller/service helper for consistent comparison rules.
  2. Replace inline success/error message strings with centralized constants/localization-ready structure.
  3. Show puzzle metadata (difficulty, tags) and add explicit “Next challenge” action.

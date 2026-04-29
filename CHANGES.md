@@ -91,3 +91,8 @@
 - Reduced provider-wiring drift risk by moving `LoopScoutScreen` to the canonical `loopPuzzlesProvider` and deprecating the legacy `puzzleProvider` alias.
 - Hardened puzzle data handling by filtering malformed challenges (missing snippet/target/answer) in `FirestoreDatabaseService`, with UI fallback messaging when no valid challenge remains.
 - Added regression tests for malformed-puzzle filtering and programmatic input synchronization so front-end behavior stays robust as provider/controller wiring evolves.
+
+## Prompt 44
+- Extracted loop-answer normalization into a shared helper (`AnswerNormalizer`) and reused it in the loop controller to keep comparison rules centralized and consistent.
+- Centralized loop-facing UI strings into `lib/constants/loop_strings.dart` to reduce inline text and keep message handling localization-ready.
+- Enhanced `LoopScoutScreen` to show puzzle metadata (`difficulty`, `tags`) while preserving explicit next-challenge navigation, and expanded widget tests for empty-data state plus input reset on puzzle changes.

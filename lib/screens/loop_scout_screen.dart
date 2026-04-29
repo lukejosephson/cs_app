@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants/loop_strings.dart';
 import '../providers/loop_provider.dart';
 import '../providers/loop_tracing_provider.dart';
 import '../widgets/code_display_box.dart';
@@ -18,7 +19,7 @@ class LoopScoutScreen extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Loop Scout')),
+      appBar: AppBar(title: const Text(LoopStrings.screenTitle)),
       body: puzzlesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(
@@ -37,7 +38,7 @@ class LoopScoutScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'We could not load loop challenges right now.',
+                      LoopStrings.loadingErrorTitle,
                       style: textTheme.titleMedium?.copyWith(
                         color: colorScheme.onErrorContainer,
                         fontWeight: FontWeight.w700,
@@ -46,7 +47,7 @@ class LoopScoutScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Please try again in a moment.',
+                      LoopStrings.loadingErrorSubtitle,
                       style: textTheme.bodyMedium?.copyWith(
                         color: colorScheme.onErrorContainer.withValues(
                           alpha: 0.9,
@@ -64,7 +65,7 @@ class LoopScoutScreen extends ConsumerWidget {
           if (puzzles.isEmpty) {
             return Center(
               child: Text(
-                'No loop challenges available right now.',
+                LoopStrings.noChallengesAvailable,
                 style: textTheme.bodyLarge,
               ),
             );
@@ -76,7 +77,7 @@ class LoopScoutScreen extends ConsumerWidget {
           if (validPuzzles.isEmpty) {
             return Center(
               child: Text(
-                'No valid loop challenges available right now.',
+                LoopStrings.noValidChallengesAvailable,
                 style: textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
@@ -90,14 +91,14 @@ class LoopScoutScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               Text(
-                'Loop tracing',
+                LoopStrings.sectionTitle,
                 style: textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                '${validPuzzles.length} challenge(s) loaded.',
+                LoopStrings.challengeCount(validPuzzles.length),
                 style: textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
@@ -105,7 +106,7 @@ class LoopScoutScreen extends ConsumerWidget {
               if (validPuzzles.length != puzzles.length) ...[
                 const SizedBox(height: 4),
                 Text(
-                  'Some malformed challenges were skipped.',
+                  LoopStrings.malformedChallengesSkipped,
                   style: textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -113,7 +114,21 @@ class LoopScoutScreen extends ConsumerWidget {
               ],
               const SizedBox(height: 4),
               Text(
-                'Retry pool: ${loopState.retryPuzzleIds.length}',
+                LoopStrings.retryPoolCount(loopState.retryPuzzleIds.length),
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.75),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                LoopStrings.difficultyLabel(currentPuzzle.difficulty),
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.75),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                LoopStrings.tagsLabel(currentPuzzle.tags),
                 style: textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.75),
                 ),
@@ -125,14 +140,14 @@ class LoopScoutScreen extends ConsumerWidget {
                     onPressed: () =>
                         loopController.moveToRandomPuzzle(validPuzzles.length),
                     icon: const Icon(Icons.shuffle_rounded),
-                    label: const Text('Random'),
+                    label: const Text(LoopStrings.randomButton),
                   ),
                   const SizedBox(width: 10),
                   FilledButton.icon(
                     onPressed: () =>
                         loopController.moveToNextPuzzle(validPuzzles.length),
                     icon: const Icon(Icons.skip_next_rounded),
-                    label: const Text('Next Challenge'),
+                    label: const Text(LoopStrings.nextChallengeButton),
                   ),
                 ],
               ),

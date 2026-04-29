@@ -61,3 +61,8 @@
 
 ## Prompt 37
 - Audited the loop-tracing frontend path (`LoopScoutScreen`, `LoopInputPanel`, loop providers/controller, and related tests) and documented remaining work, likely error sources, and targeted improvements before moving to the next build steps.
+
+## Prompt 38
+- Added puzzle progression support in the loop UI state/controller with `moveToNextPuzzle` and `moveToRandomPuzzle`, including `currentPuzzleIndex` tracking and state reset behavior between challenge changes.
+- Updated `LoopScoutScreen` to render puzzles by controller index instead of always using the first record, and added explicit `Next Challenge` and `Random` actions for navigation.
+- Expanded frontend tests to verify progression behavior and controller index/state updates.

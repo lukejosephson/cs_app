@@ -173,7 +173,7 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 37. Inspect the code that handles the front end of the loop tracing. What still needs to be done? What could cause errors? What could be improved?
 
-[ ] 38. Add puzzle progression (next/random challenge) instead of always using puzzles.first.
+[x] 38. Add puzzle progression (next/random challenge) instead of always using puzzles.first.
 
 [ ] 39. Preserve/reset answer input intentionally between puzzles (currently no puzzle lifecycle flow yet).
 

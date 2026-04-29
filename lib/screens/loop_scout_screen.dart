@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/loop_provider.dart';
+import '../providers/loop_tracing_provider.dart';
 import '../widgets/code_display_box.dart';
 import '../widgets/loop_input_panel.dart';
 
@@ -11,6 +12,8 @@ class LoopScoutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzlesAsync = ref.watch(puzzleProvider);
+    final loopState = ref.watch(loopScoutControllerProvider);
+    final loopController = ref.read(loopScoutControllerProvider.notifier);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -67,7 +70,8 @@ class LoopScoutScreen extends ConsumerWidget {
             );
           }
 
-          final currentPuzzle = puzzles.first;
+          final currentPuzzle =
+              puzzles[loopState.currentPuzzleIndex % puzzles.length];
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -85,10 +89,29 @@ class LoopScoutScreen extends ConsumerWidget {
                   color: colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
               ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: () =>
+                        loopController.moveToRandomPuzzle(puzzles.length),
+                    icon: const Icon(Icons.shuffle_rounded),
+                    label: const Text('Random'),
+                  ),
+                  const SizedBox(width: 10),
+                  FilledButton.icon(
+                    onPressed: () =>
+                        loopController.moveToNextPuzzle(puzzles.length),
+                    icon: const Icon(Icons.skip_next_rounded),
+                    label: const Text('Next Challenge'),
+                  ),
+                ],
+              ),
               const SizedBox(height: 16),
               CodeDisplayBox(snippet: currentPuzzle.snippet),
               const SizedBox(height: 12),
               LoopInputPanel(
+                key: ValueKey('loop-input-panel-${currentPuzzle.id}'),
                 targetVariable: currentPuzzle.target,
                 correctAnswer: currentPuzzle.answer,
               ),

@@ -1,9 +1,12 @@
 import 'package:cs_app/models/loop_challenge.dart';
 import 'package:cs_app/providers/loop_provider.dart';
+import 'package:cs_app/providers/loop_tracing_provider.dart';
 import 'package:cs_app/screens/loop_scout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'helpers/fake_random.dart';
 
 Widget _buildTestApp(List<Override> overrides) {
   return ProviderScope(
@@ -47,7 +50,7 @@ void main() {
   testWidgets('shows interaction widgets when puzzle data is available', (
     tester,
   ) async {
-    const challenge = LoopChallenge(
+    const challengeA = LoopChallenge(
       id: 1,
       type: 'loop_scout',
       snippet: 'for (var i = 0; i < 3; i++) { total += i; }',
@@ -58,20 +61,43 @@ void main() {
       isArchived: false,
       tags: ['loop'],
     );
+    const challengeB = LoopChallenge(
+      id: 2,
+      type: 'loop_scout',
+      snippet: 'for (var i = 0; i < 2; i++) { count += i; }',
+      target: 'count',
+      answer: '1',
+      errorLine: 0,
+      difficulty: 1,
+      isArchived: false,
+      tags: ['loop'],
+    );
 
     await tester.pumpWidget(
       _buildTestApp([
         puzzleProvider.overrideWith(
-          (ref) => Stream<List<LoopChallenge>>.value(const [challenge]),
+          (ref) =>
+              Stream<List<LoopChallenge>>.value(const [challengeA, challengeB]),
         ),
+        loopRandomProvider.overrideWithValue(FakeRandom([0])),
       ]),
     );
     await tester.pump();
 
     expect(find.text('Loop tracing'), findsOneWidget);
-    expect(find.text('1 challenge(s) loaded.'), findsOneWidget);
+    expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
     expect(find.byKey(const ValueKey('loop-answer-input')), findsOneWidget);
     expect(find.text('Target variable: total'), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);
+    expect(find.text('Next Challenge'), findsOneWidget);
+    expect(find.text('Random'), findsOneWidget);
+
+    await tester.tap(find.text('Next Challenge'));
+    await tester.pump();
+    expect(find.text('Target variable: count'), findsOneWidget);
+
+    await tester.tap(find.text('Random'));
+    await tester.pump();
+    expect(find.text('Target variable: total'), findsOneWidget);
   });
 }

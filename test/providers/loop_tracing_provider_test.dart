@@ -2,6 +2,8 @@ import 'package:cs_app/providers/loop_tracing_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../helpers/fake_random.dart';
+
 void main() {
   test('loop tracing state starts empty and incorrect', () {
     final container = ProviderContainer();
@@ -11,6 +13,7 @@ void main() {
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
+    expect(state.currentPuzzleIndex, 0);
   });
 
   test('updateInput updates input and clears correctness', () {
@@ -61,5 +64,45 @@ void main() {
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
+    expect(state.currentPuzzleIndex, 0);
   });
+
+  test('moveToNextPuzzle advances index and clears input state', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.updateInput('6');
+    controller.submitAnswer('6');
+    controller.moveToNextPuzzle(3);
+
+    final state = container.read(loopTracingControllerProvider);
+    expect(state.currentPuzzleIndex, 1);
+    expect(state.currentInput, isEmpty);
+    expect(state.isCorrect, isFalse);
+    expect(state.hasSubmitted, isFalse);
+  });
+
+  test(
+    'moveToRandomPuzzle picks a different puzzle and clears input state',
+    () {
+      final container = ProviderContainer(
+        overrides: [
+          loopRandomProvider.overrideWithValue(FakeRandom([1])),
+        ],
+      );
+      addTearDown(container.dispose);
+      final controller = container.read(loopTracingControllerProvider.notifier);
+
+      controller.updateInput('6');
+      controller.submitAnswer('6');
+      controller.moveToRandomPuzzle(3);
+
+      final state = container.read(loopTracingControllerProvider);
+      expect(state.currentPuzzleIndex, 1);
+      expect(state.currentInput, isEmpty);
+      expect(state.isCorrect, isFalse);
+      expect(state.hasSubmitted, isFalse);
+    },
+  );
 }

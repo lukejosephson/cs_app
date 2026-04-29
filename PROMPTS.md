@@ -173,15 +173,41 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 37. Inspect the code that handles the front end of the loop tracing. What still needs to be done? What could cause errors? What could be improved?
 
-[ ] 38.
+[ ] 38. Add puzzle progression (next/random challenge) instead of always using puzzles.first.
 
-[ ] 39.
+[ ] 39. Preserve/reset answer input intentionally between puzzles (currently no puzzle lifecycle flow yet).
 
-[ ] 40.
+[ ] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
 
-[ ] 41.
+[ ] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
 
-[ ] 42.
+[ ] 42.Add retry/wrong-answer tracking hooks to align with requirements.
+
+[ ] 43. These are possible sources of error. Address these as necessary.
+ 1. puzzleProvider is a stream alias; if provider types/names change later, screen wiring can silently drift.
+ 2. LoopInputPanel relies on TextField.onChanged; programmatic text updates won’t sync unless controller logic handles them.
+ 3. Correctness is strict string match; formatting differences can appear “wrong” even when semantically correct.
+ 4. UI currently assumes first puzzle is valid; malformed backend records could degrade UX without defensive display handling.
+
+[ ] 44. These are sources of improvement. Address these as necessary.
+ 1. Move answer normalization logic into controller/service helper for consistent comparison rules.
+ 2. Replace inline success/error message strings with centralized constants/localization-ready structure.
+ 3. Show puzzle metadata (difficulty, tags) and add explicit “Next challenge” action.
+ 4. Add widget tests for empty-data state and input-reset behavior when changing puzzles
+
+[ ] 45. 
+
+[ ] 46. 
+
+[ ] 47. 
+
+[ ] 48. 
+
+[ ] 49. 
+
+[ ] 50. 
+
+[ ] 51.
 
 
 

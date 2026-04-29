@@ -32,6 +32,19 @@ void main() {
     expect(find.text('Success! Correct answer.'), findsOneWidget);
   });
 
+  testWidgets('shows validation message when answer is empty', (tester) async {
+    await tester.pumpWidget(buildApp());
+
+    await tester.tap(find.byKey(const ValueKey('loop-check-answer-button')));
+    await tester.pump();
+
+    expect(
+      find.text('Please enter an answer before checking.'),
+      findsOneWidget,
+    );
+    expect(find.text('Success! Correct answer.'), findsNothing);
+  });
+
   testWidgets('shows correct answer when answer is wrong', (tester) async {
     await tester.pumpWidget(buildApp());
 
@@ -43,6 +56,33 @@ void main() {
     await tester.pump();
 
     expect(find.text('Not quite. Correct answer: 6'), findsOneWidget);
+  });
+
+  testWidgets('treats case and extra spaces as equivalent answers', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: LoopInputPanel(
+              puzzleId: 1,
+              targetVariable: 'phrase',
+              correctAnswer: 'hello world',
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(
+      find.byKey(const ValueKey('loop-answer-input')),
+      '  Hello   World  ',
+    );
+    await tester.tap(find.byKey(const ValueKey('loop-check-answer-button')));
+    await tester.pump();
+
+    expect(find.text('Success! Correct answer.'), findsOneWidget);
   });
 
   testWidgets('uses loop scout controller provider alias', (tester) async {

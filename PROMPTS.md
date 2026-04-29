@@ -179,7 +179,7 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
 
-[ ] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
+[x] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
 
 [ ] 42.Add retry/wrong-answer tracking hooks to align with requirements.
 

@@ -10,24 +10,31 @@ class LoopTracingState {
     this.isCorrect = false,
     this.hasSubmitted = false,
     this.currentPuzzleIndex = 0,
+    this.inputErrorMessage,
   });
 
   final String currentInput;
   final bool isCorrect;
   final bool hasSubmitted;
   final int currentPuzzleIndex;
+  final String? inputErrorMessage;
 
   LoopTracingState copyWith({
     String? currentInput,
     bool? isCorrect,
     bool? hasSubmitted,
     int? currentPuzzleIndex,
+    String? inputErrorMessage,
+    bool clearInputError = false,
   }) {
     return LoopTracingState(
       currentInput: currentInput ?? this.currentInput,
       isCorrect: isCorrect ?? this.isCorrect,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
       currentPuzzleIndex: currentPuzzleIndex ?? this.currentPuzzleIndex,
+      inputErrorMessage: clearInputError
+          ? null
+          : inputErrorMessage ?? this.inputErrorMessage,
     );
   }
 }
@@ -48,15 +55,27 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       currentInput: input,
       isCorrect: false,
       hasSubmitted: false,
+      clearInputError: true,
     );
   }
 
   void submitAnswer(String expectedAnswer) {
     final userInput = state.currentInput.trim();
-    final expected = expectedAnswer.trim();
+    if (userInput.isEmpty) {
+      state = state.copyWith(
+        isCorrect: false,
+        hasSubmitted: false,
+        inputErrorMessage: 'Please enter an answer before checking.',
+      );
+      return;
+    }
+
+    final normalizedInput = _normalizeAnswer(userInput);
+    final normalizedExpected = _normalizeAnswer(expectedAnswer);
     state = state.copyWith(
-      isCorrect: userInput.isNotEmpty && userInput == expected,
+      isCorrect: normalizedInput == normalizedExpected,
       hasSubmitted: true,
+      clearInputError: true,
     );
   }
 
@@ -69,6 +88,7 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       currentInput: '',
       isCorrect: false,
       hasSubmitted: false,
+      clearInputError: true,
     );
   }
 
@@ -83,6 +103,7 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       currentInput: '',
       isCorrect: false,
       hasSubmitted: false,
+      clearInputError: true,
     );
   }
 
@@ -104,7 +125,12 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       currentInput: '',
       isCorrect: false,
       hasSubmitted: false,
+      clearInputError: true,
     );
+  }
+
+  String _normalizeAnswer(String value) {
+    return value.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase();
   }
 }
 

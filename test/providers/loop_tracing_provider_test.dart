@@ -14,6 +14,7 @@ void main() {
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
     expect(state.currentPuzzleIndex, 0);
+    expect(state.inputErrorMessage, isNull);
   });
 
   test('updateInput updates input and clears correctness', () {
@@ -25,6 +26,10 @@ void main() {
     expect(container.read(loopTracingControllerProvider).currentInput, '42');
     expect(container.read(loopTracingControllerProvider).isCorrect, isFalse);
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isFalse);
+    expect(
+      container.read(loopTracingControllerProvider).inputErrorMessage,
+      isNull,
+    );
   });
 
   test('submitAnswer marks state correct when answer matches', () {
@@ -34,6 +39,22 @@ void main() {
 
     controller.updateInput('  6 ');
     controller.submitAnswer('6');
+
+    expect(container.read(loopTracingControllerProvider).isCorrect, isTrue);
+    expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
+    expect(
+      container.read(loopTracingControllerProvider).inputErrorMessage,
+      isNull,
+    );
+  });
+
+  test('submitAnswer ignores case and repeated whitespace', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.updateInput('  Hello   World  ');
+    controller.submitAnswer('hello world');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isTrue);
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
@@ -51,6 +72,20 @@ void main() {
     expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
   });
 
+  test('submitAnswer with empty input sets validation message', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.updateInput('   ');
+    controller.submitAnswer('6');
+
+    final state = container.read(loopTracingControllerProvider);
+    expect(state.hasSubmitted, isFalse);
+    expect(state.isCorrect, isFalse);
+    expect(state.inputErrorMessage, 'Please enter an answer before checking.');
+  });
+
   test('reset returns state to default values', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
@@ -65,6 +100,7 @@ void main() {
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
     expect(state.currentPuzzleIndex, 0);
+    expect(state.inputErrorMessage, isNull);
   });
 
   test('clearResponse clears answer state without changing puzzle index', () {
@@ -82,6 +118,7 @@ void main() {
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
+    expect(state.inputErrorMessage, isNull);
   });
 
   test('moveToNextPuzzle advances index and clears input state', () {
@@ -98,6 +135,7 @@ void main() {
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
     expect(state.hasSubmitted, isFalse);
+    expect(state.inputErrorMessage, isNull);
   });
 
   test(
@@ -120,6 +158,7 @@ void main() {
       expect(state.currentInput, isEmpty);
       expect(state.isCorrect, isFalse);
       expect(state.hasSubmitted, isFalse);
+      expect(state.inputErrorMessage, isNull);
     },
   );
 }

@@ -76,3 +76,8 @@
 - Integrated loop tracing into normal app navigation by adding a `Loop Scout` practice option on the home screen and routing it to `LoopScoutScreen`.
 - Improved practice option modeling with a typed `PracticeTypeId` so home navigation selects destination screens via explicit identifiers instead of implicit title matching.
 - Expanded home screen tests to verify both practice options render and loop navigation opens the Loop Scout flow.
+
+## Prompt 41
+- Added richer answer-validation UX in loop tracing: empty submissions now surface an explicit validation message instead of evaluating as wrong answers.
+- Implemented a comparison policy that normalizes answers by trimming, collapsing repeated whitespace, and ignoring letter case before correctness checks.
+- Updated loop input and controller tests to cover empty-input feedback and case/whitespace-insensitive answer matching behavior.

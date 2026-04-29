@@ -76,6 +76,7 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
               decoration: const InputDecoration(
                 labelText: 'Your answer',
                 hintText: 'Enter final value',
+                helperText: 'Case and extra spaces are ignored.',
               ),
             ),
             const SizedBox(height: 12),
@@ -84,6 +85,16 @@ class _LoopInputPanelState extends ConsumerState<LoopInputPanel> {
               onPressed: () => controller.submitAnswer(widget.correctAnswer),
               child: const Text('Check Answer'),
             ),
+            if (state.inputErrorMessage != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                state.inputErrorMessage!,
+                style: textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
             if (state.hasSubmitted) ...[
               const SizedBox(height: 12),
               Text(

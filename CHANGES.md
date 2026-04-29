@@ -48,3 +48,8 @@
 - Added `lib/screens/loop_scout_screen.dart` as the loop tracing main screen skeleton using `AsyncValue.when()` against `puzzleProvider` for loading, error, and data UI states.
 - Implemented a loading state with `CircularProgressIndicator`, a themed/professional error card, and a placeholder `Column` data layout for upcoming loop-tracing widgets.
 - Added `test/loop_scout_screen_test.dart` to cover loading, error, and data rendering behavior for the new async screen flow.
+
+## Prompt 35
+- Added `lib/widgets/code_display_box.dart`, a reusable snippet widget with dark background, subtle border, padding, and multiline-friendly rendering for code content.
+- Applied a developer-style monospace typography using `GoogleFonts.firaCode` for snippet readability and consistent coding aesthetic.
+- Added widget tests in `test/widgets/code_display_box_test.dart` and introduced the `google_fonts` dependency in `pubspec.yaml`.

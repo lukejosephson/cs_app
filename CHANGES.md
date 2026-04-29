@@ -86,3 +86,8 @@
 - Added retry/wrong-answer tracking hooks in loop controller state via `wrongAttemptsByPuzzle` and `retryPuzzleIds`, with incorrect submissions incrementing per-puzzle counters and adding retry candidates.
 - Updated answer submission flow to carry puzzle identity (`puzzleId`) so tracking is tied to specific challenges.
 - Surfaced hook state in the loop UI with a retry pool indicator and expanded tests to verify wrong-attempt accumulation and retry list behavior.
+
+## Prompt 43
+- Reduced provider-wiring drift risk by moving `LoopScoutScreen` to the canonical `loopPuzzlesProvider` and deprecating the legacy `puzzleProvider` alias.
+- Hardened puzzle data handling by filtering malformed challenges (missing snippet/target/answer) in `FirestoreDatabaseService`, with UI fallback messaging when no valid challenge remains.
+- Added regression tests for malformed-puzzle filtering and programmatic input synchronization so front-end behavior stays robust as provider/controller wiring evolves.

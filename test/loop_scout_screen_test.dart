@@ -21,7 +21,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _buildTestApp([
-        puzzleProvider.overrideWith(
+        loopPuzzlesProvider.overrideWith(
           (ref) => const Stream<List<LoopChallenge>>.empty(),
         ),
       ]),
@@ -33,7 +33,7 @@ void main() {
   testWidgets('shows error state when puzzle stream fails', (tester) async {
     await tester.pumpWidget(
       _buildTestApp([
-        puzzleProvider.overrideWith(
+        loopPuzzlesProvider.overrideWith(
           (ref) => Stream<List<LoopChallenge>>.error(Exception('boom')),
         ),
       ]),
@@ -75,7 +75,7 @@ void main() {
 
     await tester.pumpWidget(
       _buildTestApp([
-        puzzleProvider.overrideWith(
+        loopPuzzlesProvider.overrideWith(
           (ref) =>
               Stream<List<LoopChallenge>>.value(const [challengeA, challengeB]),
         ),
@@ -101,7 +101,10 @@ void main() {
     await tester.pump();
     expect(find.text('Target variable: total'), findsOneWidget);
 
-    await tester.enterText(find.byKey(const ValueKey('loop-answer-input')), 'nope');
+    await tester.enterText(
+      find.byKey(const ValueKey('loop-answer-input')),
+      'nope',
+    );
     await tester.tap(find.text('Check Answer'));
     await tester.pump();
     expect(find.text('Retry pool: 1'), findsOneWidget);
@@ -135,7 +138,7 @@ void main() {
 
     await tester.pumpWidget(
       _buildTestApp([
-        puzzleProvider.overrideWith(
+        loopPuzzlesProvider.overrideWith(
           (ref) =>
               Stream<List<LoopChallenge>>.value(const [challengeA, challengeB]),
         ),
@@ -159,5 +162,37 @@ void main() {
     );
     expect(answerField.controller?.text ?? '', isEmpty);
     expect(find.text('Success! Correct answer.'), findsNothing);
+  });
+
+  testWidgets('shows fallback when all loaded puzzles are malformed', (
+    tester,
+  ) async {
+    const malformedChallenge = LoopChallenge(
+      id: 10,
+      type: 'loop_scout',
+      snippet: '',
+      target: 'total',
+      answer: '',
+      errorLine: 0,
+      difficulty: 1,
+      isArchived: false,
+      tags: ['loop'],
+    );
+
+    await tester.pumpWidget(
+      _buildTestApp([
+        loopPuzzlesProvider.overrideWith(
+          (ref) =>
+              Stream<List<LoopChallenge>>.value(const [malformedChallenge]),
+        ),
+      ]),
+    );
+    await tester.pump();
+
+    expect(
+      find.text('No valid loop challenges available right now.'),
+      findsOneWidget,
+    );
+    expect(find.text('Check Answer'), findsNothing);
   });
 }

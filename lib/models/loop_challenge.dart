@@ -61,6 +61,12 @@ class LoopChallenge {
   final bool isArchived;
   final List<String> tags;
 
+  bool get hasRequiredPromptFields {
+    return snippet.trim().isNotEmpty &&
+        target.trim().isNotEmpty &&
+        answer.trim().isNotEmpty;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       fieldId: id,

@@ -98,4 +98,22 @@ void main() {
 
     expect(identical(loopScoutController, loopTracingController), isTrue);
   });
+
+  testWidgets(
+    'syncs TextField when controller input is updated programmatically',
+    (tester) async {
+      await tester.pumpWidget(buildApp());
+
+      final context = tester.element(find.byType(LoopInputPanel));
+      final container = ProviderScope.containerOf(context, listen: false);
+
+      container.read(loopScoutControllerProvider.notifier).updateInput('12');
+      await tester.pump();
+
+      final answerField = tester.widget<TextField>(
+        find.byKey(const ValueKey('loop-answer-input')),
+      );
+      expect(answerField.controller?.text, '12');
+    },
+  );
 }

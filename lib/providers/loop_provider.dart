@@ -11,6 +11,7 @@ final loopPuzzlesProvider = StreamProvider<List<LoopChallenge>>((ref) {
   return ref.watch(databaseServiceProvider).getLoopPuzzles();
 });
 
+@Deprecated('Use loopPuzzlesProvider directly to avoid alias drift.')
 final puzzleProvider = loopPuzzlesProvider;
 
 final loopPuzzlesOnceProvider = FutureProvider<List<LoopChallenge>>((ref) {

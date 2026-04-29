@@ -11,7 +11,7 @@ class LoopScoutScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzlesAsync = ref.watch(puzzleProvider);
+    final puzzlesAsync = ref.watch(loopPuzzlesProvider);
     final loopState = ref.watch(loopScoutControllerProvider);
     final loopController = ref.read(loopScoutControllerProvider.notifier);
     final colorScheme = Theme.of(context).colorScheme;
@@ -70,8 +70,21 @@ class LoopScoutScreen extends ConsumerWidget {
             );
           }
 
+          final validPuzzles = puzzles
+              .where((puzzle) => puzzle.hasRequiredPromptFields)
+              .toList(growable: false);
+          if (validPuzzles.isEmpty) {
+            return Center(
+              child: Text(
+                'No valid loop challenges available right now.',
+                style: textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+
           final currentPuzzle =
-              puzzles[loopState.currentPuzzleIndex % puzzles.length];
+              validPuzzles[loopState.currentPuzzleIndex % validPuzzles.length];
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -84,11 +97,20 @@ class LoopScoutScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${puzzles.length} challenge(s) loaded.',
+                '${validPuzzles.length} challenge(s) loaded.',
                 style: textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
               ),
+              if (validPuzzles.length != puzzles.length) ...[
+                const SizedBox(height: 4),
+                Text(
+                  'Some malformed challenges were skipped.',
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
               const SizedBox(height: 4),
               Text(
                 'Retry pool: ${loopState.retryPuzzleIds.length}',
@@ -101,14 +123,14 @@ class LoopScoutScreen extends ConsumerWidget {
                 children: [
                   OutlinedButton.icon(
                     onPressed: () =>
-                        loopController.moveToRandomPuzzle(puzzles.length),
+                        loopController.moveToRandomPuzzle(validPuzzles.length),
                     icon: const Icon(Icons.shuffle_rounded),
                     label: const Text('Random'),
                   ),
                   const SizedBox(width: 10),
                   FilledButton.icon(
                     onPressed: () =>
-                        loopController.moveToNextPuzzle(puzzles.length),
+                        loopController.moveToNextPuzzle(validPuzzles.length),
                     icon: const Icon(Icons.skip_next_rounded),
                     label: const Text('Next Challenge'),
                   ),

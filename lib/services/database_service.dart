@@ -28,11 +28,20 @@ class FirestoreDatabaseService implements DatabaseService {
         .where(LoopChallenge.fieldIsArchived, isEqualTo: false);
   }
 
+  List<LoopChallenge> _mapValidChallenges(
+    Iterable<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
+    return docs
+        .map(LoopChallenge.fromFirestore)
+        .where((challenge) => challenge.hasRequiredPromptFields)
+        .toList(growable: false);
+  }
+
   @override
   Future<List<LoopChallenge>> fetchPuzzlesByType(String type) async {
     final snapshot = await _activePuzzlesByTypeQuery(type).get();
 
-    return snapshot.docs.map(LoopChallenge.fromFirestore).toList(growable: false);
+    return _mapValidChallenges(snapshot.docs);
   }
 
   @override
@@ -42,12 +51,8 @@ class FirestoreDatabaseService implements DatabaseService {
 
   @override
   Stream<List<LoopChallenge>> getLoopPuzzles() {
-    return _activePuzzlesByTypeQuery(_loopScoutType)
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map(LoopChallenge.fromFirestore)
-              .toList(growable: false),
-        );
+    return _activePuzzlesByTypeQuery(
+      _loopScoutType,
+    ).snapshots().map((snapshot) => _mapValidChallenges(snapshot.docs));
   }
 }

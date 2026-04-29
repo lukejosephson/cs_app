@@ -1,15 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoopTracingState {
-  const LoopTracingState({this.currentInput = '', this.isCorrect = false});
+  const LoopTracingState({
+    this.currentInput = '',
+    this.isCorrect = false,
+    this.hasSubmitted = false,
+  });
 
   final String currentInput;
   final bool isCorrect;
+  final bool hasSubmitted;
 
-  LoopTracingState copyWith({String? currentInput, bool? isCorrect}) {
+  LoopTracingState copyWith({
+    String? currentInput,
+    bool? isCorrect,
+    bool? hasSubmitted,
+  }) {
     return LoopTracingState(
       currentInput: currentInput ?? this.currentInput,
       isCorrect: isCorrect ?? this.isCorrect,
+      hasSubmitted: hasSubmitted ?? this.hasSubmitted,
     );
   }
 }
@@ -26,7 +36,11 @@ class LoopTracingController extends Notifier<LoopTracingState> {
   }
 
   void updateInput(String input) {
-    state = state.copyWith(currentInput: input, isCorrect: false);
+    state = state.copyWith(
+      currentInput: input,
+      isCorrect: false,
+      hasSubmitted: false,
+    );
   }
 
   void submitAnswer(String expectedAnswer) {
@@ -34,6 +48,7 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     final expected = expectedAnswer.trim();
     state = state.copyWith(
       isCorrect: userInput.isNotEmpty && userInput == expected,
+      hasSubmitted: true,
     );
   }
 
@@ -41,3 +56,7 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     state = const LoopTracingState();
   }
 }
+
+typedef LoopScoutController = LoopTracingController;
+
+final loopScoutControllerProvider = loopTracingControllerProvider;

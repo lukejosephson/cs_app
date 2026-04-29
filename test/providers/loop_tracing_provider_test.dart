@@ -10,6 +10,7 @@ void main() {
     final state = container.read(loopTracingControllerProvider);
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
+    expect(state.hasSubmitted, isFalse);
   });
 
   test('updateInput updates input and clears correctness', () {
@@ -20,6 +21,7 @@ void main() {
     controller.updateInput('42');
     expect(container.read(loopTracingControllerProvider).currentInput, '42');
     expect(container.read(loopTracingControllerProvider).isCorrect, isFalse);
+    expect(container.read(loopTracingControllerProvider).hasSubmitted, isFalse);
   });
 
   test('submitAnswer marks state correct when answer matches', () {
@@ -31,6 +33,7 @@ void main() {
     controller.submitAnswer('6');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isTrue);
+    expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
   });
 
   test('submitAnswer marks state incorrect when answer does not match', () {
@@ -42,6 +45,7 @@ void main() {
     controller.submitAnswer('6');
 
     expect(container.read(loopTracingControllerProvider).isCorrect, isFalse);
+    expect(container.read(loopTracingControllerProvider).hasSubmitted, isTrue);
   });
 
   test('reset returns state to default values', () {
@@ -56,5 +60,6 @@ void main() {
     final state = container.read(loopTracingControllerProvider);
     expect(state.currentInput, isEmpty);
     expect(state.isCorrect, isFalse);
+    expect(state.hasSubmitted, isFalse);
   });
 }

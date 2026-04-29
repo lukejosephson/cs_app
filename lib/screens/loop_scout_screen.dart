@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/loop_provider.dart';
+import '../widgets/code_display_box.dart';
+import '../widgets/loop_input_panel.dart';
 
 class LoopScoutScreen extends ConsumerWidget {
   const LoopScoutScreen({super.key});
@@ -55,10 +57,20 @@ class LoopScoutScreen extends ConsumerWidget {
             ),
           ),
         ),
-        data: (puzzles) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        data: (puzzles) {
+          if (puzzles.isEmpty) {
+            return Center(
+              child: Text(
+                'No loop challenges available right now.',
+                style: textTheme.bodyLarge,
+              ),
+            );
+          }
+
+          final currentPuzzle = puzzles.first;
+
+          return ListView(
+            padding: const EdgeInsets.all(16),
             children: [
               Text(
                 'Loop tracing',
@@ -74,10 +86,15 @@ class LoopScoutScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const Placeholder(),
+              CodeDisplayBox(snippet: currentPuzzle.snippet),
+              const SizedBox(height: 12),
+              LoopInputPanel(
+                targetVariable: currentPuzzle.target,
+                correctAnswer: currentPuzzle.answer,
+              ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }

@@ -18,7 +18,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _buildTestApp([
-        puzzleProvider.overrideWith((ref) => const Stream<List<LoopChallenge>>.empty()),
+        puzzleProvider.overrideWith(
+          (ref) => const Stream<List<LoopChallenge>>.empty(),
+        ),
       ]),
     );
 
@@ -42,7 +44,7 @@ void main() {
     expect(find.text('Please try again in a moment.'), findsOneWidget);
   });
 
-  testWidgets('shows placeholder column when puzzle data is available', (
+  testWidgets('shows interaction widgets when puzzle data is available', (
     tester,
   ) async {
     const challenge = LoopChallenge(
@@ -68,6 +70,8 @@ void main() {
 
     expect(find.text('Loop tracing'), findsOneWidget);
     expect(find.text('1 challenge(s) loaded.'), findsOneWidget);
-    expect(find.byType(Placeholder), findsOneWidget);
+    expect(find.byKey(const ValueKey('loop-answer-input')), findsOneWidget);
+    expect(find.text('Target variable: total'), findsOneWidget);
+    expect(find.text('Check Answer'), findsOneWidget);
   });
 }

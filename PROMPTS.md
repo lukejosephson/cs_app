@@ -171,7 +171,7 @@ Goal: Build the input field and the "Check Answer" button that talks to the cont
 "Create lib/widgets/loop_input_panel.dart. This widget should display the target variable name and a TextField for the user's answer. Add a 'Check Answer' button that triggers a method in our LoopScoutController.
 If the answer is correct, display a 'Success' message using the green color from our ThemeData. If wrong, show the correct answer as per the requirements.
 
-[ ] 37.
+[ ] 37. Inspect the code that handles the front end of the loop tracing. What still needs to be done? What could cause errors? What could be improved?
 
 [ ] 38.
 

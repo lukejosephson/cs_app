@@ -53,3 +53,8 @@
 - Added `lib/widgets/code_display_box.dart`, a reusable snippet widget with dark background, subtle border, padding, and multiline-friendly rendering for code content.
 - Applied a developer-style monospace typography using `GoogleFonts.firaCode` for snippet readability and consistent coding aesthetic.
 - Added widget tests in `test/widgets/code_display_box_test.dart` and introduced the `google_fonts` dependency in `pubspec.yaml`.
+
+## Prompt 36
+- Added `lib/widgets/loop_input_panel.dart`, a reusable loop interaction widget showing the target variable, answer `TextField`, and a `Check Answer` action wired to the loop controller.
+- Extended loop UI state in `loop_tracing_provider.dart` with `hasSubmitted` and added `LoopScoutController`/`loopScoutControllerProvider` aliases so the interaction layer can follow prompt naming while keeping Riverpod wiring consistent.
+- Updated `LoopScoutScreen` to render live interaction UI for loaded puzzles and added tests for controller state updates and success/error answer feedback (`test/widgets/loop_input_panel_test.dart`, updated loop screen/provider tests).

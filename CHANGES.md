@@ -71,3 +71,8 @@
 - Added intentional puzzle lifecycle input behavior by upgrading `LoopInputPanel` to a stateful, controller-backed widget that syncs its `TextField` with loop controller state.
 - Implemented explicit response reset support (`clearResponse`) in the loop controller and triggered it when the active puzzle changes so answer text/feedback reset cleanly between challenges while preserving same-puzzle edits.
 - Expanded loop UI tests to verify input/feedback are reset after moving to a new challenge and that response clearing keeps puzzle index progression intact.
+
+## Prompt 40
+- Integrated loop tracing into normal app navigation by adding a `Loop Scout` practice option on the home screen and routing it to `LoopScoutScreen`.
+- Improved practice option modeling with a typed `PracticeTypeId` so home navigation selects destination screens via explicit identifiers instead of implicit title matching.
+- Expanded home screen tests to verify both practice options render and loop navigation opens the Loop Scout flow.

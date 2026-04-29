@@ -5,9 +5,16 @@ import '../models/practice_type.dart';
 final practiceOptionsProvider = Provider<List<PracticeType>>((ref) {
   return const [
     PracticeType(
+      id: PracticeTypeId.binary,
       title: 'Binary Practice',
       description:
           'Convert values between decimal and binary using tile-based drills.',
+    ),
+    PracticeType(
+      id: PracticeTypeId.loopScout,
+      title: 'Loop Scout',
+      description:
+          'Trace loop-based code snippets and predict final variable values.',
     ),
   ];
 });

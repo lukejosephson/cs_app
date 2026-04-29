@@ -177,7 +177,7 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 39. Preserve/reset answer input intentionally between puzzles (currently no puzzle lifecycle flow yet).
 
-[ ] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
+[x] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
 
 [ ] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
 

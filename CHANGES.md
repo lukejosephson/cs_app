@@ -29,3 +29,7 @@
 
 ## Prompt 30
 - Added this running `CHANGES.md` log and retroactively summarized available completed prompts so future prompt-by-prompt change tracking is centralized in one file.
+
+## Prompt 31
+- Expanded `.gitignore` to block `serviceAccountKey.json` (root and nested), Firebase Admin SDK key JSON patterns, and `android/app/src/google-services.json` so private key material and local Firebase config files are less likely to be committed.
+- Performed repository security checks to identify secret-like files and confirm ignore coverage for sensitive Firebase-related files.

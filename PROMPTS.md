@@ -145,16 +145,16 @@ Should there be any areas of improvement for the code and current basic function
 [x] 29. Create lib/providers/loop_provider.dart. Use a Riverpod StreamProvider that wraps the DatabaseService call. We will use this to handle the loading/error states in the UI later using AsyncValue.
 
 [x] 30. I have added a new markdown file CHANGES.md to contain summaries of the changes made by CLI code assist. I have also added a development 
-rule to add to this file after every prompt. Follow this rule moving forward. If past prompts have summaries available or you
-are able to generate them, add them retroactively to the CHANGES.md file
+rule to add to this file after every prompt. Follow this rule moving forward. If past prompts have summaries available or you are able to generate them, add them retroactively to the CHANGES.md file
 
-[ ] 31.
+[x] 31. add serviceAccountKey.json and any other files containing private keys to the .gitignore file. do general security checks
 
-[ ] 32.
+[x] 32. ensure that the entirety of the backend work has been completed and is correct for the loop tracing. 
 
-[ ] 33.
+[ ] 33. We are starting the front end / UI for the loop tracing. If not already done, In the providers folder, create a controller for the loop tracing. Implement a Notifier that manages a simple state class (e.g., LoopTracingState) containing the user's currentInput and a bool for isCorrect. Rule 7 (Explain-First): Briefly explain why we use a UI-specific Notifier separate from the Database Provider. Ensure it uses correct Riverpod syntax.
 
-[ ] 34.
+
+[ ] 34. 
 
 
 

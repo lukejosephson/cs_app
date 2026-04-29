@@ -166,12 +166,12 @@ For data, display a placeholder Column that will eventually hold our widgets.
 [x] 35. The Code Display Widget (Aesthetic)Goal: Create a reusable widget for the code snippet that uses your monospace developer theme.
 "Create lib/widgets/code_display_box.dart.This widget should take a String snippet as a parameter.Wrap the snippet in a Container with a dark background, subtle borders, and padding.Requirement: Use a monospace font (like Fira Code via GoogleFonts) as specified in the 'developer aesthetic' guidelines.Ensure it handles multi-line snippets properly.
 
-[ ] 36. The Interaction Layer (Input & Logic)
+[x] 36. The Interaction Layer (Input & Logic)
 Goal: Build the input field and the "Check Answer" button that talks to the controller.
 "Create lib/widgets/loop_input_panel.dart. This widget should display the target variable name and a TextField for the user's answer. Add a 'Check Answer' button that triggers a method in our LoopScoutController.
 If the answer is correct, display a 'Success' message using the green color from our ThemeData. If wrong, show the correct answer as per the requirements.
 
-[ ] 37. Inspect the code that handles the front end of the loop tracing. What still needs to be done? What could cause errors? What could be improved?
+[x] 37. Inspect the code that handles the front end of the loop tracing. What still needs to be done? What could cause errors? What could be improved?
 
 [ ] 38.
 

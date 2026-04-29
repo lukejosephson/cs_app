@@ -58,3 +58,6 @@
 - Added `lib/widgets/loop_input_panel.dart`, a reusable loop interaction widget showing the target variable, answer `TextField`, and a `Check Answer` action wired to the loop controller.
 - Extended loop UI state in `loop_tracing_provider.dart` with `hasSubmitted` and added `LoopScoutController`/`loopScoutControllerProvider` aliases so the interaction layer can follow prompt naming while keeping Riverpod wiring consistent.
 - Updated `LoopScoutScreen` to render live interaction UI for loaded puzzles and added tests for controller state updates and success/error answer feedback (`test/widgets/loop_input_panel_test.dart`, updated loop screen/provider tests).
+
+## Prompt 37
+- Audited the loop-tracing frontend path (`LoopScoutScreen`, `LoopInputPanel`, loop providers/controller, and related tests) and documented remaining work, likely error sources, and targeted improvements before moving to the next build steps.

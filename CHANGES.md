@@ -38,3 +38,8 @@
 - Completed and tightened loop-tracing backend data access in `DatabaseService` by centralizing active-puzzle query logic, enforcing non-empty puzzle type input, and adding `fetchLoopPuzzles()` for one-time loop puzzle loads.
 - Updated loop providers with `loopPuzzlesOnceProvider` so UI can consume either streaming or one-shot loop puzzle fetches from the same backend service layer.
 - Expanded backend test coverage to verify archived puzzles are excluded, invalid type input is rejected, loop-specific one-shot fetching works, and loop providers correctly read backend puzzle data.
+
+## Prompt 33
+- Added `lib/providers/loop_tracing_provider.dart` with a UI-focused Riverpod `Notifier` (`LoopTracingController`) and `LoopTracingState` containing `currentInput` and `isCorrect`.
+- Implemented controller actions for input updates, answer submission, and reset so loop-tracing UI state is managed separately from Firestore data-fetch providers.
+- Added provider tests in `test/providers/loop_tracing_provider_test.dart` to validate initial state, correctness checks, and reset behavior.

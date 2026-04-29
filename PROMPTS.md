@@ -151,7 +151,7 @@ rule to add to this file after every prompt. Follow this rule moving forward. If
 
 [x] 32. ensure that the entirety of the backend work has been completed and is correct for the loop tracing. 
 
-[ ] 33. We are starting the front end / UI for the loop tracing. If not already done, In the providers folder, create a controller for the loop tracing. Implement a Notifier that manages a simple state class (e.g., LoopTracingState) containing the user's currentInput and a bool for isCorrect. Rule 7 (Explain-First): Briefly explain why we use a UI-specific Notifier separate from the Database Provider. Ensure it uses correct Riverpod syntax.
+[x] 33. We are starting the front end / UI for the loop tracing. If not already done, In the providers folder, create a controller for the loop tracing. Implement a Notifier that manages a simple state class (e.g., LoopTracingState) containing the user's currentInput and a bool for isCorrect. Rule 7 (Explain-First): Briefly explain why we use a UI-specific Notifier separate from the Database Provider. Ensure it uses correct Riverpod syntax.
 
 
 [ ] 34. 

@@ -210,7 +210,13 @@ Run all necessary tests.
 2. In `lib/services/database_service.dart`, ensure there is a method `fetchErrorDetectionPuzzles()` that queries the 'puzzles' collection where `type == 'error_detection'` and `is_archived == false`.
 3. Use the `fromFirestore` factory to map the cloud data to the new model.
 
-[ ] 48. 
+[ ] 48. Game Logic & Controller (Riverpod)
+**Task:** Create `lib/providers/error_detection_controller.dart`.
+1. Implement a `Notifier` called `ErrorDetectionController` that manages a `ErrorDetectionState` class.
+2. The state must track: `selectedLineIndex` (int?), `hasSubmitted` (bool), and `isCorrect` (bool?).
+3. Add a method `selectLine(int index)` to update the user's current choice.
+4. Add a method `checkSelection(int correctLineIndex)` that sets `isCorrect` based on the user's selection and updates `hasSubmitted` to true.
+5. Ensure the logic is pure and decoupled from any UI code.
 
 [ ] 49. 
 

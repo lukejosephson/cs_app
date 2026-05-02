@@ -202,7 +202,13 @@ nothing is found, explain what the issue could be.
 [x] 46. Test iOS startup first. report back with any issues. then test android startup and do the same.
 Run all necessary tests.
 
-[ ] 47. 
+[ ] 47. I will now be implementing an error detection game in a similar to the loop tracing. The following prompts will concern this. 
+
+**Data Model & Service Integration
+**Task:** Create `lib/models/error_detection_challenge.dart` and update the service.
+1. Implement a class `ErrorDetectionChallenge` that maps to the Firestore schema: `id`, `type`, `snippet`, `error_line`, `target`, `difficulty`, `is_archived`, and `tags`.
+2. In `lib/services/database_service.dart`, ensure there is a method `fetchErrorDetectionPuzzles()` that queries the 'puzzles' collection where `type == 'error_detection'` and `is_archived == false`.
+3. Use the `fromFirestore` factory to map the cloud data to the new model.
 
 [ ] 48. 
 

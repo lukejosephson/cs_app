@@ -199,7 +199,8 @@ If the answer is correct, display a 'Success' message using the green color from
 First, look if something universal to both simulation OS's is causing the issue. Explain what the issue is, and if
 nothing is found, explain what the issue could be.
 
-[ ] 46. 
+[x] 46. Test iOS startup first. report back with any issues. then test android startup and do the same.
+Run all necessary tests.
 
 [ ] 47. 
 

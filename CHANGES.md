@@ -111,3 +111,8 @@
 - Added `lib/models/error_detection_challenge.dart` with a Firestore-mapped `ErrorDetectionChallenge` model (`id`, `type`, `snippet`, `error_line`, `target`, `difficulty`, `is_archived`, `tags`) and `fromFirestore` mapping support.
 - Updated `DatabaseService`/`FirestoreDatabaseService` with `fetchErrorDetectionPuzzles()` to query active `error_detection` puzzles from the `puzzles` collection and map records through `ErrorDetectionChallenge.fromFirestore`.
 - Expanded test coverage with `test/models/error_detection_challenge_test.dart` and a new service test validating that only non-archived `error_detection` records are returned.
+
+## Prompt 48
+- Added `lib/providers/error_detection_controller.dart` with a UI-decoupled Riverpod `Notifier` (`ErrorDetectionController`) and `ErrorDetectionState`.
+- Implemented required state fields (`selectedLineIndex`, `hasSubmitted`, `isCorrect`) and controller methods: `selectLine(int index)` and `checkSelection(int correctLineIndex)`.
+- Added provider tests in `test/providers/error_detection_controller_test.dart` covering initial state, line selection behavior, and correct/incorrect submission outcomes.

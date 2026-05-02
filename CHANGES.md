@@ -106,3 +106,8 @@
 - Ran required validation suite (`flutter analyze`, full `flutter test`) and confirmed app code quality/test baseline is passing.
 - Tested iOS startup first: Flutter can detect a booted iOS simulator, but launch fails at Xcode build destination resolution with `iOS 26.4 is not installed`, indicating a local Xcode platform/components mismatch.
 - Tested Android startup second on `emulator-5554`: build succeeds, but install/launch fails due to emulator storage exhaustion (`Requested internal only, but not enough space`).
+
+## Prompt 47
+- Added `lib/models/error_detection_challenge.dart` with a Firestore-mapped `ErrorDetectionChallenge` model (`id`, `type`, `snippet`, `error_line`, `target`, `difficulty`, `is_archived`, `tags`) and `fromFirestore` mapping support.
+- Updated `DatabaseService`/`FirestoreDatabaseService` with `fetchErrorDetectionPuzzles()` to query active `error_detection` puzzles from the `puzzles` collection and map records through `ErrorDetectionChallenge.fromFirestore`.
+- Expanded test coverage with `test/models/error_detection_challenge_test.dart` and a new service test validating that only non-archived `error_detection` records are returned.

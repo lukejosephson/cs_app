@@ -202,7 +202,7 @@ nothing is found, explain what the issue could be.
 [x] 46. Test iOS startup first. report back with any issues. then test android startup and do the same.
 Run all necessary tests.
 
-[ ] 47. I will now be implementing an error detection game in a similar to the loop tracing. The following prompts will concern this. 
+[x] 47. I will now be implementing an error detection game in a similar to the loop tracing. The following prompts will concern this. 
 
 **Data Model & Service Integration
 **Task:** Create `lib/models/error_detection_challenge.dart` and update the service.

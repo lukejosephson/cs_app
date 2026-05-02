@@ -171,4 +171,52 @@ void main() {
     expect(puzzles, hasLength(1));
     expect(puzzles.first.id, 401);
   });
+
+  test(
+    'fetchErrorDetectionPuzzles returns only active error_detection puzzles',
+    () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+
+      await firestore.collection('puzzles').doc('501').set({
+        'type': 'error_detection',
+        'snippet': 'if (x = 1) { print(x); }',
+        'error_line': 1,
+        'target': 'x',
+        'difficulty': 2,
+        'is_archived': false,
+        'tags': ['assignment', 'condition'],
+      });
+
+      await firestore.collection('puzzles').doc('502').set({
+        'type': 'error_detection',
+        'snippet': 'while (i < 10) { i++; }',
+        'error_line': 0,
+        'target': 'i',
+        'difficulty': 1,
+        'is_archived': true,
+        'tags': ['loop'],
+      });
+
+      await firestore.collection('puzzles').doc('503').set({
+        'type': 'loop_scout',
+        'snippet': 'for (var i = 0; i < 2; i++) { sum += i; }',
+        'target': 'sum',
+        'answer': '1',
+        'error_line': 0,
+        'difficulty': 1,
+        'is_archived': false,
+        'tags': ['loop'],
+      });
+
+      final puzzles = await service.fetchErrorDetectionPuzzles();
+
+      expect(puzzles, hasLength(1));
+      expect(puzzles.first.id, 501);
+      expect(puzzles.first.type, 'error_detection');
+      expect(puzzles.first.errorLine, 1);
+      expect(puzzles.first.isArchived, isFalse);
+      expect(puzzles.first.tags, ['assignment', 'condition']);
+    },
+  );
 }

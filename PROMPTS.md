@@ -218,7 +218,15 @@ Run all necessary tests.
 4. Add a method `checkSelection(int correctLineIndex)` that sets `isCorrect` based on the user's selection and updates `hasSubmitted` to true.
 5. Ensure the logic is pure and decoupled from any UI code.
 
-[ ] 49. 
+[x] 49. Interactive UI & Line Selection
+**Task:** Create `lib/screens/error_detection_screen.dart` and the selection widget.
+1. Implement a screen that watches the `errorDetectionProvider` and uses `.when()` for async states.
+2. Create a widget `SelectableCodeBlock` that takes the `snippet` string, splits it by newlines (`\n`), and renders each line as a tappable `InkWell` or `GestureDetector` row.
+3. **Styling & Interaction:**
+    - Use the dark terminal theme and a monospace font.
+    - Highlight the currently selected line with a subtle background tint or border.
+    - After submission: If correct, highlight the selected line in green. If wrong, highlight the selected line in red and the true `error_line` in green.
+4. Add "Submit" and "Next" buttons to control the game flow.
 
 [ ] 50. 
 

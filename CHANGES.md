@@ -116,3 +116,9 @@
 - Added `lib/providers/error_detection_controller.dart` with a UI-decoupled Riverpod `Notifier` (`ErrorDetectionController`) and `ErrorDetectionState`.
 - Implemented required state fields (`selectedLineIndex`, `hasSubmitted`, `isCorrect`) and controller methods: `selectLine(int index)` and `checkSelection(int correctLineIndex)`.
 - Added provider tests in `test/providers/error_detection_controller_test.dart` covering initial state, line selection behavior, and correct/incorrect submission outcomes.
+
+## Prompt 49
+- Added `lib/screens/error_detection_screen.dart` with async puzzle loading via `errorDetectionProvider` and `.when()` handling for loading, error, empty, and data states.
+- Added `lib/widgets/selectable_code_block.dart`, which splits snippets by newline and renders each line as a tappable row with monospace styling and state-driven highlight behavior.
+- Implemented submit/next interaction flow: submit evaluates the selected line against `error_line`, and next advances challenges while resetting controller submission state.
+- Added widget tests in `test/error_detection_screen_test.dart` and `test/widgets/selectable_code_block_test.dart` for async UI states, line selection behavior, and submit/next flow.

@@ -96,3 +96,8 @@
 - Extracted loop-answer normalization into a shared helper (`AnswerNormalizer`) and reused it in the loop controller to keep comparison rules centralized and consistent.
 - Centralized loop-facing UI strings into `lib/constants/loop_strings.dart` to reduce inline text and keep message handling localization-ready.
 - Enhanced `LoopScoutScreen` to show puzzle metadata (`difficulty`, `tags`) while preserving explicit next-challenge navigation, and expanded widget tests for empty-data state plus input reset on puzzle changes.
+
+## Prompt 45
+- Investigated cross-platform launch blockers and found no universal Dart/code-level startup failure: analysis/tests pass and Android debug build succeeds.
+- Identified the immediate iOS launch blocker as local Xcode simulator platform setup (`iOS 26.4 is not installed`), which is an environment/toolchain issue rather than app logic.
+- Documented likely non-code causes for “both platforms won’t launch” when shared app code is healthy (simulator/device runtime configuration and local SDK tooling state).

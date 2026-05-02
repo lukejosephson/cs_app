@@ -195,7 +195,9 @@ If the answer is correct, display a 'Success' message using the green color from
  3. Show puzzle metadata (difficulty, tags) and add explicit “Next challenge” action.
  4. Add widget tests for empty-data state and input-reset behavior when changing puzzles
 
-[ ] 45. 
+[x] 45. The program is not currently launching in either ios or android. Identify the issue in the code.
+First, look if something universal to both simulation OS's is causing the issue. Explain what the issue is, and if
+nothing is found, explain what the issue could be.
 
 [ ] 46. 
 

@@ -130,3 +130,9 @@
 - Renamed `errorDetectionProvider` to `errorDetectionPuzzlesProvider` (with deprecated alias) to enforce consistent naming with `loopPuzzlesProvider` and reduce provider wiring drift.
 - Updated home screen tests and database service tests to verify error detection navigation and `fetchPuzzlesByType` behavior across active/archived puzzle filtering.
 
+## Prompt 51
+- Verified that `lib/services/database_service.dart` exists with `fetchPuzzlesByType(String type)` method that queries the 'puzzles' collection by type and maps results to LoopChallenge model.
+- Confirmed service layer maintains clean separation of concerns: no UI code, no Riverpod providers, only Firestore data access logic.
+- This was a retrospective verification prompt confirming work completed in earlier prompts (Prompts 28-32) when the service backend was initially built.
+
+

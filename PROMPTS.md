@@ -231,14 +231,10 @@ Run all necessary tests.
 [x] 50.  These are sources of improvement to improve adherance to guidelines.
 Add error detection into normal app navigation (it exists, but should be first-class from home like other modes). Complete the generic puzzle service path (fetchPuzzlesByType) and ensure both game modes use consistent service/provider patterns. Refactor oversized screens (notably create_account_screen.dart) into smaller widgets/services to match your own architecture rule.
 
-[ ] 51.
-
-
-
-
-Now create lib/services/database_service.dart. Implement a fetchPuzzlesByType(String type) method. 
+[x] 51. This is a prompt I intended to add earlier. Ensure it has all been done, even if under different file or method names:
+"Now create lib/services/database_service.dart. Implement a fetchPuzzlesByType(String type) method. 
 It should query the 'puzzles' collection where 'type' matches the argument.
-Map the Firestore documents into our LoopChallenge model. Ensure no UI code or Riverpod code is in this file
+Map the Firestore documents into our LoopChallenge model. Ensure no UI code or Riverpod code is in this file"
 
 
 

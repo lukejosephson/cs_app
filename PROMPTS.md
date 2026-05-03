@@ -228,7 +228,7 @@ Run all necessary tests.
     - After submission: If correct, highlight the selected line in green. If wrong, highlight the selected line in red and the true `error_line` in green.
 4. Add "Submit" and "Next" buttons to control the game flow.
 
-[ ] 50.  These are sources of improvement to improve adherance to guidelines.
+[x] 50.  These are sources of improvement to improve adherance to guidelines.
 Add error detection into normal app navigation (it exists, but should be first-class from home like other modes). Complete the generic puzzle service path (fetchPuzzlesByType) and ensure both game modes use consistent service/provider patterns. Refactor oversized screens (notably create_account_screen.dart) into smaller widgets/services to match your own architecture rule.
 
 [ ] 51.

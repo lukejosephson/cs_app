@@ -1,10 +1,9 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
+import '../services/create_account_form_service.dart';
+import '../widgets/auth/create_account_fields.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
 class CreateAccountScreen extends ConsumerStatefulWidget {
@@ -16,10 +15,7 @@ class CreateAccountScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
-  static final RegExp _emailPattern = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
-  static final RegExp _passwordLetterPattern = RegExp(r'[A-Za-z]');
-  static final RegExp _passwordDigitPattern = RegExp(r'\d');
-
+  static const _formService = CreateAccountFormService();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
@@ -88,40 +84,11 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    TextField(
-                      key: const ValueKey('create-account-email-field'),
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const [AutofillHints.email],
-                      enabled: !isLoading,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'name@example.com',
-                      ),
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      key: const ValueKey('create-account-password-field'),
-                      controller: _passwordController,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.newPassword],
-                      enabled: !isLoading,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      key: const ValueKey(
-                        'create-account-confirm-password-field',
-                      ),
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.newPassword],
-                      enabled: !isLoading,
-                      decoration: const InputDecoration(
-                        labelText: 'Verify Password',
-                      ),
+                    CreateAccountFields(
+                      emailController: _emailController,
+                      passwordController: _passwordController,
+                      confirmPasswordController: _confirmPasswordController,
+                      isLoading: isLoading,
                       onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
@@ -149,7 +116,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     if (authActionState.hasError) ...[
                       const SizedBox(height: 12),
                       Text(
-                        _buildAuthErrorMessage(authActionState.error!),
+                        _formService.buildAuthErrorMessage(
+                          authActionState.error!,
+                        ),
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.error,
                         ),
@@ -171,7 +140,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     required String password,
     required String confirmedPassword,
   }) async {
-    final validationError = _validateCredentials(
+    final validationError = _formService.validateCredentials(
       email: email,
       password: password,
       confirmedPassword: confirmedPassword,
@@ -199,59 +168,5 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
     if (!mounted) return;
     Navigator.of(context).pop('Account created successfully. Please sign in.');
-  }
-
-  String? _validateCredentials({
-    required String email,
-    required String password,
-    required String confirmedPassword,
-  }) {
-    if (email.isEmpty) {
-      return 'Please enter an email address.';
-    }
-    if (!_emailPattern.hasMatch(email)) {
-      return 'Please enter a valid email address.';
-    }
-    if (password.isEmpty) {
-      return 'Please enter a password.';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters long.';
-    }
-    if (!_passwordLetterPattern.hasMatch(password) ||
-        !_passwordDigitPattern.hasMatch(password)) {
-      return 'Password must include at least one letter and one number.';
-    }
-    if (confirmedPassword.isEmpty) {
-      return 'Please verify your password.';
-    }
-    if (password != confirmedPassword) {
-      return 'Password verification does not match.';
-    }
-    return null;
-  }
-
-  String _buildAuthErrorMessage(Object error) {
-    if (error is TimeoutException) {
-      return 'Authentication timed out. Check your internet connection and try again.';
-    }
-    if (error is FirebaseAuthException) {
-      switch (error.code) {
-        case 'operation-not-allowed':
-          return 'Email/password sign-in is not enabled in Firebase Console.';
-        case 'email-already-in-use':
-          return 'That email is already in use. Try signing in instead.';
-        case 'invalid-email':
-          return 'Firebase rejected this email address as invalid.';
-        case 'weak-password':
-          return 'Firebase rejected this password as too weak.';
-        case 'network-request-failed':
-          return 'Network request failed while contacting Firebase.';
-        default:
-          return 'Authentication failed (${error.code}): ${error.message ?? 'Unknown error'}';
-      }
-    }
-
-    return 'Authentication failed: $error';
   }
 }

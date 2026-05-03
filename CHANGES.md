@@ -118,7 +118,15 @@
 - Added provider tests in `test/providers/error_detection_controller_test.dart` covering initial state, line selection behavior, and correct/incorrect submission outcomes.
 
 ## Prompt 49
-- Added `lib/screens/error_detection_screen.dart` with async puzzle loading via `errorDetectionProvider` and `.when()` handling for loading, error, empty, and data states.
+- Added `lib/screens/error_detection_screen.dart` with async puzzle loading via `errorDetectionPuzzlesProvider` and `.when()` handling for loading, error, empty, and data states.
 - Added `lib/widgets/selectable_code_block.dart`, which splits snippets by newline and renders each line as a tappable row with monospace styling and state-driven highlight behavior.
 - Implemented submit/next interaction flow: submit evaluates the selected line against `error_line`, and next advances challenges while resetting controller submission state.
 - Added widget tests in `test/error_detection_screen_test.dart` and `test/widgets/selectable_code_block_test.dart` for async UI states, line selection behavior, and submit/next flow.
+
+## Prompt 50
+- Integrated error detection into normal app navigation by adding `errorDetection` enum to `PracticeTypeId`, extending `practiceOptionsProvider`, and wiring `HomeScreen` routing.
+- Refactored oversized `CreateAccountScreen` (257 lines) into smaller, reusable components: extracted form field inputs into `lib/widgets/auth/create_account_fields.dart` and validation/error logic into `lib/services/create_account_form_service.dart`.
+- Completed `fetchPuzzlesByType` generic service path by separating archive-aware queries (`_activePuzzlesByTypeQuery`) from type-only queries (`_puzzlesByTypeQuery`), enabling both active-only and full-type filtering.
+- Renamed `errorDetectionProvider` to `errorDetectionPuzzlesProvider` (with deprecated alias) to enforce consistent naming with `loopPuzzlesProvider` and reduce provider wiring drift.
+- Updated home screen tests and database service tests to verify error detection navigation and `fetchPuzzlesByType` behavior across active/archived puzzle filtering.
+

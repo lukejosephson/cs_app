@@ -21,16 +21,19 @@ class FirestoreDatabaseService implements DatabaseService {
   static const _fieldType = 'type';
   static const _fieldIsArchived = 'is_archived';
 
-  Query<Map<String, dynamic>> _activePuzzlesByTypeQuery(String type) {
+  Query<Map<String, dynamic>> _puzzlesByTypeQuery(String type) {
     final normalizedType = type.trim();
     if (normalizedType.isEmpty) {
       throw ArgumentError.value(type, 'type', 'Puzzle type cannot be empty.');
     }
 
-    return _firestore
-        .collection(_puzzlesCollection)
-        .where(_fieldType, isEqualTo: normalizedType)
-        .where(_fieldIsArchived, isEqualTo: false);
+    return _firestore.collection(
+      _puzzlesCollection,
+    ).where(_fieldType, isEqualTo: normalizedType);
+  }
+
+  Query<Map<String, dynamic>> _activePuzzlesByTypeQuery(String type) {
+    return _puzzlesByTypeQuery(type).where(_fieldIsArchived, isEqualTo: false);
   }
 
   List<LoopChallenge> _mapValidChallenges(
@@ -44,14 +47,15 @@ class FirestoreDatabaseService implements DatabaseService {
 
   @override
   Future<List<LoopChallenge>> fetchPuzzlesByType(String type) async {
-    final snapshot = await _activePuzzlesByTypeQuery(type).get();
+    final snapshot = await _puzzlesByTypeQuery(type).get();
 
     return _mapValidChallenges(snapshot.docs);
   }
 
   @override
-  Future<List<LoopChallenge>> fetchLoopPuzzles() {
-    return fetchPuzzlesByType(_loopScoutType);
+  Future<List<LoopChallenge>> fetchLoopPuzzles() async {
+    final snapshot = await _activePuzzlesByTypeQuery(_loopScoutType).get();
+    return _mapValidChallenges(snapshot.docs);
   }
 
   @override

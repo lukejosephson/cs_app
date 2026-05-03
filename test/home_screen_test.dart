@@ -1,4 +1,5 @@
 import 'package:cs_app/screens/loop_scout_screen.dart';
+import 'package:cs_app/screens/error_detection_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helpers/test_app.dart';
@@ -13,6 +14,7 @@ void main() {
     expect(find.text('Practice Types'), findsOneWidget);
     expect(find.text('Binary Practice'), findsOneWidget);
     expect(find.text('Loop Scout'), findsOneWidget);
+    expect(find.text('Error Detection'), findsOneWidget);
   });
 
   testWidgets('opens loop scout screen from home practice options', (
@@ -25,5 +27,17 @@ void main() {
 
     expect(find.text('Loop Scout'), findsOneWidget);
     expect(find.byType(LoopScoutScreen), findsOneWidget);
+  });
+
+  testWidgets('opens error detection screen from home practice options', (
+    tester,
+  ) async {
+    await pumpSignedInApp(tester);
+
+    await tester.tap(find.text('Error Detection'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Error Detection'), findsOneWidget);
+    expect(find.byType(ErrorDetectionScreen), findsOneWidget);
   });
 }

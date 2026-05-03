@@ -7,6 +7,7 @@ import '../models/practice_type.dart';
 import '../widgets/home/practice_option_tile.dart';
 import '../widgets/home/welcome_card.dart';
 import 'binary_practice_screen.dart';
+import 'error_detection_screen.dart';
 import 'loop_scout_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -61,6 +62,7 @@ class HomeScreen extends ConsumerWidget {
     final Widget destination = switch (typeId) {
       PracticeTypeId.binary => const BinaryPracticeScreen(),
       PracticeTypeId.loopScout => const LoopScoutScreen(),
+      PracticeTypeId.errorDetection => const ErrorDetectionScreen(),
     };
 
     Navigator.of(

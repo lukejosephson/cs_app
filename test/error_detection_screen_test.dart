@@ -21,7 +21,7 @@ void main() {
     final pendingLoad = Completer<List<ErrorDetectionChallenge>>();
     await tester.pumpWidget(
       _buildTestApp([
-        errorDetectionProvider.overrideWith(
+        errorDetectionPuzzlesProvider.overrideWith(
           (ref) => pendingLoad.future,
         ),
       ]),
@@ -33,7 +33,7 @@ void main() {
   testWidgets('shows error state when challenge load fails', (tester) async {
     await tester.pumpWidget(
       _buildTestApp([
-        errorDetectionProvider.overrideWith(
+        errorDetectionPuzzlesProvider.overrideWith(
           (ref) => Future<List<ErrorDetectionChallenge>>.error(
             Exception('boom'),
           ),
@@ -73,7 +73,7 @@ void main() {
 
     await tester.pumpWidget(
       _buildTestApp([
-        errorDetectionProvider.overrideWith(
+        errorDetectionPuzzlesProvider.overrideWith(
           (ref) => Future.value(const [challengeA, challengeB]),
         ),
       ]),

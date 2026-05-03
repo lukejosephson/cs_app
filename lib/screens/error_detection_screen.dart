@@ -18,7 +18,7 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final puzzlesAsync = ref.watch(errorDetectionProvider);
+    final puzzlesAsync = ref.watch(errorDetectionPuzzlesProvider);
     final state = ref.watch(errorDetectionControllerProvider);
     final controller = ref.read(errorDetectionControllerProvider.notifier);
     final colorScheme = Theme.of(context).colorScheme;

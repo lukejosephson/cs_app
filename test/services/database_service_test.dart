@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'fetchPuzzlesByType returns only active matching puzzle types',
+    'fetchPuzzlesByType returns matching puzzle types regardless of archive state',
     () async {
       final firestore = FakeFirebaseFirestore();
       final service = FirestoreDatabaseService(firestore: firestore);
@@ -44,10 +44,12 @@ void main() {
 
       final puzzles = await service.fetchPuzzlesByType('loop_tracing');
 
-      expect(puzzles, hasLength(1));
-      expect(puzzles.first.id, 101);
-      expect(puzzles.first.type, 'loop_tracing');
-      expect(puzzles.first.answer, '3');
+      expect(puzzles, hasLength(2));
+      expect(puzzles.map((p) => p.id), containsAll([101, 103]));
+      expect(
+        puzzles.where((p) => p.type == 'loop_tracing').length,
+        equals(2),
+      );
     },
   );
 

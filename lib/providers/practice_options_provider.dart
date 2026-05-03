@@ -16,5 +16,11 @@ final practiceOptionsProvider = Provider<List<PracticeType>>((ref) {
       description:
           'Trace loop-based code snippets and predict final variable values.',
     ),
+    PracticeType(
+      id: PracticeTypeId.errorDetection,
+      title: 'Error Detection',
+      description:
+          'Inspect code snippets and identify the exact line causing a bug.',
+    ),
   ];
 });

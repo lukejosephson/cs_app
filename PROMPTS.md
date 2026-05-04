@@ -236,6 +236,24 @@ Add error detection into normal app navigation (it exists, but should be first-c
 It should query the 'puzzles' collection where 'type' matches the argument.
 Map the Firestore documents into our LoopChallenge model. Ensure no UI code or Riverpod code is in this file"
 
+[x] 52. add anything into .gitignore that hasn't already been added but should be
+
+[x] 53. Implement a central PracticeOptions model and provider for unified home screen management.
+
+[x] 54. Inspect the upload puzzles script. ensure that if ran again, the script won't upload duplicates 
+to firestore. ensure that things new things will be added correctly when added onto the end of the puzzles.json file.
+
+[ ] 55. Puzzles for error detection have been input into firestore with this schema. Ensure all facets of the build of error detection, front end and back end, align with this. The user should be answering with the line number of the error, and should then have the info about the error, stored in the target, displayed/explained to them.
+
+[ ] 56.
+
+[ ] 57.
+
+[ ] 58.
+
+[ ] 59.
+
+[ ] 60.
 
 
 ** Development Rules **

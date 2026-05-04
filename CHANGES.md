@@ -135,4 +135,6 @@
 - Confirmed service layer maintains clean separation of concerns: no UI code, no Riverpod providers, only Firestore data access logic.
 - This was a retrospective verification prompt confirming work completed in earlier prompts (Prompts 28-32) when the service backend was initially built.
 
-
+## Prompt 52
+- Updated the root `.gitignore` to include missing standard Flutter/Dart generated files and ephemeral platform files (e.g., `.flutter-plugins`, `Generated.xcconfig`, `ephemeral/` directories).
+- Verified that sensitive Firebase configuration files and local secrets remain untracked.

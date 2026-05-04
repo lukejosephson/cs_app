@@ -12,15 +12,15 @@ Necessary for functionality:
 3. [x] Binary Practice: User should be given a number and asked to flip tiles from 0 to 1 
 to make the number, which should then be verified
 
-4. [ ] Error Detection: User should be given a code snippet with a syntax or logic error.
+4. [x] Error Detection: User should be given a code snippet with a syntax or logic error.
 User should be able to select where the error occurs.
 
-5. [ ] Loop Tracing: User should be given a code snippet with a loop that modifies variables,
+5. [x] Loop Tracing: User should be given a code snippet with a loop that modifies variables,
 and be prompted to trace the final result of one of the variables
 
-6. [ ] User should be shown fresh questions each time
+6. [x] User should be shown fresh questions each time
 
-7. [ ] User should have the option to retry questions they got wrong later on
+7. [x] User should have the option to retry questions they got wrong later on
 
 Future Possibilities:
 

@@ -16,7 +16,9 @@ void main() {
   test('selectLine updates selected line and clears submission result', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    final controller = container.read(errorDetectionControllerProvider.notifier);
+    final controller = container.read(
+      errorDetectionControllerProvider.notifier,
+    );
 
     controller.checkSelection(2);
     controller.selectLine(3);
@@ -30,7 +32,9 @@ void main() {
   test('checkSelection sets submitted and true when selection matches', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    final controller = container.read(errorDetectionControllerProvider.notifier);
+    final controller = container.read(
+      errorDetectionControllerProvider.notifier,
+    );
 
     controller.selectLine(4);
     controller.checkSelection(4);
@@ -43,7 +47,9 @@ void main() {
   test('checkSelection sets submitted and false when selection is wrong', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    final controller = container.read(errorDetectionControllerProvider.notifier);
+    final controller = container.read(
+      errorDetectionControllerProvider.notifier,
+    );
 
     controller.selectLine(2);
     controller.checkSelection(5);
@@ -51,5 +57,20 @@ void main() {
     final state = container.read(errorDetectionControllerProvider);
     expect(state.hasSubmitted, isTrue);
     expect(state.isCorrect, isFalse);
+  });
+
+  test('selectLineNumber maps one-based line number to selected index', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final controller = container.read(
+      errorDetectionControllerProvider.notifier,
+    );
+
+    controller.selectLineNumber(3);
+
+    final state = container.read(errorDetectionControllerProvider);
+    expect(state.selectedLineIndex, 2);
+    expect(state.hasSubmitted, isFalse);
+    expect(state.isCorrect, isNull);
   });
 }

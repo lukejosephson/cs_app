@@ -10,6 +10,7 @@ void main() {
       'snippet': 'print(total)',
       'error_line': 1,
       'target': 'total',
+      'answer': 'total is out of scope in this location.',
       'difficulty': 2,
       'is_archived': false,
       'tags': ['variables', 'scope'],
@@ -20,6 +21,7 @@ void main() {
     expect(challenge.snippet, 'print(total)');
     expect(challenge.errorLine, 1);
     expect(challenge.target, 'total');
+    expect(challenge.answer, 'total is out of scope in this location.');
     expect(challenge.difficulty, 2);
     expect(challenge.isArchived, isFalse);
     expect(challenge.tags, ['variables', 'scope']);
@@ -32,6 +34,7 @@ void main() {
       snippet: 'print(value)',
       errorLine: 3,
       target: 'value',
+      answer: 'value is undefined before use.',
       difficulty: 1,
       isArchived: true,
       tags: ['dart'],
@@ -43,6 +46,7 @@ void main() {
       'snippet': 'print(value)',
       'error_line': 3,
       'target': 'value',
+      'answer': 'value is undefined before use.',
       'difficulty': 1,
       'is_archived': true,
       'tags': ['dart'],
@@ -56,17 +60,26 @@ void main() {
       ErrorDetectionChallenge.fieldSnippet: 'if (x = 1) { print(x); }',
       ErrorDetectionChallenge.fieldErrorLine: 1,
       ErrorDetectionChallenge.fieldTarget: 'x',
+      ErrorDetectionChallenge.fieldAnswer:
+          "The variable 'x' must be compared with == instead of assigned with =.",
       ErrorDetectionChallenge.fieldDifficulty: 2,
       ErrorDetectionChallenge.fieldIsArchived: false,
       ErrorDetectionChallenge.fieldTags: ['assignment', 'condition'],
     });
 
-    final snapshot = await firestore.collection('error_detection').doc('55').get();
+    final snapshot = await firestore
+        .collection('error_detection')
+        .doc('55')
+        .get();
     final challenge = ErrorDetectionChallenge.fromFirestore(snapshot);
 
     expect(challenge.id, 55);
     expect(challenge.type, 'error_detection');
     expect(challenge.errorLine, 1);
+    expect(
+      challenge.answer,
+      "The variable 'x' must be compared with == instead of assigned with =.",
+    );
     expect(challenge.tags, ['assignment', 'condition']);
   });
 }

@@ -15,6 +15,20 @@ class ErrorDetectionScreen extends ConsumerStatefulWidget {
 
 class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
   int _currentPuzzleIndex = 0;
+  late final TextEditingController _lineNumberController;
+  String? _lineNumberError;
+
+  @override
+  void initState() {
+    super.initState();
+    _lineNumberController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _lineNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +93,37 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
           }
 
           final currentPuzzle = puzzles[_currentPuzzleIndex % puzzles.length];
+          final maxLineNumber = currentPuzzle.snippet.split('\n').length;
+          final correctLineNumber = currentPuzzle.errorLine + 1;
+
+          void submitSelection() {
+            final parsedLineNumber = int.tryParse(
+              _lineNumberController.text.trim(),
+            );
+            if (parsedLineNumber == null ||
+                parsedLineNumber < 1 ||
+                parsedLineNumber > maxLineNumber) {
+              setState(() {
+                _lineNumberError =
+                    'Enter a valid line number from 1 to $maxLineNumber.';
+              });
+              return;
+            }
+
+            setState(() {
+              _lineNumberError = null;
+            });
+            controller.selectLineNumber(parsedLineNumber);
+            controller.checkSelection(currentPuzzle.errorLine);
+          }
 
           String submissionMessage() {
             if (!state.hasSubmitted || state.isCorrect == null) {
-              return 'Tap a line, then submit your choice.';
+              return 'Enter the line number with the error, then submit.';
             }
             return state.isCorrect!
-                ? 'Correct! Nice catch.'
-                : 'Not quite. Green shows the correct line.';
+                ? 'Correct! The error is on line $correctLineNumber.'
+                : 'Not quite. The error is on line $correctLineNumber.';
           }
 
           Color submissionColor() {
@@ -136,7 +173,28 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                 hasSubmitted: state.hasSubmitted,
                 isCorrect: state.isCorrect,
                 correctLineIndex: currentPuzzle.errorLine,
-                onLineSelected: controller.selectLine,
+                onLineSelected: (index) {
+                  controller.selectLine(index);
+                  _lineNumberController.text = '${index + 1}';
+                  if (_lineNumberError != null) {
+                    setState(() {
+                      _lineNumberError = null;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                key: const ValueKey('error-line-number-field'),
+                controller: _lineNumberController,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  labelText: 'Line number',
+                  hintText: 'Enter 1-$maxLineNumber',
+                  errorText: _lineNumberError,
+                ),
+                onSubmitted: (_) => submitSelection(),
               ),
               const SizedBox(height: 12),
               Text(
@@ -147,20 +205,53 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              if (state.hasSubmitted) ...[
+                const SizedBox(height: 12),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Error explanation',
+                          style: textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(currentPuzzle.target, style: textTheme.bodyMedium),
+                        if (currentPuzzle.answer.trim().isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Text(
+                            currentPuzzle.answer,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurface.withValues(
+                                alpha: 0.9,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 12),
               Row(
                 children: [
                   FilledButton(
-                    onPressed: () =>
-                        controller.checkSelection(currentPuzzle.errorLine),
+                    onPressed: submitSelection,
                     child: const Text('Submit'),
                   ),
                   const SizedBox(width: 10),
                   OutlinedButton(
                     onPressed: () {
                       setState(() {
-                        _currentPuzzleIndex = (_currentPuzzleIndex + 1) %
-                            puzzles.length;
+                        _currentPuzzleIndex =
+                            (_currentPuzzleIndex + 1) % puzzles.length;
+                        _lineNumberController.clear();
+                        _lineNumberError = null;
                       });
                       ref.invalidate(errorDetectionControllerProvider);
                     },

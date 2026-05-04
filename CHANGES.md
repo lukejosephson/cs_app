@@ -138,3 +138,9 @@
 ## Prompt 52
 - Updated the root `.gitignore` to include missing standard Flutter/Dart generated files and ephemeral platform files (e.g., `.flutter-plugins`, `Generated.xcconfig`, `ephemeral/` directories).
 - Verified that sensitive Firebase configuration files and local secrets remain untracked.
+
+## Prompt 55
+- Aligned error-detection schema handling by extending `ErrorDetectionChallenge` with the Firestore `answer` field and required-field validation (`snippet`, `target`, `answer`) so backend mapping matches uploaded puzzle records.
+- Updated `FirestoreDatabaseService.fetchErrorDetectionPuzzles()` to filter malformed error-detection records and keep only complete, active challenges.
+- Updated `ErrorDetectionScreen` so users submit a line number directly, with range validation, line-selection sync, and post-submit explanation UI that displays the puzzle’s `target` text (and detailed `answer` when present).
+- Expanded model/service/controller/screen tests to cover line-number selection flow, explanation rendering, and malformed-record filtering.

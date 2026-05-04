@@ -27,9 +27,9 @@ class FirestoreDatabaseService implements DatabaseService {
       throw ArgumentError.value(type, 'type', 'Puzzle type cannot be empty.');
     }
 
-    return _firestore.collection(
-      _puzzlesCollection,
-    ).where(_fieldType, isEqualTo: normalizedType);
+    return _firestore
+        .collection(_puzzlesCollection)
+        .where(_fieldType, isEqualTo: normalizedType);
   }
 
   Query<Map<String, dynamic>> _activePuzzlesByTypeQuery(String type) {
@@ -41,6 +41,15 @@ class FirestoreDatabaseService implements DatabaseService {
   ) {
     return docs
         .map(LoopChallenge.fromFirestore)
+        .where((challenge) => challenge.hasRequiredPromptFields)
+        .toList(growable: false);
+  }
+
+  List<ErrorDetectionChallenge> _mapValidErrorDetectionChallenges(
+    Iterable<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
+    return docs
+        .map(ErrorDetectionChallenge.fromFirestore)
         .where((challenge) => challenge.hasRequiredPromptFields)
         .toList(growable: false);
   }
@@ -61,9 +70,7 @@ class FirestoreDatabaseService implements DatabaseService {
   @override
   Future<List<ErrorDetectionChallenge>> fetchErrorDetectionPuzzles() async {
     final snapshot = await _activePuzzlesByTypeQuery(_errorDetectionType).get();
-    return snapshot.docs
-        .map(ErrorDetectionChallenge.fromFirestore)
-        .toList(growable: false);
+    return _mapValidErrorDetectionChallenges(snapshot.docs);
   }
 
   @override

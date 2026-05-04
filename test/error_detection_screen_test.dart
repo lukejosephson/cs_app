@@ -21,9 +21,7 @@ void main() {
     final pendingLoad = Completer<List<ErrorDetectionChallenge>>();
     await tester.pumpWidget(
       _buildTestApp([
-        errorDetectionPuzzlesProvider.overrideWith(
-          (ref) => pendingLoad.future,
-        ),
+        errorDetectionPuzzlesProvider.overrideWith((ref) => pendingLoad.future),
       ]),
     );
 
@@ -34,9 +32,8 @@ void main() {
     await tester.pumpWidget(
       _buildTestApp([
         errorDetectionPuzzlesProvider.overrideWith(
-          (ref) => Future<List<ErrorDetectionChallenge>>.error(
-            Exception('boom'),
-          ),
+          (ref) =>
+              Future<List<ErrorDetectionChallenge>>.error(Exception('boom')),
         ),
       ]),
     );
@@ -50,12 +47,17 @@ void main() {
   });
 
   testWidgets('renders interactive flow with submit and next', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
     const challengeA = ErrorDetectionChallenge(
       id: 1,
       type: 'error_detection',
       snippet: 'var x = 0;\nif (x = 1) {\n  print(x);\n}',
       errorLine: 1,
-      target: 'x',
+      target: 'Assignment in conditional',
+      answer:
+          "Use '==' for comparison; '=' performs assignment in the condition.",
       difficulty: 1,
       isArchived: false,
       tags: ['condition'],
@@ -65,7 +67,8 @@ void main() {
       type: 'error_detection',
       snippet: 'for (var i = 0; i < 3; i++) {\n  sum =+ i;\n}',
       errorLine: 1,
-      target: 'sum',
+      target: 'Wrong operator',
+      answer: "Use '+=' to accumulate values.",
       difficulty: 2,
       isArchived: false,
       tags: ['operator'],
@@ -82,18 +85,32 @@ void main() {
 
     expect(find.text('Find the bug'), findsOneWidget);
     expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('error-line-number-field')),
+      findsOneWidget,
+    );
     expect(find.text('Submit'), findsOneWidget);
     expect(find.text('Next'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('error-line-0')));
+    await tester.enterText(
+      find.byKey(const ValueKey('error-line-number-field')),
+      '1',
+    );
     await tester.pump();
     await tester.tap(find.text('Submit'));
     await tester.pump();
-    expect(find.text('Not quite. Green shows the correct line.'), findsOneWidget);
+    expect(find.text('Not quite. The error is on line 2.'), findsOneWidget);
+    expect(find.text('Assignment in conditional'), findsOneWidget);
 
     await tester.tap(find.text('Next'));
     await tester.pump();
-    expect(find.byKey(const ValueKey('selectable-code-block-2')), findsOneWidget);
-    expect(find.text('Tap a line, then submit your choice.'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('selectable-code-block-2')),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Enter the line number with the error, then submit.'),
+      findsOneWidget,
+    );
   });
 }

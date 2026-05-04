@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ErrorDetectionChallenge {
+  static const fieldAnswer = 'answer';
   static const fieldDifficulty = 'difficulty';
   static const fieldErrorLine = 'error_line';
   static const fieldId = 'id';
@@ -16,6 +17,7 @@ class ErrorDetectionChallenge {
     required this.snippet,
     required this.errorLine,
     required this.target,
+    required this.answer,
     required this.difficulty,
     required this.isArchived,
     required this.tags,
@@ -40,6 +42,7 @@ class ErrorDetectionChallenge {
       snippet: map[fieldSnippet] as String? ?? '',
       errorLine: (map[fieldErrorLine] as num?)?.toInt() ?? 0,
       target: map[fieldTarget] as String? ?? '',
+      answer: map[fieldAnswer] as String? ?? '',
       difficulty: (map[fieldDifficulty] as num?)?.toInt() ?? 0,
       isArchived: map[fieldIsArchived] as bool? ?? false,
       tags: (map[fieldTags] as List<dynamic>? ?? <dynamic>[])
@@ -53,9 +56,16 @@ class ErrorDetectionChallenge {
   final String snippet;
   final int errorLine;
   final String target;
+  final String answer;
   final int difficulty;
   final bool isArchived;
   final List<String> tags;
+
+  bool get hasRequiredPromptFields {
+    return snippet.trim().isNotEmpty &&
+        target.trim().isNotEmpty &&
+        answer.trim().isNotEmpty;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -64,6 +74,7 @@ class ErrorDetectionChallenge {
       fieldSnippet: snippet,
       fieldErrorLine: errorLine,
       fieldTarget: target,
+      fieldAnswer: answer,
       fieldDifficulty: difficulty,
       fieldIsArchived: isArchived,
       fieldTags: tags,
@@ -76,6 +87,7 @@ class ErrorDetectionChallenge {
     String? snippet,
     int? errorLine,
     String? target,
+    String? answer,
     int? difficulty,
     bool? isArchived,
     List<String>? tags,
@@ -86,6 +98,7 @@ class ErrorDetectionChallenge {
       snippet: snippet ?? this.snippet,
       errorLine: errorLine ?? this.errorLine,
       target: target ?? this.target,
+      answer: answer ?? this.answer,
       difficulty: difficulty ?? this.difficulty,
       isArchived: isArchived ?? this.isArchived,
       tags: tags ?? this.tags,

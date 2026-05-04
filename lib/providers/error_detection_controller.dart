@@ -47,6 +47,10 @@ class ErrorDetectionController extends Notifier<ErrorDetectionState> {
     );
   }
 
+  void selectLineNumber(int lineNumber) {
+    selectLine(lineNumber - 1);
+  }
+
   void checkSelection(int correctLineIndex) {
     state = state.copyWith(
       hasSubmitted: true,

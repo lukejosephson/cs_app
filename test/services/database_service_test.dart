@@ -46,10 +46,7 @@ void main() {
 
       expect(puzzles, hasLength(2));
       expect(puzzles.map((p) => p.id), containsAll([101, 103]));
-      expect(
-        puzzles.where((p) => p.type == 'loop_tracing').length,
-        equals(2),
-      );
+      expect(puzzles.where((p) => p.type == 'loop_tracing').length, equals(2));
     },
   );
 
@@ -184,7 +181,9 @@ void main() {
         'type': 'error_detection',
         'snippet': 'if (x = 1) { print(x); }',
         'error_line': 1,
-        'target': 'x',
+        'target': 'Assignment in conditional',
+        'answer':
+            "Use '==' for comparison; '=' performs assignment in the condition.",
         'difficulty': 2,
         'is_archived': false,
         'tags': ['assignment', 'condition'],
@@ -194,7 +193,8 @@ void main() {
         'type': 'error_detection',
         'snippet': 'while (i < 10) { i++; }',
         'error_line': 0,
-        'target': 'i',
+        'target': 'Archived puzzle',
+        'answer': 'Archived puzzle explanation',
         'difficulty': 1,
         'is_archived': true,
         'tags': ['loop'],
@@ -219,6 +219,42 @@ void main() {
       expect(puzzles.first.errorLine, 1);
       expect(puzzles.first.isArchived, isFalse);
       expect(puzzles.first.tags, ['assignment', 'condition']);
+      expect(
+        puzzles.first.answer,
+        "Use '==' for comparison; '=' performs assignment in the condition.",
+      );
     },
   );
+
+  test('fetchErrorDetectionPuzzles excludes malformed records', () async {
+    final firestore = FakeFirebaseFirestore();
+    final service = FirestoreDatabaseService(firestore: firestore);
+
+    await firestore.collection('puzzles').doc('601').set({
+      'type': 'error_detection',
+      'snippet': 'if (x = 1) { print(x); }',
+      'error_line': 0,
+      'target': 'Assignment in conditional',
+      'answer': "Use '==' for comparison.",
+      'difficulty': 1,
+      'is_archived': false,
+      'tags': ['condition'],
+    });
+
+    await firestore.collection('puzzles').doc('602').set({
+      'type': 'error_detection',
+      'snippet': 'if (x = 1) { print(x); }',
+      'error_line': 0,
+      'target': '',
+      'answer': '',
+      'difficulty': 1,
+      'is_archived': false,
+      'tags': ['condition'],
+    });
+
+    final puzzles = await service.fetchErrorDetectionPuzzles();
+
+    expect(puzzles, hasLength(1));
+    expect(puzzles.first.id, 601);
+  });
 }

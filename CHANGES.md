@@ -144,3 +144,8 @@
 - Updated `FirestoreDatabaseService.fetchErrorDetectionPuzzles()` to filter malformed error-detection records and keep only complete, active challenges.
 - Updated `ErrorDetectionScreen` so users submit a line number directly, with range validation, line-selection sync, and post-submit explanation UI that displays the puzzle’s `target` text (and detailed `answer` when present).
 - Expanded model/service/controller/screen tests to cover line-number selection flow, explanation rendering, and malformed-record filtering.
+
+## Prompt 56
+- Renamed user-facing loop practice text from `Loop Scout` to `Loop Tracing` in shared loop strings and home practice options so navigation and screen titles use the new label consistently.
+- Removed the `challenge(s) loaded` status line from loop tracing and error detection screens to simplify the puzzle UI.
+- Updated affected widget tests to match the revised labels and layout text.

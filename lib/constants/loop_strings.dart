@@ -1,7 +1,7 @@
 class LoopStrings {
   const LoopStrings._();
 
-  static const screenTitle = 'Loop Scout';
+  static const screenTitle = 'Loop Tracing';
   static const sectionTitle = 'Loop tracing';
   static const loadingErrorTitle =
       'We could not load loop challenges right now.';
@@ -22,7 +22,6 @@ class LoopStrings {
       'Please enter an answer before checking.';
   static const successAnswer = 'Success! Correct answer.';
 
-  static String challengeCount(int count) => '$count challenge(s) loaded.';
   static String retryPoolCount(int count) => 'Retry pool: $count';
   static String targetVariable(String value) => 'Target variable: $value';
   static String incorrectAnswer(String correctAnswer) =>

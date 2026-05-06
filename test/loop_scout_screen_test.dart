@@ -104,7 +104,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('Loop tracing'), findsOneWidget);
-    expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
     expect(find.text('Retry pool: 0'), findsOneWidget);
     expect(find.text('Difficulty: 1'), findsOneWidget);
     expect(find.text('Tags: loop'), findsOneWidget);

@@ -90,20 +90,14 @@ class LoopScoutScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(
-                LoopStrings.sectionTitle,
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                LoopStrings.challengeCount(validPuzzles.length),
-                style: textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.8),
-                ),
-              ),
-              if (validPuzzles.length != puzzles.length) ...[
+               Text(
+                 LoopStrings.sectionTitle,
+                 style: textTheme.headlineSmall?.copyWith(
+                   fontWeight: FontWeight.w700,
+                 ),
+               ),
+               const SizedBox(height: 8),
+               if (validPuzzles.length != puzzles.length) ...[
                 const SizedBox(height: 4),
                 Text(
                   LoopStrings.malformedChallengesSkipped,

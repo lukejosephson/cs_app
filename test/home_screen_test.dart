@@ -13,7 +13,7 @@ void main() {
     expect(find.text('Welcome to CS Practice'), findsOneWidget);
     expect(find.text('Practice Types'), findsOneWidget);
     expect(find.text('Binary Practice'), findsOneWidget);
-    expect(find.text('Loop Scout'), findsOneWidget);
+    expect(find.text('Loop Tracing'), findsOneWidget);
     expect(find.text('Error Detection'), findsOneWidget);
   });
 
@@ -22,10 +22,10 @@ void main() {
   ) async {
     await pumpSignedInApp(tester);
 
-    await tester.tap(find.text('Loop Scout'));
+    await tester.tap(find.text('Loop Tracing'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Loop Scout'), findsOneWidget);
+    expect(find.text('Loop Tracing'), findsOneWidget);
     expect(find.byType(LoopScoutScreen), findsOneWidget);
   });
 

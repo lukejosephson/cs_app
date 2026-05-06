@@ -144,13 +144,6 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                '${puzzles.length} challenge(s) loaded.',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.8),
-                ),
-              ),
               const SizedBox(height: 4),
               Text(
                 'Difficulty: ${currentPuzzle.difficulty}',

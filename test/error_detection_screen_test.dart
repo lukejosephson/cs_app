@@ -84,7 +84,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('Find the bug'), findsOneWidget);
-    expect(find.text('2 challenge(s) loaded.'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('error-line-number-field')),
       findsOneWidget,

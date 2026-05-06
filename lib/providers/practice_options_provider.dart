@@ -12,7 +12,7 @@ final practiceOptionsProvider = Provider<List<PracticeType>>((ref) {
     ),
     PracticeType(
       id: PracticeTypeId.loopScout,
-      title: 'Loop Scout',
+      title: 'Loop Tracing',
       description:
           'Trace loop-based code snippets and predict final variable values.',
     ),

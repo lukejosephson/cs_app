@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/loop_strings.dart';
@@ -115,20 +113,6 @@ class LoopTracingController extends BasePracticeController<LoopTracingState> {
     final nextIndex = getNextPuzzleIndex(puzzles);
     state = state.copyWith(
       currentPuzzleIndex: nextIndex,
-      currentInput: '',
-      isCorrect: false,
-      hasSubmitted: false,
-      clearInputError: true,
-    );
-  }
-
-  void moveToRandomPuzzle(int puzzleCount) {
-    if (puzzleCount <= 0) {
-      return;
-    }
-    final randomIndex = Random().nextInt(puzzleCount);
-    state = state.copyWith(
-      currentPuzzleIndex: randomIndex,
       currentInput: '',
       isCorrect: false,
       hasSubmitted: false,

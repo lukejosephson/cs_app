@@ -102,21 +102,10 @@ class LoopScoutScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: () =>
-                        loopController.moveToRandomPuzzle(validPuzzles.length),
-                    icon: const Icon(Icons.shuffle_rounded),
-                    label: const Text(LoopStrings.randomButton),
-                  ),
-                  const SizedBox(width: 10),
-                  FilledButton.icon(
-                    onPressed: () => loopController.moveToNextPuzzle(validPuzzles),
-                    icon: const Icon(Icons.skip_next_rounded),
-                    label: const Text(LoopStrings.nextChallengeButton),
-                  ),
-                ],
+              FilledButton.icon(
+                onPressed: () => loopController.moveToNextPuzzle(validPuzzles),
+                icon: const Icon(Icons.skip_next_rounded),
+                label: const Text(LoopStrings.nextChallengeButton),
               ),
               const SizedBox(height: 16),
               CodeDisplayBox(snippet: currentPuzzle.snippet),

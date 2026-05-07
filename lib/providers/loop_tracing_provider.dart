@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/loop_strings.dart';
 import '../models/loop_challenge.dart';
+import '../models/practice_state.dart';
 import '../utils/answer_normalizer.dart';
 import 'base_practice_controller.dart';
 
-class LoopTracingState {
+class LoopTracingState implements PracticeState {
   const LoopTracingState({
     this.currentInput = '',
     this.isCorrect = false,
@@ -21,6 +22,7 @@ class LoopTracingState {
   final String currentInput;
   final bool isCorrect;
   final bool hasSubmitted;
+  @override
   final int currentPuzzleIndex;
   final String? inputErrorMessage;
   final Map<int, int> wrongAttemptsByPuzzle;

@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/operations_practice_challenge.dart';
+import '../models/practice_state.dart';
 import '../utils/answer_normalizer.dart';
 import 'base_practice_controller.dart';
 
-class OperationsPracticeState {
+class OperationsPracticeState implements PracticeState {
   const OperationsPracticeState({
     this.currentInput = '',
     this.isCorrect,
@@ -15,6 +16,7 @@ class OperationsPracticeState {
   final String currentInput;
   final bool? isCorrect;
   final bool hasSubmitted;
+  @override
   final int currentPuzzleIndex;
 
   OperationsPracticeState copyWith({

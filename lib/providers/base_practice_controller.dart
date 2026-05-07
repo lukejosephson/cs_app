@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/practice_state.dart';
 import '../models/puzzle.dart';
 import '../models/user_progress.dart';
 import 'auth_provider.dart';
@@ -7,7 +8,8 @@ import 'loop_provider.dart';
 import 'puzzle_queue_provider.dart';
 import 'user_progress_provider.dart';
 
-abstract class BasePracticeController<TState> extends Notifier<TState> {
+abstract class BasePracticeController<TState extends PracticeState>
+    extends Notifier<TState> {
   Future<void> updateProgress({
     required int puzzleId,
     required bool isCorrect,
@@ -43,7 +45,7 @@ abstract class BasePracticeController<TState> extends Notifier<TState> {
 
     final progress = ref.read(userProgressProvider).valueOrNull;
     if (progress == null) {
-      return (state as dynamic).currentPuzzleIndex + 1 % puzzles.length;
+      return (state.currentPuzzleIndex + 1) % puzzles.length;
     }
 
     final nextPuzzle =

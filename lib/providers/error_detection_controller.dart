@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/error_detection_challenge.dart';
+import '../models/practice_state.dart';
 import 'base_practice_controller.dart';
 
-class ErrorDetectionState {
+class ErrorDetectionState implements PracticeState {
   const ErrorDetectionState({
     this.selectedLineIndex,
     this.hasSubmitted = false,
@@ -14,6 +15,7 @@ class ErrorDetectionState {
   final int? selectedLineIndex;
   final bool hasSubmitted;
   final bool? isCorrect;
+  @override
   final int currentPuzzleIndex;
 
   ErrorDetectionState copyWith({

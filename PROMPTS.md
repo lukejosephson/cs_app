@@ -245,11 +245,26 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 55. Puzzles for error detection have been input into firestore with this schema. Ensure all facets of the build of error detection, front end and back end, align with this. The user should be answering with the line number of the error, and should then have the info about the error, stored in the target, displayed/explained to them.
 
-[ ] 56.
+[ ] 56. Data Model & Service Integration
+**Task:** Create `lib/models/operations_practice_challenge.dart` and update the service.
+1. Implement a class `OperationsPracticeChallenge` that maps exactly to the Firestore schema: `id`, `type`, `snippet`, `error_line`, `target`, `answer`, `difficulty`, `is_archived`, and `tags`.
+2. In `lib/services/database_service.dart`, add a method `fetchOperationsPuzzles()` that queries the 'puzzles' collection where `type == 'operations_practice'` and `is_archived == false`.
+3. Use the `fromFirestore` factory to map the cloud data to the new model.
 
-[ ] 57.
+[ ] 57. Game Logic & Controller (Riverpod)
+**Task:** Create `lib/providers/operations_practice_controller.dart`.
+1. Implement a `Notifier` called `OperationsPracticeController` managing an `OperationsPracticeState`.
+2. **Efficiency Instruction:** This logic should be identical to the `LoopTracingController`. The state must track: `currentInput` (String), `isCorrect` (bool?), and `hasSubmitted` (bool).
+3. Add a `checkAnswer(String correctAnswer)` method that compares the user's input to the puzzle's answer.
+4. Include a `reset()` method to clear the text field for the next challenge.
 
-[ ] 58.
+[ ] 58. Interactive UI (Screen Re-use)
+**Task:** Create `lib/screens/operations_practice_screen.dart`.
+1. Implement a `ConsumerWidget` that watches the new `operationsPracticeProvider` and uses `.when()` for async states (loading/error/data).
+2. **Efficiency Instruction:** Clone the layout structure of the `LoopTracingScreen`. 
+3. Use the existing `CodeSnippetView` widget to display the `snippet`.
+4. Use the existing `TracingInputPanel` (or a similar text input widget) to allow the user to type their answer and call the `checkAnswer` method.
+5. Ensure the screen displays the `target` text (e.g., "What is the final console output?") clearly above the input field.
 
 [ ] 59.
 

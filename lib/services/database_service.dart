@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/error_detection_challenge.dart';
 import '../models/loop_challenge.dart';
+import '../models/operations_practice_challenge.dart';
 
 abstract class DatabaseService {
   Future<List<LoopChallenge>> fetchPuzzlesByType(String type);
   Future<List<LoopChallenge>> fetchLoopPuzzles();
   Future<List<ErrorDetectionChallenge>> fetchErrorDetectionPuzzles();
+  Future<List<OperationsPracticeChallenge>> fetchOperationsPuzzles();
   Stream<List<LoopChallenge>> getLoopPuzzles();
 }
 
@@ -18,6 +20,7 @@ class FirestoreDatabaseService implements DatabaseService {
   static const _puzzlesCollection = 'puzzles';
   static const _loopScoutType = 'loop_scout';
   static const _errorDetectionType = 'error_detection';
+  static const _operationsPracticeType = 'operations_practice';
   static const _fieldType = 'type';
   static const _fieldIsArchived = 'is_archived';
 
@@ -54,6 +57,15 @@ class FirestoreDatabaseService implements DatabaseService {
         .toList(growable: false);
   }
 
+  List<OperationsPracticeChallenge> _mapValidOperationsChallenges(
+    Iterable<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
+    return docs
+        .map(OperationsPracticeChallenge.fromFirestore)
+        .where((challenge) => challenge.hasRequiredPromptFields)
+        .toList(growable: false);
+  }
+
   @override
   Future<List<LoopChallenge>> fetchPuzzlesByType(String type) async {
     final snapshot = await _puzzlesByTypeQuery(type).get();
@@ -71,6 +83,14 @@ class FirestoreDatabaseService implements DatabaseService {
   Future<List<ErrorDetectionChallenge>> fetchErrorDetectionPuzzles() async {
     final snapshot = await _activePuzzlesByTypeQuery(_errorDetectionType).get();
     return _mapValidErrorDetectionChallenges(snapshot.docs);
+  }
+
+  @override
+  Future<List<OperationsPracticeChallenge>> fetchOperationsPuzzles() async {
+    final snapshot = await _activePuzzlesByTypeQuery(
+      _operationsPracticeType,
+    ).get();
+    return _mapValidOperationsChallenges(snapshot.docs);
   }
 
   @override

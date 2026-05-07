@@ -257,4 +257,53 @@ void main() {
     expect(puzzles, hasLength(1));
     expect(puzzles.first.id, 601);
   });
+
+  test(
+    'fetchOperationsPuzzles returns only active operations puzzles',
+    () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+
+      await firestore.collection('puzzles').doc('701').set({
+        'type': 'operations_practice',
+        'snippet': 'x = 3 + 4 * 2',
+        'error_line': 0,
+        'target': 'x',
+        'answer': '11',
+        'difficulty': 1,
+        'is_archived': false,
+        'tags': ['order-of-operations'],
+      });
+
+      await firestore.collection('puzzles').doc('702').set({
+        'id': 702,
+        'type': 'operations_practice',
+        'snippet': 'x = (3 + 4) * 2',
+        'error_line': 0,
+        'target': 'x',
+        'answer': '14',
+        'difficulty': 1,
+        'is_archived': true,
+        'tags': ['parentheses'],
+      });
+
+      await firestore.collection('puzzles').doc('703').set({
+        'type': 'loop_scout',
+        'snippet': 'for i in range(3): total += i',
+        'error_line': 0,
+        'target': 'total',
+        'answer': '3',
+        'difficulty': 1,
+        'is_archived': false,
+        'tags': ['loop'],
+      });
+
+      final puzzles = await service.fetchOperationsPuzzles();
+
+      expect(puzzles, hasLength(1));
+      expect(puzzles.first.id, 701);
+      expect(puzzles.first.type, 'operations_practice');
+      expect(puzzles.first.isArchived, isFalse);
+    },
+  );
 }

@@ -146,6 +146,6 @@
 - Expanded model/service/controller/screen tests to cover line-number selection flow, explanation rendering, and malformed-record filtering.
 
 ## Prompt 56
-- Renamed user-facing loop practice text from `Loop Scout` to `Loop Tracing` in shared loop strings and home practice options so navigation and screen titles use the new label consistently.
-- Removed the `challenge(s) loaded` status line from loop tracing and error detection screens to simplify the puzzle UI.
-- Updated affected widget tests to match the revised labels and layout text.
+- Added `lib/models/operations_practice_challenge.dart` with complete Firestore schema mapping (`id`, `type`, `snippet`, `error_line`, `target`, `answer`, `difficulty`, `is_archived`, `tags`) and a `fromFirestore` factory.
+- Extended `DatabaseService`/`FirestoreDatabaseService` with `fetchOperationsPuzzles()` to query active `operations_practice` records from the `puzzles` collection and map them through the new model.
+- Added model and service tests to validate operations challenge mapping and active-only query behavior, and updated provider test fakes to satisfy the expanded service interface.

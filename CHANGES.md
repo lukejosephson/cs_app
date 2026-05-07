@@ -149,3 +149,8 @@
 - Added `lib/models/operations_practice_challenge.dart` with complete Firestore schema mapping (`id`, `type`, `snippet`, `error_line`, `target`, `answer`, `difficulty`, `is_archived`, `tags`) and a `fromFirestore` factory.
 - Extended `DatabaseService`/`FirestoreDatabaseService` with `fetchOperationsPuzzles()` to query active `operations_practice` records from the `puzzles` collection and map them through the new model.
 - Added model and service tests to validate operations challenge mapping and active-only query behavior, and updated provider test fakes to satisfy the expanded service interface.
+
+## Prompt 57
+- Added `lib/providers/operations_practice_controller.dart` with a Riverpod `Notifier` (`OperationsPracticeController`) and `OperationsPracticeState` tracking `currentInput`, `isCorrect`, and `hasSubmitted`.
+- Implemented `checkAnswer(String correctAnswer)` with normalized answer comparison and submission-state updates, plus `reset()` to clear state for the next challenge.
+- Added provider unit tests in `test/providers/operations_practice_controller_test.dart` covering initial state, input updates, correct/incorrect checks, and reset behavior.

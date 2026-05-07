@@ -251,7 +251,7 @@ to firestore. ensure that things new things will be added correctly when added o
 2. In `lib/services/database_service.dart`, add a method `fetchOperationsPuzzles()` that queries the 'puzzles' collection where `type == 'operations_practice'` and `is_archived == false`.
 3. Use the `fromFirestore` factory to map the cloud data to the new model.
 
-[ ] 57. Game Logic & Controller (Riverpod)
+[x] 57. Game Logic & Controller (Riverpod)
 **Task:** Create `lib/providers/operations_practice_controller.dart`.
 1. Implement a `Notifier` called `OperationsPracticeController` managing an `OperationsPracticeState`.
 2. **Efficiency Instruction:** This logic should be identical to the `LoopTracingController`. The state must track: `currentInput` (String), `isCorrect` (bool?), and `hasSubmitted` (bool).

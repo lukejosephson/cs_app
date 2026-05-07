@@ -61,22 +61,6 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          ListTile(
-            key: const ValueKey('home-operations-practice-tile'),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 4,
-            ),
-            title: const Text('Math Operations Practice'),
-            subtitle: const Text('Master modulo, division, and precedence.'),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const OperationsPracticeScreen(),
-                ),
-              );
-            },
-          ),
         ],
       ),
     );
@@ -87,6 +71,7 @@ class HomeScreen extends ConsumerWidget {
       PracticeTypeId.binary => const BinaryPracticeScreen(),
       PracticeTypeId.loopScout => const LoopScoutScreen(),
       PracticeTypeId.errorDetection => const ErrorDetectionScreen(),
+      PracticeTypeId.operationsPractice => const OperationsPracticeScreen(),
     };
 
     Navigator.of(

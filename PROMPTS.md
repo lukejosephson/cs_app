@@ -333,6 +333,8 @@ If the intern's code looks like a tangled mess of nested providers, that is your
 
 [x] 69. Remove the redundant "Random" button from the Loop Scout screen and its corresponding `moveToRandomPuzzle` method from the controller to simplify the UI and remove duplicated logic.
 
+[x] 70. Refactor the "Math Operations Practice" tile on the home screen to use the standardized `PracticeOptionTile` component, ensuring consistency with other practice options. This involved updating the `PracticeTypeId` enum, adding the option to `practiceOptionsProvider`, and modifying the `HomeScreen`'s navigation logic.
+
 ** Development Rules **
 
 1. Always commit the current code before implementing a new feature.

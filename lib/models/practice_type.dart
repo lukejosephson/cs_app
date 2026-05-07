@@ -1,4 +1,4 @@
-enum PracticeTypeId { binary, loopScout, errorDetection }
+enum PracticeTypeId { binary, loopScout, errorDetection, operationsPractice }
 
 class PracticeType {
   const PracticeType({

@@ -22,5 +22,10 @@ final practiceOptionsProvider = Provider<List<PracticeType>>((ref) {
       description:
           'Inspect code snippets and identify the exact line causing a bug.',
     ),
+    PracticeType(
+      id: PracticeTypeId.operationsPractice,
+      title: 'Math Operations Practice',
+      description: 'Master modulo, division, and precedence.',
+    ),
   ];
 });

@@ -266,7 +266,7 @@ to firestore. ensure that things new things will be added correctly when added o
 4. Use the existing `TracingInputPanel` (or a similar text input widget) to allow the user to type their answer and call the `checkAnswer` method.
 5. Ensure the screen displays the `target` text (e.g., "What is the final console output?") clearly above the input field.
 
-[ ] 59. Surgical Navigation Injection
+[x] 59. Surgical Navigation Injection
 **Task:** Update `lib/screens/home_screen.dart` to link the new module.
 1. Read `lib/screens/home_screen.dart`.
 2. At the top of the file, safely inject the import statement: `import 'package:[YOUR_APP_NAME]/screens/operations_practice_screen.dart';` (ensure you use the correct package name).

@@ -160,3 +160,8 @@
 - Added `lib/screens/operations_practice_screen.dart` as a `ConsumerWidget` using `.when()` for loading/error/data, reusing `CodeDisplayBox` for snippet rendering and showing the puzzle `target` prompt clearly above input.
 - Added `lib/widgets/operations_input_panel.dart` as a tracing-style input panel wired to `OperationsPracticeController` for typed answer submission and correctness feedback.
 - Added coverage in `test/providers/operations_practice_provider_test.dart` and `test/operations_practice_screen_test.dart` for provider fetch behavior plus screen loading/error/submission UI flow.
+
+## Prompt 59
+- Updated `lib/screens/home_screen.dart` to import `OperationsPracticeScreen` and safely append a new `ListTile` titled **Math Operations Practice** with the required subtitle text.
+- Wired the new tile’s `onTap` to push `OperationsPracticeScreen` via `MaterialPageRoute` without altering existing practice option tiles.
+- Expanded `test/home_screen_test.dart` to verify the new tile renders and navigates correctly to the operations practice module.

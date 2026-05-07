@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cs_app/screens/operations_practice_screen.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/practice_options_provider.dart';
@@ -52,6 +53,22 @@ class HomeScreen extends ConsumerWidget {
                 onTap: () => _openPracticeScreen(context, option.id),
               ),
             ),
+          ),
+          ListTile(
+            key: const ValueKey('home-operations-practice-tile'),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 4,
+            ),
+            title: const Text('Math Operations Practice'),
+            subtitle: const Text('Master modulo, division, and precedence.'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const OperationsPracticeScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),

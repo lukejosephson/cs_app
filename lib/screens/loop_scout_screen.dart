@@ -112,8 +112,7 @@ class LoopScoutScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 10),
                   FilledButton.icon(
-                    onPressed: () =>
-                        loopController.moveToNextPuzzle(validPuzzles.length),
+                    onPressed: () => loopController.moveToNextPuzzle(validPuzzles),
                     icon: const Icon(Icons.skip_next_rounded),
                     label: const Text(LoopStrings.nextChallengeButton),
                   ),

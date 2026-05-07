@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cs_app/models/error_detection_challenge.dart';
 import 'package:cs_app/models/loop_challenge.dart';
 import 'package:cs_app/models/operations_practice_challenge.dart';
+import 'package:cs_app/models/user_progress.dart';
 import 'package:cs_app/providers/loop_provider.dart';
 import 'package:cs_app/services/database_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +27,13 @@ class _FakeDatabaseService implements DatabaseService {
   @override
   Future<List<OperationsPracticeChallenge>> fetchOperationsPuzzles() async =>
       const [];
+
+  @override
+  Future<UserProgress> getUserProgress(String uid) async =>
+      UserProgress.empty(uid);
+
+  @override
+  Future<void> updateUserProgress(UserProgress progress) async {}
 
   @override
   Stream<List<LoopChallenge>> getLoopPuzzles() => Stream.value(_puzzles);

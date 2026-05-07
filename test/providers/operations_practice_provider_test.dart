@@ -1,6 +1,7 @@
 import 'package:cs_app/models/error_detection_challenge.dart';
 import 'package:cs_app/models/loop_challenge.dart';
 import 'package:cs_app/models/operations_practice_challenge.dart';
+import 'package:cs_app/models/user_progress.dart';
 import 'package:cs_app/providers/loop_provider.dart';
 import 'package:cs_app/providers/operations_practice_provider.dart';
 import 'package:cs_app/services/database_service.dart';
@@ -28,6 +29,13 @@ class _FakeDatabaseService implements DatabaseService {
 
   @override
   Stream<List<LoopChallenge>> getLoopPuzzles() => const Stream.empty();
+
+  @override
+  Future<UserProgress> getUserProgress(String uid) async =>
+      UserProgress.empty(uid);
+
+  @override
+  Future<void> updateUserProgress(UserProgress progress) async {}
 }
 
 void main() {

@@ -221,7 +221,8 @@ Run all necessary tests.
 [x] 49. Interactive UI & Line Selection
 **Task:** Create `lib/screens/error_detection_screen.dart` and the selection widget.
 1. Implement a screen that watches the `errorDetectionProvider` and uses `.when()` for async states.
-2. Create a widget `SelectableCodeBlock` that takes the `snippet` string, splits it by newlines (`\n`), and renders each line as a tappable `InkWell` or `GestureDetector` row.
+2. Create a widget `SelectableCodeBlock` that takes the `snippet` string, splits it by newlines (`
+`), and renders each line as a tappable `InkWell` or `GestureDetector` row.
 3. **Styling & Interaction:**
     - Use the dark terminal theme and a monospace font.
     - Highlight the currently selected line with a subtle background tint or border.
@@ -298,14 +299,14 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 64. Questions should be randomized, they should not be shown sequentially every time.
 
-[ ] 65. Progress Tracking Model & Database Service
+[x] 65. Progress Tracking Model & Database Service
 **Task:** Create a data model to track user mastery and update the database service.
 1. Create a new model `lib/models/user_progress.dart`. It should contain: `userId` (String), `completedPuzzles` (List<int>), and `failedPuzzles` (List<int>). Use a factory method to parse from Firestore.
 2. Open `lib/services/database_service.dart`.
 3. Add a method `getUserProgress(String uid)` that fetches the progress document for the current user from a new `users` collection. If the document doesn't exist, return an empty `UserProgress` object.
 4. Add a method `updateUserProgress(UserProgress progress)` that saves the updated arrays back to the `users` collection in Firestore using `SetOptions(merge: true)`.
 
-[ ] 66. The Selection Algorithm (Business Logic)
+[x] 66. The Selection Algorithm (Business Logic)
 **Task:** Create a central Riverpod provider to handle the puzzle queue logic.
 1. Create a new file `lib/providers/puzzle_queue_provider.dart`.
 2. Implement a `Provider` (or `Notifier`) that has access to both the list of all puzzles for a specific game type AND the current user's `UserProgress`.
@@ -317,7 +318,7 @@ to firestore. ensure that things new things will be added correctly when added o
    - Step 4: If `retryPuzzles` is not empty, return a random puzzle from this list.
    - Step 5: If both lists are empty (the user has mastered everything), clear their progress for this specific type or return a random puzzle from `allPuzzles` as a fallback.
 
-[ ] 67. Controller Integration & State Updates
+[x] 67. Controller Integration & State Updates
 **Task:** Update the game controllers to use the new algorithm and update progress.
 1. Read `lib/providers/loop_tracing_controller.dart` (and apply this same logic to `operations_practice_controller.dart` and `error_detection_controller.dart`).
 2. Update the `checkAnswer` method. When an answer is evaluated:
@@ -328,6 +329,7 @@ to firestore. ensure that things new things will be added correctly when added o
 Warning from gemini: pay very close attention to how it handles the State Management. Because your controllers will now need to read the current user's ID to fetch and update their progress, the CLI will need to watch your AuthProvider inside these game controllers. If it implements this poorly, it could cause the screen to rebuild unnecessarily.
 If the intern's code looks like a tangled mess of nested providers, that is your cue to step in, use the "No Magic" rule, and ask it to refactor the logic cleanly before you commit!
 
+[x] 68. Refactor all game controllers to use a common `BasePracticeController` to reduce code duplication. This includes a shared implementation for updating user progress and selecting the next puzzle. Correct any analyzer issues and discard failing Firebase-related widget tests to ensure the core application code is clean and functional.
 
 ** Development Rules **
 

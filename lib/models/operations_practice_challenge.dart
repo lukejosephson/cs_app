@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'puzzle.dart';
 
-class OperationsPracticeChallenge {
+class OperationsPracticeChallenge implements Puzzle {
   static const fieldAnswer = 'answer';
   static const fieldDifficulty = 'difficulty';
   static const fieldErrorLine = 'error_line';
@@ -51,6 +52,7 @@ class OperationsPracticeChallenge {
     );
   }
 
+  @override
   final int id;
   final String type;
   final String snippet;

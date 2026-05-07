@@ -14,7 +14,6 @@ class ErrorDetectionScreen extends ConsumerStatefulWidget {
 }
 
 class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
-  int _currentPuzzleIndex = 0;
   late final TextEditingController _lineNumberController;
   String? _lineNumberError;
 
@@ -66,7 +65,8 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
             );
           }
 
-          final currentPuzzle = puzzles[_currentPuzzleIndex % puzzles.length];
+          final currentPuzzle =
+              puzzles[state.currentPuzzleIndex % puzzles.length];
           final maxLineNumber = currentPuzzle.snippet.split('\n').length;
           final correctLineNumber = currentPuzzle.errorLine + 1;
 
@@ -88,7 +88,10 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
               _lineNumberError = null;
             });
             controller.selectLineNumber(parsedLineNumber);
-            controller.checkSelection(currentPuzzle.errorLine);
+            controller.checkSelection(
+              puzzleId: currentPuzzle.id,
+              correctLineIndex: currentPuzzle.errorLine,
+            );
           }
 
           String submissionMessage() {
@@ -214,13 +217,11 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                   const SizedBox(width: 10),
                   OutlinedButton(
                     onPressed: () {
+                      controller.moveToNextPuzzle(puzzles);
+                      _lineNumberController.clear();
                       setState(() {
-                        _currentPuzzleIndex =
-                            (_currentPuzzleIndex + 1) % puzzles.length;
-                        _lineNumberController.clear();
                         _lineNumberError = null;
                       });
-                      ref.invalidate(errorDetectionControllerProvider);
                     },
                     child: const Text('Next'),
                   ),

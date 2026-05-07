@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthService {
   Stream<bool> authStateChanges();
+  String? get currentUserUid;
 
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
@@ -34,6 +35,9 @@ class FirebaseAuthService implements AuthService {
   Stream<bool> authStateChanges() {
     return _firebaseAuth.authStateChanges().map((user) => user != null);
   }
+
+  @override
+  String? get currentUserUid => _firebaseAuth.currentUser?.uid;
 
   @override
   Future<UserCredential> signInWithEmailAndPassword({

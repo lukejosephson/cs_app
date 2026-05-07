@@ -10,6 +10,12 @@ final authStateProvider = StreamProvider<bool>((ref) {
   return ref.watch(authServiceProvider).authStateChanges();
 });
 
+final userIdProvider = Provider<String?>((ref) {
+  // We watch authStateProvider to ensure it re-evaluates on auth changes
+  ref.watch(authStateProvider);
+  return ref.read(authServiceProvider).currentUserUid;
+});
+
 final authActionStateProvider = StateProvider<AsyncValue<Object?>>((ref) {
   return const AsyncData(null);
 });

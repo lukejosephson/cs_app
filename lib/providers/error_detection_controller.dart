@@ -1,20 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/error_detection_challenge.dart';
+import 'base_practice_controller.dart';
+
 class ErrorDetectionState {
   const ErrorDetectionState({
     this.selectedLineIndex,
     this.hasSubmitted = false,
     this.isCorrect,
+    this.currentPuzzleIndex = 0,
   });
 
   final int? selectedLineIndex;
   final bool hasSubmitted;
   final bool? isCorrect;
+  final int currentPuzzleIndex;
 
   ErrorDetectionState copyWith({
     int? selectedLineIndex,
     bool? hasSubmitted,
     bool? isCorrect,
+    int? currentPuzzleIndex,
     bool clearSelection = false,
     bool clearCorrectness = false,
   }) {
@@ -24,6 +30,7 @@ class ErrorDetectionState {
           : selectedLineIndex ?? this.selectedLineIndex,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
       isCorrect: clearCorrectness ? null : isCorrect ?? this.isCorrect,
+      currentPuzzleIndex: currentPuzzleIndex ?? this.currentPuzzleIndex,
     );
   }
 }
@@ -33,7 +40,8 @@ final errorDetectionControllerProvider =
       ErrorDetectionController.new,
     );
 
-class ErrorDetectionController extends Notifier<ErrorDetectionState> {
+class ErrorDetectionController
+    extends BasePracticeController<ErrorDetectionState> {
   @override
   ErrorDetectionState build() {
     return const ErrorDetectionState();
@@ -51,10 +59,28 @@ class ErrorDetectionController extends Notifier<ErrorDetectionState> {
     selectLine(lineNumber - 1);
   }
 
-  void checkSelection(int correctLineIndex) {
+  Future<void> checkSelection({
+    required int puzzleId,
+    required int correctLineIndex,
+  }) async {
+    final isCorrect = state.selectedLineIndex == correctLineIndex;
+    state = state.copyWith(hasSubmitted: true, isCorrect: isCorrect);
+    await updateProgress(puzzleId: puzzleId, isCorrect: isCorrect);
+  }
+
+  void moveToNextPuzzle(List<ErrorDetectionChallenge> puzzles) {
+    final nextIndex = getNextPuzzleIndex(puzzles);
     state = state.copyWith(
-      hasSubmitted: true,
-      isCorrect: state.selectedLineIndex == correctLineIndex,
+      currentPuzzleIndex: nextIndex,
+      selectedLineIndex: null,
+      hasSubmitted: false,
+      isCorrect: null,
+      clearSelection: true,
+      clearCorrectness: true,
     );
+  }
+
+  void reset() {
+    state = const ErrorDetectionState();
   }
 }

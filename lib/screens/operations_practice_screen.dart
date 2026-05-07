@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,36 +6,14 @@ import '../providers/operations_practice_provider.dart';
 import '../widgets/code_display_box.dart';
 import '../widgets/operations_input_panel.dart';
 
-final operationsRandomProvider = Provider<Random>((ref) => Random());
-
-class OperationsPracticeScreen extends ConsumerStatefulWidget {
+class OperationsPracticeScreen extends ConsumerWidget {
   const OperationsPracticeScreen({super.key});
 
   @override
-  ConsumerState<OperationsPracticeScreen> createState() =>
-      _OperationsPracticeScreenState();
-}
-
-class _OperationsPracticeScreenState
-    extends ConsumerState<OperationsPracticeScreen> {
-  int _currentPuzzleIndex = 0;
-
-  int _nextRandomPuzzleIndex(int puzzleCount) {
-    if (puzzleCount <= 1) {
-      return 0;
-    }
-
-    final random = ref.read(operationsRandomProvider);
-    var nextIndex = _currentPuzzleIndex;
-    while (nextIndex == _currentPuzzleIndex) {
-      nextIndex = random.nextInt(puzzleCount);
-    }
-    return nextIndex;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final puzzlesAsync = ref.watch(operationsPracticeProvider);
+    final controller = ref.read(operationsPracticeControllerProvider.notifier);
+    final state = ref.watch(operationsPracticeControllerProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -83,7 +59,7 @@ class _OperationsPracticeScreenState
           }
 
           final currentPuzzle =
-              validPuzzles[_currentPuzzleIndex % validPuzzles.length];
+              validPuzzles[state.currentPuzzleIndex % validPuzzles.length];
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -110,16 +86,7 @@ class _OperationsPracticeScreenState
               ),
               const SizedBox(height: 12),
               FilledButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _currentPuzzleIndex = _nextRandomPuzzleIndex(
-                      validPuzzles.length,
-                    );
-                  });
-                  ref
-                      .read(operationsPracticeControllerProvider.notifier)
-                      .reset();
-                },
+                onPressed: () => controller.moveToNextPuzzle(validPuzzles),
                 icon: const Icon(Icons.skip_next_rounded),
                 label: const Text('Next Challenge'),
               ),

@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'helpers/fake_random.dart';
-
 Widget _buildTestApp(List<Override> overrides) {
   return ProviderScope(
     overrides: overrides,
@@ -131,7 +129,6 @@ void main() {
         operationsPracticeProvider.overrideWith(
           (ref) => Future.value(const [challengeA, challengeB, challengeC]),
         ),
-        operationsRandomProvider.overrideWithValue(FakeRandom([2])),
       ]),
     );
     await tester.pumpAndSettle();

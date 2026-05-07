@@ -88,7 +88,10 @@ class _OperationsInputPanelState extends ConsumerState<OperationsInputPanel> {
             const SizedBox(height: 12),
             FilledButton(
               key: const ValueKey('operations-check-answer-button'),
-              onPressed: () => controller.checkAnswer(widget.correctAnswer),
+              onPressed: () => controller.checkAnswer(
+                puzzleId: widget.puzzleId,
+                correctAnswer: widget.correctAnswer,
+              ),
               child: const Text('Check Answer'),
             ),
             if (state.hasSubmitted) ...[

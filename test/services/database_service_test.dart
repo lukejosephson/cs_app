@@ -1,3 +1,4 @@
+import 'package:cs_app/models/user_progress.dart';
 import 'package:cs_app/services/database_service.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -306,4 +307,62 @@ void main() {
       expect(puzzles.first.isArchived, isFalse);
     },
   );
+
+  group('UserProgress', () {
+    test('getUserProgress returns empty progress if document does not exist', () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+
+      final progress = await service.getUserProgress('non-existent-user');
+
+      expect(progress.userId, 'non-existent-user');
+      expect(progress.completedPuzzles, isEmpty);
+      expect(progress.failedPuzzles, isEmpty);
+    });
+
+    test('getUserProgress returns existing progress', () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+
+      await firestore.collection('users').doc('user-123').set({
+        'userId': 'user-123',
+        'completedPuzzles': [1, 2],
+        'failedPuzzles': [3],
+      });
+
+      final progress = await service.getUserProgress('user-123');
+
+      expect(progress.userId, 'user-123');
+      expect(progress.completedPuzzles, [1, 2]);
+      expect(progress.failedPuzzles, [3]);
+    });
+
+    test('getUserProgress throws when uid is empty', () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+
+      expect(
+        () => service.getUserProgress('   '),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('updateUserProgress saves data to users collection', () async {
+      final firestore = FakeFirebaseFirestore();
+      final service = FirestoreDatabaseService(firestore: firestore);
+      final progress = UserProgress(
+        userId: 'user-123',
+        completedPuzzles: [101],
+        failedPuzzles: [102],
+      );
+
+      await service.updateUserProgress(progress);
+
+      final snapshot =
+          await firestore.collection('users').doc('user-123').get();
+      expect(snapshot.exists, isTrue);
+      expect(snapshot.data()?['completedPuzzles'], [101]);
+      expect(snapshot.data()?['failedPuzzles'], [102]);
+    });
+  });
 }

@@ -44,6 +44,9 @@ class FakeAuthService implements AuthService {
   Future<void> signOut() async {
     signOutCalled = true;
   }
+
+  @override
+  String? get currentUserUid => 'fake-uid';
 }
 
 class _FakeUserCredential implements UserCredential {

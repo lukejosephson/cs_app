@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/loop_strings.dart';
+import '../models/loop_challenge.dart';
 import '../utils/answer_normalizer.dart';
-
-final loopRandomProvider = Provider<Random>((ref) => Random());
+import 'base_practice_controller.dart';
 
 class LoopTracingState {
   const LoopTracingState({
@@ -56,7 +56,7 @@ final loopTracingControllerProvider =
       LoopTracingController.new,
     );
 
-class LoopTracingController extends Notifier<LoopTracingState> {
+class LoopTracingController extends BasePracticeController<LoopTracingState> {
   @override
   LoopTracingState build() {
     return const LoopTracingState();
@@ -71,7 +71,10 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     );
   }
 
-  void submitAnswer({required int puzzleId, required String expectedAnswer}) {
+  Future<void> submitAnswer({
+    required int puzzleId,
+    required String expectedAnswer,
+  }) async {
     final userInput = state.currentInput.trim();
     if (userInput.isEmpty) {
       state = state.copyWith(
@@ -102,27 +105,12 @@ class LoopTracingController extends Notifier<LoopTracingState> {
       wrongAttemptsByPuzzle: wrongAttempts,
       retryPuzzleIds: retryIds,
     );
+
+    await updateProgress(puzzleId: puzzleId, isCorrect: isCorrect);
   }
 
-  void reset() {
-    state = const LoopTracingState();
-  }
-
-  void clearResponse() {
-    state = state.copyWith(
-      currentInput: '',
-      isCorrect: false,
-      hasSubmitted: false,
-      clearInputError: true,
-    );
-  }
-
-  void moveToNextPuzzle(int puzzleCount) {
-    if (puzzleCount <= 0) {
-      return;
-    }
-
-    final nextIndex = (state.currentPuzzleIndex + 1) % puzzleCount;
+  void moveToNextPuzzle(List<LoopChallenge> puzzles) {
+    final nextIndex = getNextPuzzleIndex(puzzles);
     state = state.copyWith(
       currentPuzzleIndex: nextIndex,
       currentInput: '',
@@ -136,22 +124,27 @@ class LoopTracingController extends Notifier<LoopTracingState> {
     if (puzzleCount <= 0) {
       return;
     }
-
-    final random = ref.read(loopRandomProvider);
-    var nextIndex = state.currentPuzzleIndex;
-    if (puzzleCount > 1) {
-      while (nextIndex == state.currentPuzzleIndex) {
-        nextIndex = random.nextInt(puzzleCount);
-      }
-    }
-
+    final randomIndex = Random().nextInt(puzzleCount);
     state = state.copyWith(
-      currentPuzzleIndex: nextIndex,
+      currentPuzzleIndex: randomIndex,
       currentInput: '',
       isCorrect: false,
       hasSubmitted: false,
       clearInputError: true,
     );
+  }
+
+  void clearResponse() {
+    state = state.copyWith(
+      currentInput: '',
+      isCorrect: false,
+      hasSubmitted: false,
+      clearInputError: true,
+    );
+  }
+
+  void reset() {
+    state = const LoopTracingState();
   }
 }
 

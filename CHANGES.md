@@ -193,3 +193,70 @@
 - Updated operations-practice progression to randomize the next question instead of moving sequentially through the puzzle list.
 - Added a dedicated `operationsRandomProvider` in `operations_practice_screen.dart` so random behavior is testable and consistent with Riverpod patterns.
 - Updated operations screen tests to override randomness deterministically and verify the next challenge selection follows randomized index behavior.
+
+## Prompt 65
+- Added `lib/models/user_progress.dart` to track user mastery, including `userId`, `completedPuzzles`, and `failedPuzzles` with Firestore mapping support.
+- Updated `DatabaseService` and `FirestoreDatabaseService` with `getUserProgress(String uid)` and `updateUserProgress(UserProgress progress)` to manage persistent user-specific puzzle history in the `users` collection.
+- Added comprehensive unit tests for the `UserProgress` model and its corresponding database service methods to ensure reliable progress tracking and Firestore synchronization.
+
+## Prompt 66
+- Introduced a shared `Puzzle` interface and updated `LoopChallenge`, `ErrorDetectionChallenge`, and `OperationsPracticeChallenge` to implement it, enabling type-safe generic selection logic.
+- Implemented `lib/providers/puzzle_queue_provider.dart` with `PuzzleQueueService` which selects the next challenge based on user progress (prioritizing unattempted and retries).
+- Added `lib/providers/user_progress_provider.dart` to reactively fetch and expose the current user's progress.
+- Updated `AuthService` and `auth_provider.dart` to expose `currentUserUid` and `userIdProvider` for unified user context across the app.
+- Added unit tests for `PuzzleQueueService` to verify the prioritization algorithm and fallback behavior.
+
+## Prompt 67
+- Integrated the `PuzzleQueueService` into `LoopTracingController`, `OperationsPracticeController`, and `ErrorDetectionController` to drive puzzle selection via the new progress-aware algorithm.
+- Updated the `submitAnswer` and `checkSelection` methods in all three controllers to persist `completedPuzzles` and `failedPuzzles` to Firestore through the `DatabaseService` upon completion.
+- Refactored all three game screens (`LoopScoutScreen`, `OperationsPracticeScreen`, `ErrorDetectionScreen`) to rely on their respective controllers for puzzle index management and progression, removing local state.
+- Added comprehensive unit tests for all three controllers to verify that puzzle selection, answer submission, and progress persistence behave as expected with the new backend logic.
+
+## Prompt 68
+- Created a `BasePracticeController` to abstract common logic for progress updates and puzzle selection, which was then extended by all three game controllers (`LoopTracing`, `Operations`, `ErrorDetection`).
+- Refactored the game controllers to remove duplicated code, relying on the new base class for shared functionality.
+- Fixed all static analysis issues reported by `flutter analyze`.
+- Commented out and discarded failing widget tests related to Firebase initialization to focus on core application logic, per user instruction.
+ess progress)` that saves the updated arrays back to the `users` collection in Firestore using `SetOptions(merge: true)`.
+
+[ ] 66. The Selection Algorithm (Business Logic)
+**Task:** Create a central Riverpod provider to handle the puzzle queue logic.
+1. Create a new file `lib/providers/puzzle_queue_provider.dart`.
+2. Implement a `Provider` (or `Notifier`) that has access to both the list of all puzzles for a specific game type AND the current user's `UserProgress`.
+3. Write a method `getNextPuzzle(List<Puzzle> allPuzzles, UserProgress progress)`.
+4. **The Algorithm Rules:**
+   - Step 1: Filter `allPuzzles` to create a list of `unattemptedPuzzles` (puzzles whose IDs are NOT in `progress.completedPuzzles` AND NOT in `progress.failedPuzzles`).
+   - Step 2: If `unattemptedPuzzles` is not empty, use `dart:math` `Random()` to select and return one puzzle from this list.
+   - Step 3: If `unattemptedPuzzles` is empty, filter `allPuzzles` to create a list of `retryPuzzles` (puzzles whose IDs ARE in `progress.failedPuzzles`).
+   - Step 4: If `retryPuzzles` is not empty, return a random puzzle from this list.
+   - Step 5: If both lists are empty (the user has mastered everything), clear their progress for this specific type or return a random puzzle from `allPuzzles` as a fallback.
+
+[ ] 67. Controller Integration & State Updates
+**Task:** Update the game controllers to use the new algorithm and update progress.
+1. Read `lib/providers/loop_tracing_controller.dart` (and apply this same logic to `operations_practice_controller.dart` and `error_detection_controller.dart`).
+2. Update the `checkAnswer` method. When an answer is evaluated:
+   - If Correct: Add the current puzzle's ID to the user's `completedPuzzles` array. If that ID currently exists in the `failedPuzzles` array, remove it.
+   - If Incorrect: Add the current puzzle's ID to the user's `failedPuzzles` array (ensure no duplicates).
+   - Call `databaseService.updateUserProgress()` immediately to save to Firestore.
+3. Update the method that loads the initial puzzle (or moves to the next puzzle). Instead of incrementing an index, it must now call `getNextPuzzle()` from the new `puzzle_queue_provider.dart` to determine what to display next.
+Warning from gemini: pay very close attention to how it handles the State Management. Because your controllers will now need to read the current user's ID to fetch and update their progress, the CLI will need to watch your AuthProvider inside these game controllers. If it implements this poorly, it could cause the screen to rebuild unnecessarily.
+If the intern's code looks like a tangled mess of nested providers, that is your cue to step in, use the "No Magic" rule, and ask it to refactor the logic cleanly before you commit!
+
+
+** Development Rules **
+
+1. Always commit the current code before implementing a new feature.
+2. State Management: Use flutter_riverpod exclusively. Do not use setState for complex logic.
+3. Architecture: Maintain strict separation of concerns:
+● /models: Pure Dart data classes (use json_serializable or freezed if helpful).
+● /services: Backend/API communication only. No UI code.
+● /providers: Riverpod providers linking services to the UI.
+● /screens & /widgets: UI only. Keep files small. Extract complex widgets into their own files.
+4. Local Storage: Use shared_preferences for local app state (e.g., theme toggles, onboarding
+status).
+5. Database: Use [Firebase Firestore OR PostgreSQL] for persistent cloud data.
+6. Stepwise Execution: Only implement the specific step requested in the prompt. Do not jump ahead.
+7. Explain-First Policy: Before providing code, Gemini must briefly explain the architectural pattern chosen and why it is the standard approach for Flutter/Riverpod.
+8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description
+9. Refactor Alert: If Gemini identifies a widget or logic block that could be made reusable, it must stop and suggest a refactor into the /widgets or /services folder before continuing with the UI.
+10. After completing a prompt, summarize what has been done and why. Add this information into the changes.md file with the prompt number.

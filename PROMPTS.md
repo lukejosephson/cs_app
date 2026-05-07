@@ -266,9 +266,31 @@ to firestore. ensure that things new things will be added correctly when added o
 4. Use the existing `TracingInputPanel` (or a similar text input widget) to allow the user to type their answer and call the `checkAnswer` method.
 5. Ensure the screen displays the `target` text (e.g., "What is the final console output?") clearly above the input field.
 
-[ ] 59.
+[ ] 59. Surgical Navigation Injection
+**Task:** Update `lib/screens/home_screen.dart` to link the new module.
+1. Read `lib/screens/home_screen.dart`.
+2. At the top of the file, safely inject the import statement: `import 'package:[YOUR_APP_NAME]/screens/operations_practice_screen.dart';` (ensure you use the correct package name).
+3. Locate the main `ListView` or `Column` in the `build` method where the navigation buttons/ListTiles for "Loop Tracing" and "Error Detection" are located.
+4. DO NOT overwrite or delete any existing `ListTile` or `ElevatedButton`.
+5. Safely append a new `ListTile` below the existing ones with the title "Math Operations Practice" and a subtitle "Master modulo, division, and precedence."
+6. Set the `onTap` property of this new tile to push `OperationsPracticeScreen` using `MaterialPageRoute`.
 
-[ ] 60.
+[ ] 60. Local Persistence & Theme Toggle (Dark Mode)
+**Task:** Implement a Riverpod Theme Notifier using SharedPreferences.
+1. Create a new file `lib/providers/theme_provider.dart`.
+2. Implement a `StateNotifier<ThemeMode>` (or Riverpod 3.0 equivalent) called `ThemeNotifier`.
+3. In its initialization, it must read a boolean flag from `SharedPreferences` (e.g., key: 'isDarkMode') to set the initial state.
+4. Create a `toggleTheme()` method that switches the state between `ThemeMode.light` and `ThemeMode.dark` and immediately saves the new preference to `SharedPreferences`.
+5. **Update Main:** Read `lib/main.dart`. Ensure `MaterialApp` uses `themeMode: ref.watch(themeProvider)` so the app reacts to the state change.
+6. **Update UI:** Read `lib/screens/home_screen.dart`. Safely inject an `IconButton` (using `Icons.brightness_6` or similar) into the `AppBar`'s `actions` list. The button's `onPressed` should call `toggleTheme()`. Do not alter the rest of the `AppBar`.
+
+[ ] 61. Graceful Async States (Error & Loading Polish)
+**Task:** Standardize the `.when()` implementations across all game screens.
+1. Read the following files: `lib/screens/loop_tracing_screen.dart`, `lib/screens/error_detection_screen.dart`, and `lib/screens/operations_practice_screen.dart`.
+2. Locate the Riverpod `AsyncValue.when()` methods used to watch the Firestore puzzle streams.
+3. **Loading State:** Ensure every `loading` state returns a centered `CircularProgressIndicator`. Do not just return an empty `SizedBox`.
+4. **Error State:** Ensure every `error` state returns a centered `Column` containing an `Icon(Icons.error, color: Colors.red)` and a `Text` widget displaying a user-friendly error message (e.g., "Unable to load puzzles. Please check your connection.").
+5. DO NOT modify the `data` state logic in any of these screens; only upgrade the `error` and `loading` visual fallbacks.
 
 
 ** Development Rules **

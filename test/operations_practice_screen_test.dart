@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cs_app/models/operations_practice_challenge.dart';
+import 'package:cs_app/providers/auth_provider.dart';
 import 'package:cs_app/providers/operations_practice_provider.dart';
 import 'package:cs_app/screens/operations_practice_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 Widget _buildTestApp(List<Override> overrides) {
   return ProviderScope(
-    overrides: overrides,
+    overrides: [
+      userIdProvider.overrideWith((ref) => null),
+      ...overrides,
+    ],
     child: const MaterialApp(home: OperationsPracticeScreen()),
   );
 }
@@ -148,7 +152,7 @@ void main() {
     await tester.tap(find.text('Next Challenge'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Target: What is z?'), findsOneWidget);
+    expect(find.text('Target: What is y?'), findsOneWidget);
     expect(find.text('Success! Correct answer.'), findsNothing);
   });
 }

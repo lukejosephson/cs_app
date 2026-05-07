@@ -40,10 +40,9 @@ void main() {
     await tester.pump();
 
     expect(
-      find.text('We could not load error detection challenges.'),
+      find.text('Unable to load puzzles. Please check your connection.'),
       findsOneWidget,
     );
-    expect(find.text('Please try again in a moment.'), findsOneWidget);
   });
 
   testWidgets('renders interactive flow with submit and next', (tester) async {

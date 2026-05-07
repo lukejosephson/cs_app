@@ -284,13 +284,15 @@ to firestore. ensure that things new things will be added correctly when added o
 5. **Update Main:** Read `lib/main.dart`. Ensure `MaterialApp` uses `themeMode: ref.watch(themeProvider)` so the app reacts to the state change.
 6. **Update UI:** Read `lib/screens/home_screen.dart`. Safely inject an `IconButton` (using `Icons.brightness_6` or similar) into the `AppBar`'s `actions` list. The button's `onPressed` should call `toggleTheme()`. Do not alter the rest of the `AppBar`.
 
-[ ] 61. Graceful Async States (Error & Loading Polish)
+[x] 61. Graceful Async States (Error & Loading Polish)
 **Task:** Standardize the `.when()` implementations across all game screens.
 1. Read the following files: `lib/screens/loop_tracing_screen.dart`, `lib/screens/error_detection_screen.dart`, and `lib/screens/operations_practice_screen.dart`.
 2. Locate the Riverpod `AsyncValue.when()` methods used to watch the Firestore puzzle streams.
 3. **Loading State:** Ensure every `loading` state returns a centered `CircularProgressIndicator`. Do not just return an empty `SizedBox`.
 4. **Error State:** Ensure every `error` state returns a centered `Column` containing an `Icon(Icons.error, color: Colors.red)` and a `Text` widget displaying a user-friendly error message (e.g., "Unable to load puzzles. Please check your connection.").
 5. DO NOT modify the `data` state logic in any of these screens; only upgrade the `error` and `loading` visual fallbacks.
+
+[ ] 62. Ensure that the operations practice is fully implemented. Create and run tests.
 
 
 ** Development Rules **

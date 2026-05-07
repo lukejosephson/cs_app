@@ -18,43 +18,17 @@ class OperationsPracticeScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Operations Practice')),
       body: puzzlesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Card(
-              color: colorScheme.errorContainer.withValues(alpha: 0.65),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.error_outline_rounded,
-                      color: colorScheme.onErrorContainer,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'We could not load operations challenges.',
-                      style: textTheme.titleMedium?.copyWith(
-                        color: colorScheme.onErrorContainer,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Please try again in a moment.',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onErrorContainer.withValues(
-                          alpha: 0.9,
-                        ),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+        error: (error, stackTrace) => const Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error, color: Colors.red),
+              SizedBox(height: 8),
+              Text(
+                'Unable to load puzzles. Please check your connection.',
+                textAlign: TextAlign.center,
               ),
-            ),
+            ],
           ),
         ),
         data: (puzzles) {

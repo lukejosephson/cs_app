@@ -171,3 +171,9 @@
 - Updated `lib/main.dart` to make `CsPracticeApp` a `ConsumerWidget`, wire `themeMode: ref.watch(themeProvider)`, and provide both light and dark `ThemeData` so theme toggling reacts immediately.
 - Updated `lib/screens/home_screen.dart` to inject a theme-toggle `IconButton` (`Icons.brightness_6`) in the app bar actions, calling `toggleTheme()` without altering the existing sign-out behavior.
 - Added coverage in `test/providers/theme_provider_test.dart` for default initialization, persisted initialization, and preference persistence on toggle, and updated `test/home_screen_test.dart` to assert the toggle icon is present.
+
+## Prompt 61
+- Standardized async loading and error fallbacks for the three puzzle screens (`LoopScoutScreen`, `ErrorDetectionScreen`, and `OperationsPracticeScreen`) while leaving all `data`-state logic untouched.
+- Ensured each `loading` branch uses a centered `CircularProgressIndicator`.
+- Updated each `error` branch to a centered `Column` with `Icon(Icons.error, color: Colors.red)` and the user-friendly message: `Unable to load puzzles. Please check your connection.`
+- Updated related widget tests to assert the standardized error message.

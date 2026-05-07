@@ -41,10 +41,9 @@ void main() {
     await tester.pump();
 
     expect(
-      find.text('We could not load loop challenges right now.'),
+      find.text('Unable to load puzzles. Please check your connection.'),
       findsOneWidget,
     );
-    expect(find.text('Please try again in a moment.'), findsOneWidget);
   });
 
   testWidgets('shows empty-data state when no puzzles are returned', (

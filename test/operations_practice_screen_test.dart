@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'helpers/fake_random.dart';
+
 Widget _buildTestApp(List<Override> overrides) {
   return ProviderScope(
     overrides: overrides,
@@ -112,12 +114,24 @@ void main() {
       isArchived: false,
       tags: ['division'],
     );
+    const challengeC = OperationsPracticeChallenge(
+      id: 13,
+      type: 'operations_practice',
+      snippet: 'z = 5 % 2',
+      errorLine: 0,
+      target: 'What is z?',
+      answer: '1',
+      difficulty: 1,
+      isArchived: false,
+      tags: ['modulo'],
+    );
 
     await tester.pumpWidget(
       _buildTestApp([
         operationsPracticeProvider.overrideWith(
-          (ref) => Future.value(const [challengeA, challengeB]),
+          (ref) => Future.value(const [challengeA, challengeB, challengeC]),
         ),
+        operationsRandomProvider.overrideWithValue(FakeRandom([2])),
       ]),
     );
     await tester.pumpAndSettle();
@@ -137,7 +151,7 @@ void main() {
     await tester.tap(find.text('Next Challenge'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Target: What is y?'), findsOneWidget);
+    expect(find.text('Target: What is z?'), findsOneWidget);
     expect(find.text('Success! Correct answer.'), findsNothing);
   });
 }

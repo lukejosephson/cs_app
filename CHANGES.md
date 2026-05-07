@@ -188,3 +188,8 @@
 - Added a `Next Challenge` action styled consistently with existing challenge flows (`FilledButton.icon` with `Icons.skip_next_rounded`) so UI behavior matches the rest of the app.
 - Wired next-challenge navigation to reset operations input state and render the next puzzle’s target/snippet cleanly.
 - Expanded `test/operations_practice_screen_test.dart` with progression coverage to verify moving to the next question updates UI content and clears prior success feedback.
+
+## Prompt 64
+- Updated operations-practice progression to randomize the next question instead of moving sequentially through the puzzle list.
+- Added a dedicated `operationsRandomProvider` in `operations_practice_screen.dart` so random behavior is testable and consistent with Riverpod patterns.
+- Updated operations screen tests to override randomness deterministically and verify the next challenge selection follows randomized index behavior.

@@ -296,7 +296,7 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 63. The user should be able to access the next question. the ui should match the rest of the apps ui.
 
-[ ] 64. Questions should be randomized, they should not be shown sequentially every time.
+[x] 64. Questions should be randomized, they should not be shown sequentially every time.
 
 
 ** Development Rules **

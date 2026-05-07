@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +7,8 @@ import '../providers/operations_practice_controller.dart';
 import '../providers/operations_practice_provider.dart';
 import '../widgets/code_display_box.dart';
 import '../widgets/operations_input_panel.dart';
+
+final operationsRandomProvider = Provider<Random>((ref) => Random());
 
 class OperationsPracticeScreen extends ConsumerStatefulWidget {
   const OperationsPracticeScreen({super.key});
@@ -17,6 +21,19 @@ class OperationsPracticeScreen extends ConsumerStatefulWidget {
 class _OperationsPracticeScreenState
     extends ConsumerState<OperationsPracticeScreen> {
   int _currentPuzzleIndex = 0;
+
+  int _nextRandomPuzzleIndex(int puzzleCount) {
+    if (puzzleCount <= 1) {
+      return 0;
+    }
+
+    final random = ref.read(operationsRandomProvider);
+    var nextIndex = _currentPuzzleIndex;
+    while (nextIndex == _currentPuzzleIndex) {
+      nextIndex = random.nextInt(puzzleCount);
+    }
+    return nextIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +112,9 @@ class _OperationsPracticeScreenState
               FilledButton.icon(
                 onPressed: () {
                   setState(() {
-                    _currentPuzzleIndex =
-                        (_currentPuzzleIndex + 1) % validPuzzles.length;
+                    _currentPuzzleIndex = _nextRandomPuzzleIndex(
+                      validPuzzles.length,
+                    );
                   });
                   ref
                       .read(operationsPracticeControllerProvider.notifier)

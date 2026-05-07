@@ -4,6 +4,7 @@ import 'package:cs_app/screens/operations_practice_screen.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/practice_options_provider.dart';
+import '../providers/theme_provider.dart';
 import '../models/practice_type.dart';
 import '../widgets/home/practice_option_tile.dart';
 import '../widgets/home/welcome_card.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authController = ref.read(authControllerProvider);
+    final themeController = ref.read(themeProvider.notifier);
     final practiceOptions = ref.watch(practiceOptionsProvider);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
@@ -25,6 +27,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('CS Practice'),
         actions: [
+          IconButton(
+            tooltip: 'Toggle theme',
+            onPressed: themeController.toggleTheme,
+            icon: const Icon(Icons.brightness_6),
+          ),
           IconButton(
             tooltip: 'Sign out',
             onPressed: authController.signOut,

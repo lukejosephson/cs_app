@@ -165,3 +165,9 @@
 - Updated `lib/screens/home_screen.dart` to import `OperationsPracticeScreen` and safely append a new `ListTile` titled **Math Operations Practice** with the required subtitle text.
 - Wired the new tile’s `onTap` to push `OperationsPracticeScreen` via `MaterialPageRoute` without altering existing practice option tiles.
 - Expanded `test/home_screen_test.dart` to verify the new tile renders and navigates correctly to the operations practice module.
+
+## Prompt 60
+- Added `lib/providers/theme_provider.dart` with a Riverpod `ThemeNotifier` (`StateNotifier<ThemeMode>`) that initializes from `SharedPreferences` key `isDarkMode` and persists updates in `toggleTheme()`.
+- Updated `lib/main.dart` to make `CsPracticeApp` a `ConsumerWidget`, wire `themeMode: ref.watch(themeProvider)`, and provide both light and dark `ThemeData` so theme toggling reacts immediately.
+- Updated `lib/screens/home_screen.dart` to inject a theme-toggle `IconButton` (`Icons.brightness_6`) in the app bar actions, calling `toggleTheme()` without altering the existing sign-out behavior.
+- Added coverage in `test/providers/theme_provider_test.dart` for default initialization, persisted initialization, and preference persistence on toggle, and updated `test/home_screen_test.dart` to assert the toggle icon is present.

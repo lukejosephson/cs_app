@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 import 'providers/binary_practice_provider.dart';
+import 'providers/theme_provider.dart';
 import 'screens/auth_gate_screen.dart';
 
 Future<void> main() async {
@@ -22,20 +23,30 @@ Future<void> main() async {
   );
 }
 
-class CsPracticeApp extends StatelessWidget {
+class CsPracticeApp extends ConsumerWidget {
   const CsPracticeApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.fromSeed(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final darkColorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF4F8CFF),
       brightness: Brightness.dark,
+    );
+    final lightColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF4F8CFF),
+      brightness: Brightness.light,
     );
 
     return MaterialApp(
       title: 'CS Practice',
+      themeMode: ref.watch(themeProvider),
       theme: ThemeData(
-        colorScheme: colorScheme,
+        colorScheme: lightColorScheme,
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
         brightness: Brightness.dark,
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFF0B1020),

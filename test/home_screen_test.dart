@@ -18,6 +18,7 @@ void main() {
     expect(find.text('Loop Tracing'), findsOneWidget);
     expect(find.text('Error Detection'), findsOneWidget);
     expect(find.text('Math Operations Practice'), findsOneWidget);
+    expect(find.byIcon(Icons.brightness_6), findsOneWidget);
   });
 
   testWidgets('opens loop scout screen from home practice options', (

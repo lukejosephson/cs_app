@@ -275,7 +275,7 @@ to firestore. ensure that things new things will be added correctly when added o
 5. Safely append a new `ListTile` below the existing ones with the title "Math Operations Practice" and a subtitle "Master modulo, division, and precedence."
 6. Set the `onTap` property of this new tile to push `OperationsPracticeScreen` using `MaterialPageRoute`.
 
-[ ] 60. Local Persistence & Theme Toggle (Dark Mode)
+[x] 60. Local Persistence & Theme Toggle (Dark Mode)
 **Task:** Implement a Riverpod Theme Notifier using SharedPreferences.
 1. Create a new file `lib/providers/theme_provider.dart`.
 2. Implement a `StateNotifier<ThemeMode>` (or Riverpod 3.0 equivalent) called `ThemeNotifier`.

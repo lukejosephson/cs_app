@@ -298,6 +298,36 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 64. Questions should be randomized, they should not be shown sequentially every time.
 
+[ ] 65. Progress Tracking Model & Database Service
+**Task:** Create a data model to track user mastery and update the database service.
+1. Create a new model `lib/models/user_progress.dart`. It should contain: `userId` (String), `completedPuzzles` (List<int>), and `failedPuzzles` (List<int>). Use a factory method to parse from Firestore.
+2. Open `lib/services/database_service.dart`.
+3. Add a method `getUserProgress(String uid)` that fetches the progress document for the current user from a new `users` collection. If the document doesn't exist, return an empty `UserProgress` object.
+4. Add a method `updateUserProgress(UserProgress progress)` that saves the updated arrays back to the `users` collection in Firestore using `SetOptions(merge: true)`.
+
+[ ] 66. The Selection Algorithm (Business Logic)
+**Task:** Create a central Riverpod provider to handle the puzzle queue logic.
+1. Create a new file `lib/providers/puzzle_queue_provider.dart`.
+2. Implement a `Provider` (or `Notifier`) that has access to both the list of all puzzles for a specific game type AND the current user's `UserProgress`.
+3. Write a method `getNextPuzzle(List<Puzzle> allPuzzles, UserProgress progress)`.
+4. **The Algorithm Rules:**
+   - Step 1: Filter `allPuzzles` to create a list of `unattemptedPuzzles` (puzzles whose IDs are NOT in `progress.completedPuzzles` AND NOT in `progress.failedPuzzles`).
+   - Step 2: If `unattemptedPuzzles` is not empty, use `dart:math` `Random()` to select and return one puzzle from this list.
+   - Step 3: If `unattemptedPuzzles` is empty, filter `allPuzzles` to create a list of `retryPuzzles` (puzzles whose IDs ARE in `progress.failedPuzzles`).
+   - Step 4: If `retryPuzzles` is not empty, return a random puzzle from this list.
+   - Step 5: If both lists are empty (the user has mastered everything), clear their progress for this specific type or return a random puzzle from `allPuzzles` as a fallback.
+
+[ ] 67. Controller Integration & State Updates
+**Task:** Update the game controllers to use the new algorithm and update progress.
+1. Read `lib/providers/loop_tracing_controller.dart` (and apply this same logic to `operations_practice_controller.dart` and `error_detection_controller.dart`).
+2. Update the `checkAnswer` method. When an answer is evaluated:
+   - If Correct: Add the current puzzle's ID to the user's `completedPuzzles` array. If that ID currently exists in the `failedPuzzles` array, remove it.
+   - If Incorrect: Add the current puzzle's ID to the user's `failedPuzzles` array (ensure no duplicates).
+   - Call `databaseService.updateUserProgress()` immediately to save to Firestore.
+3. Update the method that loads the initial puzzle (or moves to the next puzzle). Instead of incrementing an index, it must now call `getNextPuzzle()` from the new `puzzle_queue_provider.dart` to determine what to display next.
+Warning from gemini: pay very close attention to how it handles the State Management. Because your controllers will now need to read the current user's ID to fetch and update their progress, the CLI will need to watch your AuthProvider inside these game controllers. If it implements this poorly, it could cause the screen to rebuild unnecessarily.
+If the intern's code looks like a tangled mess of nested providers, that is your cue to step in, use the "No Magic" rule, and ask it to refactor the logic cleanly before you commit!
+
 
 ** Development Rules **
 

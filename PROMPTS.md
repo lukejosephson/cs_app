@@ -258,7 +258,7 @@ to firestore. ensure that things new things will be added correctly when added o
 3. Add a `checkAnswer(String correctAnswer)` method that compares the user's input to the puzzle's answer.
 4. Include a `reset()` method to clear the text field for the next challenge.
 
-[ ] 58. Interactive UI (Screen Re-use)
+[x] 58. Interactive UI (Screen Re-use)
 **Task:** Create `lib/screens/operations_practice_screen.dart`.
 1. Implement a `ConsumerWidget` that watches the new `operationsPracticeProvider` and uses `.when()` for async states (loading/error/data).
 2. **Efficiency Instruction:** Clone the layout structure of the `LoopTracingScreen`. 

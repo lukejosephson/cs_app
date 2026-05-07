@@ -154,3 +154,9 @@
 - Added `lib/providers/operations_practice_controller.dart` with a Riverpod `Notifier` (`OperationsPracticeController`) and `OperationsPracticeState` tracking `currentInput`, `isCorrect`, and `hasSubmitted`.
 - Implemented `checkAnswer(String correctAnswer)` with normalized answer comparison and submission-state updates, plus `reset()` to clear state for the next challenge.
 - Added provider unit tests in `test/providers/operations_practice_controller_test.dart` covering initial state, input updates, correct/incorrect checks, and reset behavior.
+
+## Prompt 58
+- Added `lib/providers/operations_practice_provider.dart` with `operationsPracticeProvider` (`FutureProvider`) to load operations puzzles via `DatabaseService.fetchOperationsPuzzles()` and expose async loading/error/data states.
+- Added `lib/screens/operations_practice_screen.dart` as a `ConsumerWidget` using `.when()` for loading/error/data, reusing `CodeDisplayBox` for snippet rendering and showing the puzzle `target` prompt clearly above input.
+- Added `lib/widgets/operations_input_panel.dart` as a tracing-style input panel wired to `OperationsPracticeController` for typed answer submission and correctness feedback.
+- Added coverage in `test/providers/operations_practice_provider_test.dart` and `test/operations_practice_screen_test.dart` for provider fetch behavior plus screen loading/error/submission UI flow.

@@ -182,3 +182,9 @@
 - Verified operations practice is fully wired across model/service/provider/controller/screen/navigation paths and remained integrated from the home screen.
 - Added dedicated widget tests in `test/widgets/operations_input_panel_test.dart` to cover target prompt rendering, correct/incorrect submissions, and state reset behavior when moving to a new puzzle.
 - Ran the project validation suite after adding operations-focused coverage.
+
+## Prompt 63
+- Updated `lib/screens/operations_practice_screen.dart` to support moving through multiple operations puzzles by tracking a current index and selecting the next challenge.
+- Added a `Next Challenge` action styled consistently with existing challenge flows (`FilledButton.icon` with `Icons.skip_next_rounded`) so UI behavior matches the rest of the app.
+- Wired next-challenge navigation to reset operations input state and render the next puzzle’s target/snippet cleanly.
+- Expanded `test/operations_practice_screen_test.dart` with progression coverage to verify moving to the next question updates UI content and clears prior success feedback.

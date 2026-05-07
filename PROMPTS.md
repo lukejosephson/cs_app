@@ -294,7 +294,7 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 62. Ensure that the operations practice is fully implemented. Create and run tests.
 
-[ ] 63. The user should be able to access the next question. the ui should match the rest of the apps ui.
+[x] 63. The user should be able to access the next question. the ui should match the rest of the apps ui.
 
 
 ** Development Rules **

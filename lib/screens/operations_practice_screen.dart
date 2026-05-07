@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/operations_practice_controller.dart';
 import '../providers/operations_practice_provider.dart';
 import '../widgets/code_display_box.dart';
 import '../widgets/operations_input_panel.dart';
 
-class OperationsPracticeScreen extends ConsumerWidget {
+class OperationsPracticeScreen extends ConsumerStatefulWidget {
   const OperationsPracticeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OperationsPracticeScreen> createState() =>
+      _OperationsPracticeScreenState();
+}
+
+class _OperationsPracticeScreenState
+    extends ConsumerState<OperationsPracticeScreen> {
+  int _currentPuzzleIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final puzzlesAsync = ref.watch(operationsPracticeProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -55,7 +65,8 @@ class OperationsPracticeScreen extends ConsumerWidget {
             );
           }
 
-          final currentPuzzle = validPuzzles.first;
+          final currentPuzzle =
+              validPuzzles[_currentPuzzleIndex % validPuzzles.length];
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -79,6 +90,20 @@ class OperationsPracticeScreen extends ConsumerWidget {
                 style: textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.75),
                 ),
+              ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _currentPuzzleIndex =
+                        (_currentPuzzleIndex + 1) % validPuzzles.length;
+                  });
+                  ref
+                      .read(operationsPracticeControllerProvider.notifier)
+                      .reset();
+                },
+                icon: const Icon(Icons.skip_next_rounded),
+                label: const Text('Next Challenge'),
               ),
               const SizedBox(height: 12),
               CodeDisplayBox(snippet: currentPuzzle.snippet),

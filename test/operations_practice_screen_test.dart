@@ -73,6 +73,7 @@ void main() {
     expect(find.text('Operations practice'), findsOneWidget);
     expect(find.text('Target: What is x?'), findsOneWidget);
     expect(find.text('Check Answer'), findsOneWidget);
+    expect(find.text('Next Challenge'), findsOneWidget);
 
     await tester.enterText(
       find.byKey(const ValueKey('operations-answer-input')),
@@ -84,5 +85,59 @@ void main() {
     await tester.pump();
 
     expect(find.text('Success! Correct answer.'), findsOneWidget);
+  });
+
+  testWidgets('moves to next challenge and updates target prompt', (
+    tester,
+  ) async {
+    const challengeA = OperationsPracticeChallenge(
+      id: 11,
+      type: 'operations_practice',
+      snippet: 'x = 3 + 4 * 2',
+      errorLine: 0,
+      target: 'What is x?',
+      answer: '11',
+      difficulty: 1,
+      isArchived: false,
+      tags: ['order-of-operations'],
+    );
+    const challengeB = OperationsPracticeChallenge(
+      id: 12,
+      type: 'operations_practice',
+      snippet: 'y = 20 ~/ 5',
+      errorLine: 0,
+      target: 'What is y?',
+      answer: '4',
+      difficulty: 1,
+      isArchived: false,
+      tags: ['division'],
+    );
+
+    await tester.pumpWidget(
+      _buildTestApp([
+        operationsPracticeProvider.overrideWith(
+          (ref) => Future.value(const [challengeA, challengeB]),
+        ),
+      ]),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Target: What is x?'), findsOneWidget);
+
+    await tester.enterText(
+      find.byKey(const ValueKey('operations-answer-input')),
+      '11',
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('operations-check-answer-button')),
+    );
+    await tester.pump();
+    expect(find.text('Success! Correct answer.'), findsOneWidget);
+
+    await tester.tap(find.text('Next Challenge'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Target: What is y?'), findsOneWidget);
+    expect(find.text('Success! Correct answer.'), findsNothing);
   });
 }

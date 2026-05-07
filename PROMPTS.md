@@ -245,7 +245,7 @@ to firestore. ensure that things new things will be added correctly when added o
 
 [x] 55. Puzzles for error detection have been input into firestore with this schema. Ensure all facets of the build of error detection, front end and back end, align with this. The user should be answering with the line number of the error, and should then have the info about the error, stored in the target, displayed/explained to them.
 
-[ ] 56. Data Model & Service Integration
+[x] 56. Data Model & Service Integration
 **Task:** Create `lib/models/operations_practice_challenge.dart` and update the service.
 1. Implement a class `OperationsPracticeChallenge` that maps exactly to the Firestore schema: `id`, `type`, `snippet`, `error_line`, `target`, `answer`, `difficulty`, `is_archived`, and `tags`.
 2. In `lib/services/database_service.dart`, add a method `fetchOperationsPuzzles()` that queries the 'puzzles' collection where `type == 'operations_practice'` and `is_archived == false`.

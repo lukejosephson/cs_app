@@ -348,8 +348,10 @@ database_service.dart).
 ○ /providers (or /controllers): Riverpod providers containing the business logic that
 connects your services to your UI.
 
-[x] 72. I have been getting this in my output when i launch the program. what could the cause of this be? 
+[ ] 72. I have been getting this in my output when i launch the program. what could the cause of this be? 
 I/Choreographer( 3828): Skipped 225 frames!  The application may be doing too much work on its main thread.
+
+[x] 73. The random feeding of the puzzles is not working in loop tracing, error detection, or operations practice. Assess and identify the issue
 
 ** Development Rules **
 

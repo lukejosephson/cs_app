@@ -272,3 +272,8 @@ status).
 - Investigated the Android startup log `Skipped 225 frames` and identified it as a UI-thread jank warning (not a Firebase/auth failure by itself), typically seen in debug mode/emulators when first frames are delayed.
 - Confirmed likely contributors in this app’s startup path are synchronous pre-run initialization (`Firebase.initializeApp`, `SharedPreferences.getInstance`) plus first-render overhead from complex themed widgets/fonts, which is more pronounced on slower emulators.
 - Documented practical root causes and interpretation guidance so this warning can be treated as performance profiling input rather than an automatic functional error.
+
+## Prompt 73
+- Traced puzzle progression for loop tracing, error detection, and operations practice to the shared `BasePracticeController.getNextPuzzleIndex()` path and identified one common failure mode affecting all three games.
+- Root cause: `getNextPuzzleIndex()` reads `userProgressProvider` synchronously (`ref.read(userProgressProvider).valueOrNull`). When that async provider is still loading (especially right after `updateProgress()` invalidates it), progress is `null` and the controller falls back to sequential `(currentIndex + 1) % length`, which appears as “random feed not working.”
+- Confirmed this issue can be masked by tests because controller tests override `userProgressProvider` with immediate values, so they do not exercise the runtime loading window where fallback-to-sequential occurs.

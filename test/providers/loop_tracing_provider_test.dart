@@ -5,10 +5,13 @@ import 'package:cs_app/models/user_progress.dart';
 import 'package:cs_app/providers/auth_provider.dart';
 import 'package:cs_app/providers/loop_provider.dart';
 import 'package:cs_app/providers/loop_tracing_provider.dart';
+import 'package:cs_app/providers/puzzle_queue_provider.dart';
 import 'package:cs_app/providers/user_progress_provider.dart';
 import 'package:cs_app/services/database_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../helpers/fake_random.dart';
 
 class FakeDatabaseService implements DatabaseService {
   UserProgress? lastUpdatedProgress;
@@ -183,5 +186,57 @@ void main() {
     controller.moveToNextPuzzle(puzzles);
 
     expect(container.read(loopTracingControllerProvider).currentPuzzleIndex, 1);
+  });
+
+  test('moveToNextPuzzle still randomizes while progress is loading', () {
+    final puzzles = [
+      const LoopChallenge(
+        id: 1,
+        type: 'loop_scout',
+        snippet: 's1',
+        target: 't1',
+        answer: 'a1',
+        difficulty: 1,
+        errorLine: 0,
+        isArchived: false,
+        tags: [],
+      ),
+      const LoopChallenge(
+        id: 2,
+        type: 'loop_scout',
+        snippet: 's2',
+        target: 't2',
+        answer: 'a2',
+        difficulty: 1,
+        errorLine: 0,
+        isArchived: false,
+        tags: [],
+      ),
+      const LoopChallenge(
+        id: 3,
+        type: 'loop_scout',
+        snippet: 's3',
+        target: 't3',
+        answer: 'a3',
+        difficulty: 1,
+        errorLine: 0,
+        isArchived: false,
+        tags: [],
+      ),
+    ];
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleQueueServiceProvider.overrideWithValue(
+          PuzzleQueueService(random: FakeRandom([2])),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+    final controller = container.read(loopTracingControllerProvider.notifier);
+
+    controller.moveToNextPuzzle(puzzles);
+
+    expect(container.read(loopTracingControllerProvider).currentPuzzleIndex, 2);
   });
 }

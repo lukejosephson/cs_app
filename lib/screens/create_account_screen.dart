@@ -6,6 +6,19 @@ import '../services/create_account_form_service.dart';
 import '../widgets/auth/create_account_fields.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
+final createAccountEmailProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
+final createAccountPasswordProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
+final createAccountConfirmPasswordProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
+final createAccountValidationErrorProvider = StateProvider.autoDispose<String?>(
+  (ref) => null,
+);
+
 class CreateAccountScreen extends ConsumerStatefulWidget {
   const CreateAccountScreen({super.key});
 
@@ -19,7 +32,6 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
-  String? _inputValidationError;
 
   @override
   void initState() {
@@ -27,10 +39,16 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
+    _emailController.addListener(_syncEmail);
+    _passwordController.addListener(_syncPassword);
+    _confirmPasswordController.addListener(_syncConfirmPassword);
   }
 
   @override
   void dispose() {
+    _emailController.removeListener(_syncEmail);
+    _passwordController.removeListener(_syncPassword);
+    _confirmPasswordController.removeListener(_syncConfirmPassword);
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -42,11 +60,12 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final authActionState = ref.watch(authActionStateProvider);
+    final inputValidationError = ref.watch(createAccountValidationErrorProvider);
     final isLoading = authActionState.isLoading;
     final authController = ref.read(authControllerProvider);
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-    final confirmedPassword = _confirmPasswordController.text;
+    final email = ref.watch(createAccountEmailProvider).trim();
+    final password = ref.watch(createAccountPasswordProvider);
+    final confirmedPassword = ref.watch(createAccountConfirmPasswordProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
@@ -89,7 +108,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                       passwordController: _passwordController,
                       confirmPasswordController: _confirmPasswordController,
                       isLoading: isLoading,
-                      onChanged: (_) => setState(() {}),
+                      onChanged: _onFieldChanged,
                     ),
                     const SizedBox(height: 12),
                     SignInActionButton(
@@ -104,10 +123,10 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                         confirmedPassword: confirmedPassword,
                       ),
                     ),
-                    if (_inputValidationError != null) ...[
+                    if (inputValidationError != null) ...[
                       const SizedBox(height: 12),
                       Text(
-                        _inputValidationError!,
+                        inputValidationError,
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.error,
                         ),
@@ -146,15 +165,12 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       confirmedPassword: confirmedPassword,
     );
     if (validationError != null) {
-      setState(() {
-        _inputValidationError = validationError;
-      });
+      ref.read(createAccountValidationErrorProvider.notifier).state =
+          validationError;
       return;
     }
 
-    setState(() {
-      _inputValidationError = null;
-    });
+    ref.read(createAccountValidationErrorProvider.notifier).state = null;
 
     final isCreated = await authController.createUserWithEmailAndPassword(
       email: email,
@@ -168,5 +184,25 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
     if (!mounted) return;
     Navigator.of(context).pop('Account created successfully. Please sign in.');
+  }
+
+  void _syncEmail() {
+    ref.read(createAccountEmailProvider.notifier).state = _emailController.text;
+  }
+
+  void _syncPassword() {
+    ref.read(createAccountPasswordProvider.notifier).state =
+        _passwordController.text;
+  }
+
+  void _syncConfirmPassword() {
+    ref.read(createAccountConfirmPasswordProvider.notifier).state =
+        _confirmPasswordController.text;
+  }
+
+  void _onFieldChanged(String _) {
+    if (ref.read(createAccountValidationErrorProvider) != null) {
+      ref.read(createAccountValidationErrorProvider.notifier).state = null;
+    }
   }
 }

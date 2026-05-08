@@ -5,6 +5,9 @@ import '../providers/error_detection_controller.dart';
 import '../providers/error_detection_provider.dart';
 import '../widgets/selectable_code_block.dart';
 
+final errorDetectionLineNumberErrorProvider =
+    StateProvider.autoDispose<String?>((ref) => null);
+
 class ErrorDetectionScreen extends ConsumerStatefulWidget {
   const ErrorDetectionScreen({super.key});
 
@@ -15,7 +18,6 @@ class ErrorDetectionScreen extends ConsumerStatefulWidget {
 
 class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
   late final TextEditingController _lineNumberController;
-  String? _lineNumberError;
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
     final puzzlesAsync = ref.watch(errorDetectionPuzzlesProvider);
     final state = ref.watch(errorDetectionControllerProvider);
     final controller = ref.read(errorDetectionControllerProvider.notifier);
+    final lineNumberError = ref.watch(errorDetectionLineNumberErrorProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -77,16 +80,13 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
             if (parsedLineNumber == null ||
                 parsedLineNumber < 1 ||
                 parsedLineNumber > maxLineNumber) {
-              setState(() {
-                _lineNumberError =
-                    'Enter a valid line number from 1 to $maxLineNumber.';
-              });
+              ref.read(errorDetectionLineNumberErrorProvider.notifier).state =
+                  'Enter a valid line number from 1 to $maxLineNumber.';
               return;
             }
 
-            setState(() {
-              _lineNumberError = null;
-            });
+            ref.read(errorDetectionLineNumberErrorProvider.notifier).state =
+                null;
             controller.selectLineNumber(parsedLineNumber);
             controller.checkSelection(
               puzzleId: currentPuzzle.id,
@@ -146,10 +146,9 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                 onLineSelected: (index) {
                   controller.selectLine(index);
                   _lineNumberController.text = '${index + 1}';
-                  if (_lineNumberError != null) {
-                    setState(() {
-                      _lineNumberError = null;
-                    });
+                  if (lineNumberError != null) {
+                    ref.read(errorDetectionLineNumberErrorProvider.notifier)
+                        .state = null;
                   }
                 },
               ),
@@ -162,7 +161,7 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                 decoration: InputDecoration(
                   labelText: 'Line number',
                   hintText: 'Enter 1-$maxLineNumber',
-                  errorText: _lineNumberError,
+                  errorText: lineNumberError,
                 ),
                 onSubmitted: (_) => submitSelection(),
               ),
@@ -219,9 +218,8 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
                     onPressed: () {
                       controller.moveToNextPuzzle(puzzles);
                       _lineNumberController.clear();
-                      setState(() {
-                        _lineNumberError = null;
-                      });
+                      ref.read(errorDetectionLineNumberErrorProvider.notifier)
+                          .state = null;
                     },
                     child: const Text('Next'),
                   ),

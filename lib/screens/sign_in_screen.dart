@@ -5,6 +5,11 @@ import '../providers/auth_provider.dart';
 import 'create_account_screen.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
+final signInEmailProvider = StateProvider.autoDispose<String>((ref) => '');
+final signInPasswordProvider = StateProvider.autoDispose<String>((ref) => '');
+final signInAccountCreatedMessageProvider =
+    StateProvider.autoDispose<String?>((ref) => null);
+
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
@@ -15,17 +20,20 @@ class SignInScreen extends ConsumerStatefulWidget {
 class _SignInScreenState extends ConsumerState<SignInScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  String? _accountCreatedMessage;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _emailController.addListener(_syncEmail);
+    _passwordController.addListener(_syncPassword);
   }
 
   @override
   void dispose() {
+    _emailController.removeListener(_syncEmail);
+    _passwordController.removeListener(_syncPassword);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -36,10 +44,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final authActionState = ref.watch(authActionStateProvider);
+    final accountCreatedMessage = ref.watch(signInAccountCreatedMessageProvider);
     final isLoading = authActionState.isLoading;
     final authController = ref.read(authControllerProvider);
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+    final email = ref.watch(signInEmailProvider).trim();
+    final password = ref.watch(signInPasswordProvider);
     final canSubmitEmailForm = email.isNotEmpty && password.isNotEmpty;
 
     return Scaffold(
@@ -77,10 +86,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
-                    if (_accountCreatedMessage != null) ...[
+                    if (accountCreatedMessage != null) ...[
                       const SizedBox(height: 12),
                       Text(
-                        _accountCreatedMessage!,
+                        accountCreatedMessage,
                         style: textTheme.bodyMedium?.copyWith(
                           color: Colors.greenAccent.shade200,
                         ),
@@ -96,7 +105,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         labelText: 'Email',
                         hintText: 'name@example.com',
                       ),
-                      onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -105,7 +113,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       autofillHints: const [AutofillHints.password],
                       enabled: !isLoading,
                       decoration: const InputDecoration(labelText: 'Password'),
-                      onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
                     SignInActionButton(
@@ -159,9 +166,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     );
 
     if (message != null && mounted) {
-      setState(() {
-        _accountCreatedMessage = message;
-      });
+      ref.read(signInAccountCreatedMessageProvider.notifier).state = message;
     }
+  }
+
+  void _syncEmail() {
+    ref.read(signInEmailProvider.notifier).state = _emailController.text;
+  }
+
+  void _syncPassword() {
+    ref.read(signInPasswordProvider.notifier).state = _passwordController.text;
   }
 }

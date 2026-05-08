@@ -288,3 +288,9 @@ status).
 - Assessed grade-facing categories across AI workflow/process, architecture/code quality, and technical implementation using current repo state and commit history.
 - Confirmed strengths: structured `REQUIREMENTS.md`, prompt-by-prompt tracking in `PROMPTS.md`, frequent incremental commits, clean layer separation (`models/services/providers/screens/widgets`), Riverpod-first state flow, SharedPreferences persistence, Firebase Auth with Email+Google, and Firestore-backed data/progress sync.
 - Identified likely scoring risks to address before submission: a few files still near/above the “small file” target (auth screens and some widgets around ~120-185 lines), and documentation hygiene inconsistency in `CHANGES.md` due to older appended prompt text/noise that could appear less polished if reviewed directly.
+
+## Prompt 76
+- Normalized prompt entry formatting in `PROMPTS.md` for consistency across the full list (uniform checkbox numbering style like `[x] N. ...`).
+- Fixed several spacing inconsistencies in prompt headers (e.g., missing space after numbered prompt markers, duplicate spaces).
+- Repaired malformed markdown heading formatting in the prompt list and reformatted prompt 75 content into clear bullet points for readability.
+- Marked prompt 76 complete.

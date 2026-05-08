@@ -72,7 +72,7 @@ best practice outlined by the instructions.
 [x] 21. According to the guidelines laid out, give constructive criticism for
 the current code. Do not make any changes. Give feedback on what could be improved and why.
 
-[x] 22.We are starting the Model Layer for the Loop Scout module. Create 
+[x] 22. We are starting the Model Layer for the Loop Scout module. Create 
 lib/models/loop_challenge.dart. Define a class LoopChallenge with fields 
 matching our Firestore schema, which is as follows below:
 
@@ -179,9 +179,9 @@ If the answer is correct, display a 'Success' message using the green color from
 
 [x] 40. Integrate loop screen navigation from home so this flow is reachable in normal app usage.
 
-[x] 41.  Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
+[x] 41. Add richer validation/UX for answers (empty input messaging, optional case/whitespace policy).
 
-[x] 42.Add retry/wrong-answer tracking hooks to align with requirements.
+[x] 42. Add retry/wrong-answer tracking hooks to align with requirements.
 
 [x] 43. These are possible sources of error. Address these as necessary.
  1. puzzleProvider is a stream alias; if provider types/names change later, screen wiring can silently drift.
@@ -202,9 +202,9 @@ nothing is found, explain what the issue could be.
 [x] 46. Test iOS startup first. report back with any issues. then test android startup and do the same.
 Run all necessary tests.
 
-[x] 47. I will now be implementing an error detection game in a similar to the loop tracing. The following prompts will concern this. 
+[x] 47. I will now be implementing an error detection game in a similar to the loop tracing. The following prompts will concern this.
 
-**Data Model & Service Integration
+**Data Model & Service Integration**
 **Task:** Create `lib/models/error_detection_challenge.dart` and update the service.
 1. Implement a class `ErrorDetectionChallenge` that maps to the Firestore schema: `id`, `type`, `snippet`, `error_line`, `target`, `difficulty`, `is_archived`, and `tags`.
 2. In `lib/services/database_service.dart`, ensure there is a method `fetchErrorDetectionPuzzles()` that queries the 'puzzles' collection where `type == 'error_detection'` and `is_archived == false`.
@@ -229,7 +229,7 @@ Run all necessary tests.
     - After submission: If correct, highlight the selected line in green. If wrong, highlight the selected line in red and the true `error_line` in green.
 4. Add "Submit" and "Next" buttons to control the game flow.
 
-[x] 50.  These are sources of improvement to improve adherance to guidelines.
+[x] 50. These are sources of improvement to improve adherance to guidelines.
 Add error detection into normal app navigation (it exists, but should be first-class from home like other modes). Complete the generic puzzle service path (fetchPuzzlesByType) and ensure both game modes use consistent service/provider patterns. Refactor oversized screens (notably create_account_screen.dart) into smaller widgets/services to match your own architecture rule.
 
 [x] 51. This is a prompt I intended to add earlier. Ensure it has all been done, even if under different file or method names:
@@ -356,28 +356,12 @@ I/Choreographer( 3828): Skipped 225 frames!  The application may be doing too mu
 [x] 74. I am preparing to temporarily stop development to submit this app as a
 final project. assess any logical errors or bad code that could be fixed before submitting
 
-[x] 75. Assess these aspects of my grade: Category Description Points
-AI Workflow & Version Control REQUIREMENTS.md is
-well-structured. PROMPTS.md
-accurately tracks the process. Git
-history shows frequent,
-incremental commits tied to AI
-prompts.
+[x] 75. Assess these aspects of my grade:
+- AI Workflow & Version Control: `REQUIREMENTS.md` is well-structured, `PROMPTS.md` accurately tracks process, and git history shows frequent incremental commits tied to prompts.
+- Architecture & Code Quality: Code follows architectural guidelines (models/services/UI separation), files/widgets are kept reasonably small, and generated code is understood.
+- Technical Implementation: Riverpod is correctly utilized, SharedPreferences works, Firebase Auth uses advanced providers, and cloud DB (Firestore/Postgres) is structured and syncing.
 
-Architecture & Code Quality Code strictly follows the
-architectural guidelines (Models,
-Services, UI separation). Widgets
-and files are kept small. You
-demonstrate a complete
-understanding of the generated
-code.
-
-Technical Implementation Riverpod is correctly utilized.
-SharedPreferences is working.
-Firebase Auth uses advanced
-providers. The Cloud DB
-(Firestore/Postgres) is structured
-properly and syncs correctly.
+[x] 76. clean up the formatting of this prompts file. make it consistent across all prompts
 
 ** Development Rules **
 

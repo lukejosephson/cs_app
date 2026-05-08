@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
 import '../services/create_account_form_service.dart';
+import '../widgets/auth/auth_surface_card.dart';
 import '../widgets/auth/create_account_fields.dart';
 import '../widgets/auth/sign_in_action_button.dart';
 
@@ -57,10 +58,11 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final authActionState = ref.watch(authActionStateProvider);
-    final inputValidationError = ref.watch(createAccountValidationErrorProvider);
+    final inputValidationError = ref.watch(
+      createAccountValidationErrorProvider,
+    );
     final isLoading = authActionState.isLoading;
     final authController = ref.read(authControllerProvider);
     final email = ref.watch(createAccountEmailProvider).trim();
@@ -75,76 +77,51 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF1C2742), Color(0xFF111A30)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              AuthSurfaceCard(
+                title: 'Create your account',
+                subtitle: 'Set up an email and password to save your progress.',
+                children: [
+                  CreateAccountFields(
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    confirmPasswordController: _confirmPasswordController,
+                    isLoading: isLoading,
+                    onChanged: _onFieldChanged,
                   ),
-                  border: Border.all(color: const Color(0xFF25314A)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Create your account',
-                      style: textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  const SizedBox(height: 12),
+                  SignInActionButton(
+                    key: const ValueKey('create-account-submit-button'),
+                    label: 'Create Account',
+                    icon: Icons.person_add_alt_1_rounded,
+                    isLoading: isLoading,
+                    onPressed: () => _submitCreateAccount(
+                      authController: authController,
+                      email: email,
+                      password: password,
+                      confirmedPassword: confirmedPassword,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Set up an email and password to save your progress.',
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    CreateAccountFields(
-                      emailController: _emailController,
-                      passwordController: _passwordController,
-                      confirmPasswordController: _confirmPasswordController,
-                      isLoading: isLoading,
-                      onChanged: _onFieldChanged,
-                    ),
+                  ),
+                  if (inputValidationError != null) ...[
                     const SizedBox(height: 12),
-                    SignInActionButton(
-                      key: const ValueKey('create-account-submit-button'),
-                      label: 'Create Account',
-                      icon: Icons.person_add_alt_1_rounded,
-                      isLoading: isLoading,
-                      onPressed: () => _submitCreateAccount(
-                        authController: authController,
-                        email: email,
-                        password: password,
-                        confirmedPassword: confirmedPassword,
+                    Text(
+                      inputValidationError,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.error,
                       ),
                     ),
-                    if (inputValidationError != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        inputValidationError,
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.error,
-                        ),
-                      ),
-                    ],
-                    if (authActionState.hasError) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        _formService.buildAuthErrorMessage(
-                          authActionState.error!,
-                        ),
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.error,
-                        ),
-                      ),
-                    ],
                   ],
-                ),
+                  if (authActionState.hasError) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      _formService.buildAuthErrorMessage(
+                        authActionState.error!,
+                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.error,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ],
           ),

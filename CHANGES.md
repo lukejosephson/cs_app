@@ -261,3 +261,9 @@ status).
 8. Commit Message Generation: After generating a successful code block, Gemini should suggest a concise Git commit message following the format: Feature Name: Short Description
 9. Refactor Alert: If Gemini identifies a widget or logic block that could be made reusable, it must stop and suggest a refactor into the /widgets or /services folder before continuing with the UI.
 10. After completing a prompt, summarize what has been done and why. Add this information into the changes.md file with the prompt number.
+
+## Prompt 71
+- Performed a full architecture quality pass across `lib/` and verified folder boundaries remain aligned with the required layered structure (`models`, `services`, `providers`, `screens`, `widgets`), with no UI code leaking into service/model layers.
+- Refactored oversized authentication UI by extracting a reusable `AuthSurfaceCard` (`lib/widgets/auth/auth_surface_card.dart`) and reusing it in both sign-in and create-account screens to reduce screen complexity and improve reuse.
+- Refactored `ErrorDetectionScreen` by extracting the data-state UI into `lib/widgets/error_detection/error_detection_challenge_view.dart`, keeping screen orchestration in `screens/` and reusable rendering logic in `widgets/`.
+- Re-ran project validation after refactoring (`flutter analyze`, `flutter test`) to ensure architecture cleanup did not alter behavior.

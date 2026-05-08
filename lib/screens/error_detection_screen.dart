@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/error_detection_controller.dart';
 import '../providers/error_detection_provider.dart';
-import '../widgets/selectable_code_block.dart';
+import '../widgets/error_detection/error_detection_challenge_view.dart';
 
 final errorDetectionLineNumberErrorProvider =
     StateProvider.autoDispose<String?>((ref) => null);
@@ -37,7 +37,6 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
     final state = ref.watch(errorDetectionControllerProvider);
     final controller = ref.read(errorDetectionControllerProvider.notifier);
     final lineNumberError = ref.watch(errorDetectionLineNumberErrorProvider);
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -71,7 +70,6 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
           final currentPuzzle =
               puzzles[state.currentPuzzleIndex % puzzles.length];
           final maxLineNumber = currentPuzzle.snippet.split('\n').length;
-          final correctLineNumber = currentPuzzle.errorLine + 1;
 
           void submitSelection() {
             final parsedLineNumber = int.tryParse(
@@ -94,138 +92,26 @@ class _ErrorDetectionScreenState extends ConsumerState<ErrorDetectionScreen> {
             );
           }
 
-          String submissionMessage() {
-            if (!state.hasSubmitted || state.isCorrect == null) {
-              return 'Enter the line number with the error, then submit.';
-            }
-            return state.isCorrect!
-                ? 'Correct! The error is on line $correctLineNumber.'
-                : 'Not quite. The error is on line $correctLineNumber.';
-          }
-
-          Color submissionColor() {
-            if (!state.hasSubmitted || state.isCorrect == null) {
-              return colorScheme.onSurface.withValues(alpha: 0.8);
-            }
-            return state.isCorrect!
-                ? Colors.green.shade300
-                : colorScheme.error.withValues(alpha: 0.9);
-          }
-
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Text(
-                'Find the bug',
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Difficulty: ${currentPuzzle.difficulty}',
-                style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.75),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Tags: ${currentPuzzle.tags.isEmpty ? 'None' : currentPuzzle.tags.join(', ')}',
-                style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.75),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SelectableCodeBlock(
-                key: ValueKey('selectable-code-block-${currentPuzzle.id}'),
-                snippet: currentPuzzle.snippet,
-                selectedLineIndex: state.selectedLineIndex,
-                hasSubmitted: state.hasSubmitted,
-                isCorrect: state.isCorrect,
-                correctLineIndex: currentPuzzle.errorLine,
-                onLineSelected: (index) {
-                  controller.selectLine(index);
-                  _lineNumberController.text = '${index + 1}';
-                  if (lineNumberError != null) {
-                    ref.read(errorDetectionLineNumberErrorProvider.notifier)
-                        .state = null;
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                key: const ValueKey('error-line-number-field'),
-                controller: _lineNumberController,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  labelText: 'Line number',
-                  hintText: 'Enter 1-$maxLineNumber',
-                  errorText: lineNumberError,
-                ),
-                onSubmitted: (_) => submitSelection(),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                submissionMessage(),
-                key: const ValueKey('error-detection-feedback'),
-                style: textTheme.bodyMedium?.copyWith(
-                  color: submissionColor(),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (state.hasSubmitted) ...[
-                const SizedBox(height: 12),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Error explanation',
-                          style: textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(currentPuzzle.target, style: textTheme.bodyMedium),
-                        if (currentPuzzle.answer.trim().isNotEmpty) ...[
-                          const SizedBox(height: 6),
-                          Text(
-                            currentPuzzle.answer,
-                            style: textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.9,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  FilledButton(
-                    onPressed: submitSelection,
-                    child: const Text('Submit'),
-                  ),
-                  const SizedBox(width: 10),
-                  OutlinedButton(
-                    onPressed: () {
-                      controller.moveToNextPuzzle(puzzles);
-                      _lineNumberController.clear();
-                      ref.read(errorDetectionLineNumberErrorProvider.notifier)
-                          .state = null;
-                    },
-                    child: const Text('Next'),
-                  ),
-                ],
-              ),
-            ],
+          return ErrorDetectionChallengeView(
+            challenge: currentPuzzle,
+            state: state,
+            lineNumberController: _lineNumberController,
+            lineNumberError: lineNumberError,
+            onLineSelected: (index) {
+              controller.selectLine(index);
+              _lineNumberController.text = '${index + 1}';
+              if (lineNumberError != null) {
+                ref.read(errorDetectionLineNumberErrorProvider.notifier).state =
+                    null;
+              }
+            },
+            onSubmit: submitSelection,
+            onNext: () {
+              controller.moveToNextPuzzle(puzzles);
+              _lineNumberController.clear();
+              ref.read(errorDetectionLineNumberErrorProvider.notifier).state =
+                  null;
+            },
           );
         },
       ),

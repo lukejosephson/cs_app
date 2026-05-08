@@ -335,6 +335,19 @@ If the intern's code looks like a tangled mess of nested providers, that is your
 
 [x] 70. Refactor the "Math Operations Practice" tile on the home screen to use the standardized `PracticeOptionTile` component, ensuring consistency with other practice options. This involved updating the `PracticeTypeId` enum, adding the option to `practiceOptionsProvider`, and modifying the `HomeScreen`'s navigation logic.
 
+[x] 71. Perform a final check on code quality and architecture guidelines: 
+Small Files & Widgets: No file should be overwhelmingly long. Break complex screens into smaller,
+reusable custom widgets.
+● Directory Structure: Your lib/ folder must be organized logically. Enforce this structure with your AI
+prompts:
+○ /models: Pure Dart classes representing your data (e.g., user.dart, post.dart).
+○ /screens (or /views): The main page layouts.
+○ /widgets: Reusable, isolated UI components (e.g., custom_button.dart).
+○ /services: Backend communication logic (e.g., auth_service.dart,
+database_service.dart).
+○ /providers (or /controllers): Riverpod providers containing the business logic that
+connects your services to your UI.
+
 ** Development Rules **
 
 1. Always commit the current code before implementing a new feature.

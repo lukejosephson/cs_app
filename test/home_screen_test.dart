@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helpers/test_app.dart';
@@ -15,6 +14,5 @@ void main() {
     expect(find.text('Loop Tracing'), findsOneWidget);
     expect(find.text('Error Detection'), findsOneWidget);
     expect(find.text('Math Operations Practice'), findsOneWidget);
-    expect(find.byIcon(Icons.brightness_6), findsOneWidget);
   });
 }

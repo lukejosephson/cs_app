@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 import 'providers/binary_practice_provider.dart';
-import 'providers/theme_provider.dart';
 import 'screens/auth_gate_screen.dart';
 
 Future<void> main() async {
@@ -32,39 +31,30 @@ class CsPracticeApp extends ConsumerWidget {
       seedColor: const Color(0xFF4F8CFF),
       brightness: Brightness.dark,
     );
-    final lightColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF4F8CFF),
-      brightness: Brightness.light,
+    final darkTheme = ThemeData(
+      colorScheme: darkColorScheme,
+      brightness: Brightness.dark,
+      useMaterial3: true,
+      scaffoldBackgroundColor: const Color(0xFF0B1020),
+      appBarTheme: const AppBarTheme(
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+      ),
+      cardTheme: const CardThemeData(
+        margin: EdgeInsets.zero,
+        color: Color(0xFF141B2D),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+      ),
     );
 
     return MaterialApp(
       title: 'CS Practice',
-      themeMode: ref.watch(themeProvider),
-      theme: ThemeData(
-        colorScheme: lightColorScheme,
-        brightness: Brightness.light,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: darkColorScheme,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF0B1020),
-        appBarTheme: const AppBarTheme(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.white,
-        ),
-        cardTheme: const CardThemeData(
-          margin: EdgeInsets.zero,
-          color: Color(0xFF141B2D),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-        ),
-      ),
+      theme: darkTheme,
       home: const AuthGateScreen(),
     );
   }

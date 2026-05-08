@@ -46,9 +46,15 @@ abstract class BasePracticeController<TState extends PracticeState>
     final progress =
         ref.read(userProgressProvider).valueOrNull ?? UserProgress.empty('');
 
+    final currentPuzzleId =
+        (state.currentPuzzleIndex >= 0 &&
+            state.currentPuzzleIndex < puzzles.length)
+        ? puzzles[state.currentPuzzleIndex].id
+        : null;
+
     final nextPuzzle = ref
         .read(puzzleQueueServiceProvider)
-        .getNextPuzzle(puzzles, progress);
+        .getNextPuzzle(puzzles, progress, currentPuzzleId: currentPuzzleId);
 
     return nextPuzzle != null ? puzzles.indexOf(nextPuzzle) : 0;
   }

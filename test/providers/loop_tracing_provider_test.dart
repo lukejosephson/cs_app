@@ -228,7 +228,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleQueueServiceProvider.overrideWithValue(
-          PuzzleQueueService(random: FakeRandom([2])),
+          PuzzleQueueService(random: FakeRandom([1])),
         ),
       ],
     );
@@ -239,4 +239,55 @@ void main() {
 
     expect(container.read(loopTracingControllerProvider).currentPuzzleIndex, 2);
   });
+
+  test(
+    'moveToNextPuzzle avoids repeating current puzzle when alternatives exist',
+    () {
+      final puzzles = [
+        const LoopChallenge(
+          id: 1,
+          type: 'loop_scout',
+          snippet: 's1',
+          target: 't1',
+          answer: 'a1',
+          difficulty: 1,
+          errorLine: 0,
+          isArchived: false,
+          tags: [],
+        ),
+        const LoopChallenge(
+          id: 2,
+          type: 'loop_scout',
+          snippet: 's2',
+          target: 't2',
+          answer: 'a2',
+          difficulty: 1,
+          errorLine: 0,
+          isArchived: false,
+          tags: [],
+        ),
+      ];
+
+      final container = ProviderContainer(
+        overrides: [
+          puzzleQueueServiceProvider.overrideWithValue(
+            PuzzleQueueService(random: FakeRandom([0])),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+      final controller = container.read(loopTracingControllerProvider.notifier);
+
+      expect(
+        container.read(loopTracingControllerProvider).currentPuzzleIndex,
+        0,
+      );
+      controller.moveToNextPuzzle(puzzles);
+
+      expect(
+        container.read(loopTracingControllerProvider).currentPuzzleIndex,
+        1,
+      );
+    },
+  );
 }

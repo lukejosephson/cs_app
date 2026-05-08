@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:cs_app/models/operations_practice_challenge.dart';
 import 'package:cs_app/providers/auth_provider.dart';
 import 'package:cs_app/providers/operations_practice_provider.dart';
+import 'package:cs_app/providers/puzzle_queue_provider.dart';
 import 'package:cs_app/screens/operations_practice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'helpers/fake_random.dart';
+
 Widget _buildTestApp(List<Override> overrides) {
   return ProviderScope(
-    overrides: [
-      userIdProvider.overrideWith((ref) => null),
-      ...overrides,
-    ],
+    overrides: [userIdProvider.overrideWith((ref) => null), ...overrides],
     child: const MaterialApp(home: OperationsPracticeScreen()),
   );
 }
@@ -132,6 +132,9 @@ void main() {
       _buildTestApp([
         operationsPracticeProvider.overrideWith(
           (ref) => Future.value(const [challengeA, challengeB, challengeC]),
+        ),
+        puzzleQueueServiceProvider.overrideWithValue(
+          PuzzleQueueService(random: FakeRandom([0])),
         ),
       ]),
     );

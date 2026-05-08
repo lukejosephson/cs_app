@@ -277,3 +277,9 @@ status).
 - Traced puzzle progression for loop tracing, error detection, and operations practice to the shared `BasePracticeController.getNextPuzzleIndex()` path and identified one common failure mode affecting all three games.
 - Root cause: `getNextPuzzleIndex()` reads `userProgressProvider` synchronously (`ref.read(userProgressProvider).valueOrNull`). When that async provider is still loading (especially right after `updateProgress()` invalidates it), progress is `null` and the controller falls back to sequential `(currentIndex + 1) % length`, which appears as “random feed not working.”
 - Confirmed this issue can be masked by tests because controller tests override `userProgressProvider` with immediate values, so they do not exercise the runtime loading window where fallback-to-sequential occurs.
+
+## Prompt 74
+- Performed a pre-submission logic/code-quality audit and fixed a core progression issue in the shared puzzle queue flow.
+- Updated `PuzzleQueueService` and `BasePracticeController` so “Next Challenge” avoids repeating the current puzzle when alternatives exist, improving perceived randomness and preventing no-op transitions.
+- Added/updated regression coverage in provider and screen tests to keep puzzle progression deterministic in tests while preserving random behavior in-app.
+- Re-ran project validation and kept analyzer/test suite passing after the fixes.

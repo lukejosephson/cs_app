@@ -267,3 +267,8 @@ status).
 - Refactored oversized authentication UI by extracting a reusable `AuthSurfaceCard` (`lib/widgets/auth/auth_surface_card.dart`) and reusing it in both sign-in and create-account screens to reduce screen complexity and improve reuse.
 - Refactored `ErrorDetectionScreen` by extracting the data-state UI into `lib/widgets/error_detection/error_detection_challenge_view.dart`, keeping screen orchestration in `screens/` and reusable rendering logic in `widgets/`.
 - Re-ran project validation after refactoring (`flutter analyze`, `flutter test`) to ensure architecture cleanup did not alter behavior.
+
+## Prompt 72
+- Investigated the Android startup log `Skipped 225 frames` and identified it as a UI-thread jank warning (not a Firebase/auth failure by itself), typically seen in debug mode/emulators when first frames are delayed.
+- Confirmed likely contributors in this app’s startup path are synchronous pre-run initialization (`Firebase.initializeApp`, `SharedPreferences.getInstance`) plus first-render overhead from complex themed widgets/fonts, which is more pronounced on slower emulators.
+- Documented practical root causes and interpretation guidance so this warning can be treated as performance profiling input rather than an automatic functional error.

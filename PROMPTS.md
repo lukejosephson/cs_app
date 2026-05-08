@@ -348,6 +348,9 @@ database_service.dart).
 ○ /providers (or /controllers): Riverpod providers containing the business logic that
 connects your services to your UI.
 
+[x] 72. I have been getting this in my output when i launch the program. what could the cause of this be? 
+I/Choreographer( 3828): Skipped 225 frames!  The application may be doing too much work on its main thread.
+
 ** Development Rules **
 
 1. Always commit the current code before implementing a new feature.
